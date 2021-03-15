@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="9.5.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Chattoo.Domain\Chattoo.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\Services\" />
+    <Folder Include="CommunicationChannelMessageAttachments\Commands" />
+    <Folder Include="CommunicationChannelMessageAttachments\EventHandlers" />
+    <Folder Include="CommunicationChannelMessageAttachments\Queries" />
+    <Folder Include="CommunicationChannelMessages\Commands" />
+    <Folder Include="CommunicationChannelMessages\EventHandlers" />
+    <Folder Include="CommunicationChannelMessages\Queries" />
+    <Folder Include="CommunicationChannelRoles\Commands" />
+    <Folder Include="CommunicationChannelRoles\EventHandlers" />
+    <Folder Include="CommunicationChannelRoles\Queries" />
+    <Folder Include="CommunicationChannels\Commands" />
+    <Folder Include="CommunicationChannels\EventHandlers" />
+    <Folder Include="CommunicationChannels\Queries" />
+    <Folder Include="GroupRoles\Commands" />
+    <Folder Include="GroupRoles\EventHandlers" />
+    <Folder Include="GroupRoles\Queries" />
+    <Folder Include="Groups\Commands" />
+    <Folder Include="Groups\EventHandlers" />
+    <Folder Include="Groups\Queries" />
+    <Folder Include="UserAliases\Commands" />
+    <Folder Include="UserAliases\EventHandlers" />
+    <Folder Include="UserAliases\Queries" />
+    <Folder Include="Users\Commands" />
+    <Folder Include="Users\EventHandlers" />
+    <Folder Include="Users\Queries" />
+  </ItemGroup>
+
+</Project>

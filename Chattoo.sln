@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{E7E337CA-7FBB-4C6A-A87A-2B4B7E893F68}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentations", "Presentations", "{5419C09E-D4E9-4623-83F5-DE4DE9B7AE08}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BackEnds", "BackEnds", "{F3DCDCE4-546B-4A2B-9EC1-C123DF28F42D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UIs", "UIs", "{68DADACA-A936-48E2-8FA2-275434CE87E6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D0E58D08-6284-4047-B9D3-A8D3C34CBB96}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{97B9AE56-2E0A-4176-B663-5C18E4ADCFD0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chattoo.Application", "Chattoo.Application\Chattoo.Application.csproj", "{1A374BE1-86DF-49BB-B9A9-DD25A1C8DB34}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chattoo.Domain", "Chattoo.Domain\Chattoo.Domain.csproj", "{193A6718-7701-47BD-A078-47057E3DE35E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chattoo.Infrastructure", "Chattoo.Infrastructure\Chattoo.Infrastructure.csproj", "{C85843EA-21CB-4CBA-A2CE-7A9ECD7D321B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chattoo.GraphQL", "Chattoo.GraphQL\Chattoo.GraphQL.csproj", "{6409DFBF-D6F3-42CD-B098-4E11AF50D1B0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A374BE1-86DF-49BB-B9A9-DD25A1C8DB34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A374BE1-86DF-49BB-B9A9-DD25A1C8DB34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A374BE1-86DF-49BB-B9A9-DD25A1C8DB34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A374BE1-86DF-49BB-B9A9-DD25A1C8DB34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{193A6718-7701-47BD-A078-47057E3DE35E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{193A6718-7701-47BD-A078-47057E3DE35E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{193A6718-7701-47BD-A078-47057E3DE35E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{193A6718-7701-47BD-A078-47057E3DE35E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C85843EA-21CB-4CBA-A2CE-7A9ECD7D321B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C85843EA-21CB-4CBA-A2CE-7A9ECD7D321B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C85843EA-21CB-4CBA-A2CE-7A9ECD7D321B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C85843EA-21CB-4CBA-A2CE-7A9ECD7D321B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6409DFBF-D6F3-42CD-B098-4E11AF50D1B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6409DFBF-D6F3-42CD-B098-4E11AF50D1B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6409DFBF-D6F3-42CD-B098-4E11AF50D1B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6409DFBF-D6F3-42CD-B098-4E11AF50D1B0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F3DCDCE4-546B-4A2B-9EC1-C123DF28F42D} = {5419C09E-D4E9-4623-83F5-DE4DE9B7AE08}
+		{68DADACA-A936-48E2-8FA2-275434CE87E6} = {5419C09E-D4E9-4623-83F5-DE4DE9B7AE08}
+		{1A374BE1-86DF-49BB-B9A9-DD25A1C8DB34} = {E7E337CA-7FBB-4C6A-A87A-2B4B7E893F68}
+		{193A6718-7701-47BD-A078-47057E3DE35E} = {E7E337CA-7FBB-4C6A-A87A-2B4B7E893F68}
+		{C85843EA-21CB-4CBA-A2CE-7A9ECD7D321B} = {97B9AE56-2E0A-4176-B663-5C18E4ADCFD0}
+		{6409DFBF-D6F3-42CD-B098-4E11AF50D1B0} = {F3DCDCE4-546B-4A2B-9EC1-C123DF28F42D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CA3117DE-AFB4-4B60-B499-26E6344C73F4}
+	EndGlobalSection
+EndGlobal
