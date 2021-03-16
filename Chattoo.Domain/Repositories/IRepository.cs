@@ -35,6 +35,13 @@ namespace Chattoo.Domain.Repositories
         Task<T> SingleOrDefaultAsync<T>(IQueryable<T> query);
 
         Task<List<T>> ToListAsync<T>(IQueryable<T> query);
+    }
 
+    /// <summary>
+    /// Rozhraní pro repozitář pro získávání/manipulaci dat z určitého zdroje (např. ORM databáze).
+    /// </summary>
+    public interface IRepository<TEntity> : IRepository<TEntity, string> where TEntity : Entity<string>
+    {
+        
     }
 }

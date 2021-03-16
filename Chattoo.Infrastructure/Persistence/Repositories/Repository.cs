@@ -22,13 +22,7 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
 
         protected DbSet<TEntity> DbSet => _dbContext.Set<TEntity>();
 
-        public IUnitOfWork UnitOfWork
-        {
-            get
-            {
-                return _dbContext;
-            }
-        }
+        public IUnitOfWork UnitOfWork => _dbContext;
 
         public Repository(ApplicationDbContext dbContext, IMapper mapper)
         {
@@ -97,6 +91,15 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
         {
             return query.ToListAsync();
         }
+    }
 
+    /// <summary>
+    /// Výchozí repozitář obsahující základní akce pro manipulaci s datovým zdrojem (z tohoto repozitáře dědí ostatní repozitáře).
+    /// </summary>
+    public class Repository<TEntity> : Repository<TEntity, string> where TEntity : Entity<string>
+    {
+        public Repository(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
+        {
+        }
     }
 }
