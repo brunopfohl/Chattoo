@@ -1,4 +1,6 @@
-﻿namespace Chattoo.Application.Common.Interfaces
+﻿using Chattoo.Domain.Entities;
+
+namespace Chattoo.Application.Common.Interfaces
 {
     /// <summary>
     /// Rozhraní pro službu poskytující Id aktuálně přihlášeného uživatele.
@@ -9,5 +11,10 @@
         /// Vrací Id aktuálně přihlášeného uživatele.
         /// </summary>
         public string UserId { get; }
+        
+        /// <summary>
+        /// Vrací aktuálně přihlášeného uživatele.
+        /// </summary>
+        public User User { get; }
     }
 }

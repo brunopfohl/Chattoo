@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Repositories;
 
@@ -11,6 +12,15 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
     {
         public CommunicationChannelRepository(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
+        }
+
+        public IQueryable<CommunicationChannel> GetByUserId(string userId)
+        {
+            // TODO: Tohle je hovadina. Měl bych jít přes uživatele rovnou.
+            var result = GetAll()
+                .Where(c => c.Users.Any(u => u.Id == userId));
+
+            return result;
         }
     }
 }

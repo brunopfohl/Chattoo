@@ -11,6 +11,11 @@ namespace Chattoo.Domain.Entities
     public class GroupRole : AuditableEntity, IAuditableEntity
     {
         /// <summary>
+        /// Vrací nebo nastavuje Id skupiny, do které tato role patří.
+        /// </summary>
+        public string GroupId { get; set; }
+        
+        /// <summary>
         /// Vrací nebo nastavuje název uživatelské role.
         /// </summary>
         public string Name { get; set; }
@@ -19,6 +24,11 @@ namespace Chattoo.Domain.Entities
         /// Vrací nebo nastavuje oprávnění, které uživatelům poskytuje tato role.
         /// </summary>
         public UserGroupPermission Permission { get; set; }
+        
+        /// <summary>
+        /// Vrací nebo nastavuje skupinu, do které tato role patří.
+        /// </summary>
+        public virtual Group Group { get; set; }
         
         /// <summary>
         /// Vrací nebo nastavuje kolekci uživatelů, kteří disponují touto rolí.

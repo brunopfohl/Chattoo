@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Chattoo.Infrastructure.Persistence.Configurations
 {
-    public class UserGroupRoleConfiguration : IEntityTypeConfiguration<GroupRole>
+    public class GroupRoleConfiguration : IEntityTypeConfiguration<GroupRole>
     {
         public void Configure(EntityTypeBuilder<GroupRole> builder)
         {
