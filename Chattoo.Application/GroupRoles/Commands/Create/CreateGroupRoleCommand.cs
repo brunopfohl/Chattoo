@@ -21,12 +21,12 @@ namespace Chattoo.Application.GroupRoles.Commands.Create
         public string GroupId { get; set; }
         
         /// <summary>
-        /// Vrací nebo nastavuje název skupiny uživatelů.
+        /// Vrací nebo nastavuje název uživatelské role v rámci skupiny uživatelů.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Vrací nebo nastavuje oprávnění, které tato skupina poskytuje.
+        /// Vrací nebo nastavuje oprávnění, které tato role umožňuje.
         /// </summary>
         public UserGroupPermission Permission { get; set; }
     }

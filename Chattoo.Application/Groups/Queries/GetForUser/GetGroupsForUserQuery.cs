@@ -10,7 +10,7 @@ using Chattoo.Application.Groups.DTOs;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Repositories;
 
-namespace Chattoo.Application.Groups.Queries.GetForUser
+namespace Chattoo.Application.GroupRoles.Queries.GetForUser
 {
     /// <summary>
     /// Dotaz na skupiny, do kterých patří daný uživatel.

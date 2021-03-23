@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Chattoo.Application.Common.Models;
 using Chattoo.Application.Groups.DTOs;
-using Chattoo.Application.Groups.Queries.GetForUser;
 using MediatR;
 
 namespace Chattoo.Application.Common.Queries

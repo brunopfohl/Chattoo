@@ -1,0 +1,65 @@
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Chattoo.Application.Common.Exceptions;
+using Chattoo.Domain.Entities;
+using Chattoo.Domain.Enums;
+using Chattoo.Domain.Repositories;
+using MediatR;
+
+namespace Chattoo.Application.CommunicationChannelRoles.Commands.Update
+{
+    /// <summary>
+    /// Příkaz pro upravení již existující role z komunikačního kanálu.
+    /// </summary>
+    public class UpdateCommunicationChannelRoleCommand : IRequest
+    {
+        /// <summary>
+        /// Vrací nebo nastavuje Id role z komunikačního kanálu.
+        /// </summary>
+        public string Id { get; set; }
+        
+        /// <summary>
+        /// Vrací nebo nastavuje název uživatelské role.
+        /// </summary>
+        public string Name { get; set; }
+        
+        /// <summary>
+        /// Vrací nebo nastavuje práva uživatele, který disponuje touto rolí.
+        /// </summary>
+        public CommunicationChannelPermission Permission { get; set; }
+    }
+    
+    public class UpdateCommunicationChannelRoleCommandHandler : IRequestHandler<UpdateCommunicationChannelRoleCommand, Unit>
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ICommunicationChannelRoleRepository _communicationChannelRoleRepository;
+
+        public UpdateCommunicationChannelRoleCommandHandler(IUnitOfWork unitOfWork, ICommunicationChannelRoleRepository communicationChannelRoleRepository)
+        {
+            _unitOfWork = unitOfWork;
+            _communicationChannelRoleRepository = communicationChannelRoleRepository;
+        }
+
+        public async Task<Unit> Handle(UpdateCommunicationChannelRoleCommand request, CancellationToken cancellationToken)
+        {
+            // Vytáhnu záznam z datového zdroje.
+            var entity = await _communicationChannelRoleRepository.GetByIdAsync(request.Id);
+
+            // Pokud se mi záznam nepodařilo najít, vrátím NotFoundException (zdroj nenalezen).
+            if (entity is null)
+            {
+                throw new NotFoundException(nameof(CommunicationChannelRole), request.Id);
+            }
+
+            // Naplním entitu daty z příkazu.
+            entity.Name = request.Name;
+            entity.Permission = request.Permission;
+
+            // Upravím záznam a uložím.
+            await _communicationChannelRoleRepository.AddOrUpdateAsync(entity, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return Unit.Value;
+        }
+    }
+}

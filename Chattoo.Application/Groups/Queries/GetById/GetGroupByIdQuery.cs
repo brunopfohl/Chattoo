@@ -1,13 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Chattoo.Application.Common.Exceptions;
-using Chattoo.Application.Common.Mappings;
-using Chattoo.Application.Common.Models;
-using Chattoo.Application.Common.Queries;
 using Chattoo.Application.Groups.DTOs;
-using Chattoo.Application.Groups.Queries.GetForUser;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Repositories;
 using MediatR;

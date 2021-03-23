@@ -11,7 +11,7 @@ namespace Chattoo.Application.GroupRoles.Commands.Create
         {
             RuleFor(v => v.Name)
                 .MaximumLength(100).WithMessage("Název uživatelské role nesmí být delší než 100 znaků.")
-                .NotEmpty().WithMessage("Název skupiny je nutné vyplnit.");
+                .NotEmpty().WithMessage("Název uživatelské role je nutné vyplnit.");
         }
     }
 }
