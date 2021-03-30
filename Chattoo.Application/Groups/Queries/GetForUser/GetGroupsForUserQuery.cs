@@ -35,13 +35,8 @@ namespace Chattoo.Application.GroupRoles.Queries.GetForUser
 
         public override async Task<PaginatedList<GroupDto>> Handle(GetGroupsForUserQuery request, CancellationToken cancellationToken)
         {
-            // Nejdřív načtu uživatele s Id z požadavku, abych mohl určit, jestli uživatel skutečně exituje.
-            var user = await _userRepository.GetByIdAsync(request.UserId);
-
-            if (user is null)
-            {
-                throw new NotFoundException(nameof(User), request.UserId);
-            }
+            // Ověřím, zda-li uživatel existuje.
+            _userRepository.ThrowIfNotExists(request.UserId);
 
             // Načtu kolekci skupin, do kterých spadá uživatel a zpracuju na stránkovanou kolekci.
             var result = await _groupRepository.GetByUserId(request.UserId)

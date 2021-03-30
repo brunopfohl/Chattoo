@@ -42,14 +42,8 @@ namespace Chattoo.Application.GroupRoles.Commands.Update
 
         public async Task<Unit> Handle(UpdateGroupRoleCommand request, CancellationToken cancellationToken)
         {
-            // Vytáhnu záznam z datového zdroje.
-            var entity = await _groupRoleRepository.GetByIdAsync(request.Id);
-
-            // Pokud se mi záznam nepodařilo najít, vrátím NotFoundException (zdroj nenalezen).
-            if (entity is null)
-            {
-                throw new NotFoundException(nameof(GroupRole), request.Id);
-            }
+            // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
+            var entity = await _groupRoleRepository.GetByIdAsync(request.Id, true);
 
             // Naplním entitu daty z příkazu.
             entity.Name = request.Name;

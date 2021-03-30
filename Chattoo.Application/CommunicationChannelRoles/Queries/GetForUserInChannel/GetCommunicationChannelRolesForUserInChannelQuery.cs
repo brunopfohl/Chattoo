@@ -46,23 +46,10 @@ namespace Chattoo.Application.CommunicationChannels.Queries.GetForUserInChannel
 
         public override async Task<PaginatedList<CommunicationChannelRoleDto>> Handle(GetCommunicationChannelRolesForUserInChannelQuery request, CancellationToken cancellationToken)
         {
-            // Nejdřív načtu uživatele s Id z požadavku, abych mohl určit, jestli uživatel skutečně existuje.
-            var user = await _userRepository.GetByIdAsync(request.UserId);
-
-            // Pokud se nepodařilo dohledat uživatele, vyhodím výjimku.
-            if (user is null)
-            {
-                throw new NotFoundException(nameof(User), request.UserId);
-            }
-            
-            // Načtu komunikační kanál.
-            var channel = await _communicationChannelRepository.GetByIdAsync(request.ChannelId);
-
-            // Pokud se nepodařilo dohledat komunikační kanál, vyhodím výjimku.
-            if (channel is null)
-            {
-                throw new NotFoundException(nameof(CommunicationChannel), request.ChannelId);
-            }
+            // Ověřím, zda-li uživatel existuje.
+            _userRepository.ThrowIfNotExists(request.UserId);
+            // Ověřím, zda-li komunikační kanál existuje.
+            _communicationChannelRepository.ThrowIfNotExists(request.ChannelId);
 
             // Načtu kolekci rolí uživatele v komunikačním kanálu a zpracuju na stránkovanou kolekci.
             var result = await _communicationChannelRoleRepository.GetForUserInChannel(request.UserId, request.ChannelId)

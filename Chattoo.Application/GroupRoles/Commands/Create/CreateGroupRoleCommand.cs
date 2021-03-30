@@ -48,14 +48,8 @@ namespace Chattoo.Application.GroupRoles.Commands.Create
 
         public async Task<string> Handle(CreateGroupRoleCommand request, CancellationToken cancellationToken)
         {
-            // Pokusím se načíst skupinu uživatelů, do které se má přidat nová role.
-            var group = await _groupRepository.GetByIdAsync(request.GroupId);
-
-            // Pokud se nepodařilo skupinu uživatelů nalézt, vyhodím výjimku.
-            if (group is null)
-            {
-                throw new NotFoundException(nameof(Group), request.GroupId);
-            }
+            // Pokusím se načíst skupinu uživatelů, do které se má přidat nová role (vyhodím výjimku, pokud ji nedohledám).
+            var group = await _groupRepository.GetByIdAsync(request.GroupId, true);
 
             // Připravím si role aktuálně přihlášeného uživatele, abych věděl jestli má právo na přidání role.
             var currentUserRoles = _groupRoleRepository.GetForUserInGroup(_currentUserService.UserId, request.GroupId);

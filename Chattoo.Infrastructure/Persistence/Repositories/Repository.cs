@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Chattoo.Domain.Common;
 using Chattoo.Domain.Repositories;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Chattoo.Application.Common.Exceptions;
 
 namespace Chattoo.Infrastructure.Persistence.Repositories
 {
@@ -59,15 +61,21 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
             return result;
         }
 
-        public async Task<TEntity> GetByIdAsync(TKey id)
+        public async Task<TEntity> GetByIdAsync(TKey id, bool throwNotFound = false)
         {
             var result = await _dbContext.FindAsync<TEntity>(id);
+
+            if (throwNotFound && result is null)
+            {
+                throw new NotFoundException(nameof(TKey), id);
+            }
+            
             return result;
         }
 
-        public async Task<T> GetByIdAsync<T>(TKey id)
+        public async Task<T> GetByIdAsync<T>(TKey id, bool throwNotFound = false)
         {
-            var entity = await GetByIdAsync(id);
+            var entity = await GetByIdAsync(id, throwNotFound);
             var result = _mapper.Map<T>(entity);
             return result;
         }
@@ -90,6 +98,23 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
         public Task<List<T>> ToListAsync<T>(IQueryable<T> query)
         {
             return query.ToListAsync();
+        }
+
+        public bool Exists(TKey id)
+        {
+            var result = GetAll().Any(e => e.Id.Equals(id));
+
+            return result;
+        }
+
+        public void ThrowIfNotExists(TKey id)
+        {
+            var exists = Exists(id);
+
+            if (!exists)
+            {
+                throw new NotFoundException(nameof(TKey), id);
+            }
         }
     }
 

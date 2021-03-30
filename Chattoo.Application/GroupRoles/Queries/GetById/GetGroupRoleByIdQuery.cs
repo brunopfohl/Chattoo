@@ -33,19 +33,9 @@ namespace Chattoo.Application.GroupRoles.Queries.GetById
 
         public async Task<GroupRoleDto> Handle(GetGroupRoleByIdQuery request, CancellationToken cancellationToken)
         {
-            // Načtu uživatelskou roli z datového zdroje.
-            var groupRole = await _groupRoleRepository.GetByIdAsync(request.Id);
-
-            // Pokud se uživatelskou roli s daným Id nepodařilo dohledat, vracím chybu.
-            if (groupRole is null)
-            {
-                throw new NotFoundException(nameof(GroupRole), request.Id);
-            }
-
-            // Převedu entitu na dto.
-            var result = _mapper.Map<GroupRoleDto>(groupRole);
-
-            return result;
+            // Načtu uživatelskou roli z datového zdroje (vyhodím výjimku, pokud se mi ji nepodaří dohledat).
+            var groupRole = await _groupRoleRepository.GetByIdAsync<GroupRoleDto>(request.Id, true);
+            return groupRole;
         }
     }
 }

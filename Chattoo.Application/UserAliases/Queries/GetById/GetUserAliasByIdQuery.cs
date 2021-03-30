@@ -1,9 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Chattoo.Application.Common.Exceptions;
 using Chattoo.Application.UserAliases.DTOs;
-using Chattoo.Domain.Entities;
 using Chattoo.Domain.Repositories;
 using MediatR;
 
@@ -34,18 +32,8 @@ namespace Chattoo.Application.UserAliases.Queries.GetById
         public async Task<UserAliasDto> Handle(GetUserAliasByIdQuery request, CancellationToken cancellationToken)
         {
             // Načtu uživatelskou přezdívku z datového zdroje.
-            var userAlias = await _userAliasRepository.GetByIdAsync(request.Id);
-
-            // Pokud se uživatelskou přezdívku s daným Id nepodařilo dohledat, vracím chybu.
-            if (userAlias is null)
-            {
-                throw new NotFoundException(nameof(UserAlias), request.Id);
-            }
-
-            // Převedu entitu na dto.
-            var result = _mapper.Map<UserAliasDto>(userAlias);
-
-            return result;
+            var userAlias = await _userAliasRepository.GetByIdAsync<UserAliasDto>(request.Id, true);
+            return userAlias;
         }
     }
 }

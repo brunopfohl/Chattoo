@@ -46,21 +46,10 @@ namespace Chattoo.Application.GroupRoles.Queries.GetForUserInGroup
 
         public override async Task<PaginatedList<GroupRoleDto>> Handle(GetGroupRolesForUserInGroupQuery request, CancellationToken cancellationToken)
         {
-            // Nejdřív načtu uživatele s Id z požadavku, abych mohl určit, jestli uživatel skutečně existuje.
-            var user = await _userRepository.GetByIdAsync(request.UserId);
-
-            if (user is null)
-            {
-                throw new NotFoundException(nameof(User), request.UserId);
-            }
-            
-            // Pokusím se načíst skupiny, pro kterou chci později vyhledat její uživatelské role.
-            var group = await _groupRepository.GetByIdAsync(request.UserId);
-
-            if (group is null)
-            {
-                throw new NotFoundException(nameof(Group), request.GroupId);
-            }
+            // Zkontoluji, zda-li uživatel existuje.
+            _userRepository.ThrowIfNotExists(request.UserId);
+            // Zkontroluji, zda-li skupina uživatelů existuje.
+            _groupRepository.ThrowIfNotExists(request.GroupId);
 
             // Načtu kolekci uživatelských rolí uživatele v dané skupině a zpracuju na stránkovanou kolekci.
             var result = await _groupRoleRepository.GetForUserInGroup(request.UserId, request.GroupId)

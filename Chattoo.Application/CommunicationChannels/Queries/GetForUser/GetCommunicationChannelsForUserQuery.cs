@@ -38,13 +38,8 @@ namespace Chattoo.Application.CommunicationChannels.Queries.GetForUser
 
         public override async Task<PaginatedList<CommunicationChannelDto>> Handle(GetCommunicationChannelsForUserQuery request, CancellationToken cancellationToken)
         {
-            // Nejdřív načtu uživatele s Id z požadavku, abych mohl určit, jestli uživatel skutečně existuje.
-            var user = await _userRepository.GetByIdAsync(request.UserId);
-
-            if (user is null)
-            {
-                throw new NotFoundException(nameof(User), request.UserId);
-            }
+            // Ověřím, zda-li uživatel skutečně existuje.
+            _userRepository.ThrowIfNotExists(request.UserId);
 
             // Načtu kolekci komunikačních kanálů uživatele a zpracuju na stránkovanou kolekci.
             var result = await _communicationChannelRepository.GetByUserId(request.UserId)

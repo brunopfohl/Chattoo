@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Chattoo.Application.Common.Exceptions;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Repositories;
 using MediatR;
@@ -38,14 +37,8 @@ namespace Chattoo.Application.UserAliases.Commands.Create
 
         public async Task<string> Handle(CreateUserAliasCommand request, CancellationToken cancellationToken)
         {
-            // Pokusím se z datového zdroje vytáhnout uživatele, kterému se má přidat přezdívka.
-            var user = await _userRepository.GetByIdAsync(request.UserId);
-
-            // Pokud se uživatele nepodařilo dohledat, vracím výjimku.
-            if (user is null)
-            {
-                throw new NotFoundException(nameof(User), request.UserId);
-            }
+            // Ověřím, zda-li uživatel existuje.
+            _userRepository.ThrowIfNotExists(request.UserId);
             
             // Vytvořím entitu naplněnou daty z příkazu.
             var entity = new UserAlias()

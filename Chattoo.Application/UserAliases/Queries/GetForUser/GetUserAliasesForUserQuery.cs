@@ -35,14 +35,8 @@ namespace Chattoo.Application.UserAliases.Queries.GetForUser
 
         public override async Task<PaginatedList<UserAliasDto>> Handle(GetUserAliasesForUserQuery request, CancellationToken cancellationToken)
         {
-            // Nejdřív načtu uživatele s Id z požadavku, abych mohl určit, jestli uživatel skutečně exituje.
-            var user = await _userRepository.GetByIdAsync(request.UserId);
-
-            // Pokud se mi uživatele nepodařilo vyhledat, vyhodím výjimku.
-            if (user is null)
-            {
-                throw new NotFoundException(nameof(User), request.UserId);
-            }
+            // Ověřím, zda-li uživatel existuje.
+            _userRepository.ThrowIfNotExists(request.UserId);
 
             // Načtu přezdívek uživatele a zpracuju na stránkovanou kolekci.
             var result = await _userAliasRepository.GetByUserId(request.UserId)

@@ -1,9 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Chattoo.Application.Common.Exceptions;
 using Chattoo.Application.CommunicationChannels.DTOs;
-using Chattoo.Domain.Entities;
 using Chattoo.Domain.Repositories;
 using MediatR;
 
@@ -33,19 +31,9 @@ namespace Chattoo.Application.CommunicationChannels.Queries.GetById
 
         public async Task<CommunicationChannelDto> Handle(GetCommunicationChannelByIdQuery request, CancellationToken cancellationToken)
         {
-            // Načtu komunikační kanál z datového zdroje.
-            var channel = await _communicationChannelRepository.GetByIdAsync(request.Id);
-
-            // Pokud se komunikační kanál s daným Id nepodařilo dohledat, vracím chybu.
-            if (channel is null)
-            {
-                throw new NotFoundException(nameof(CommunicationChannel), request.Id);
-            }
-
-            // Převedu entitu na dto.
-            var result = _mapper.Map<CommunicationChannelDto>(channel);
-
-            return result;
+            // Načtu komunikační kanál z datového zdroje (vyhodím výjimku, pokud se mi to nepodaří).
+            var channel = await _communicationChannelRepository.GetByIdAsync<CommunicationChannelDto>(request.Id);
+            return channel;
         }
     }
 }

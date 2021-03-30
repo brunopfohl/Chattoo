@@ -31,14 +31,8 @@ namespace Chattoo.Application.GroupRoles.Commands.Delete
 
         public async Task<Unit> Handle(DeleteGroupRoleCommand request, CancellationToken cancellationToken)
         {
-            // Vytáhnu záznam z datového zdroje.
-            var entity = await _groupRoleRepository.GetByIdAsync(request.Id);
-
-            // Pokud se mi záznam nepodařilo najít, vrátím NotFoundException (zdroj nenalezen).
-            if (entity is null)
-            {
-                throw new NotFoundException(nameof(GroupRole), request.Id);
-            }
+            // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
+            var entity = await _groupRoleRepository.GetByIdAsync(request.Id, true);
             
             // Záznam se podařilo nalézt -> smažu ho a uložím změny.
             _groupRoleRepository.Remove(entity);

@@ -44,14 +44,8 @@ namespace Chattoo.Application.CommunicationChannelRoles.Commands.Create
 
         public async Task<string> Handle(CreateCommunicationChannelRoleCommand request, CancellationToken cancellationToken)
         {
-            // Pokusím se z datového zdroje získat komunikační kanál s daným Id.
-            var channel = await _communicationChannelRepository.GetByIdAsync(request.ChannelId);
-
-            // Pokud se mi nepodařilo dohledat komunikační kanál, vyhodím výjimku.
-            if (channel is null)
-            {
-                throw new NotFoundException(nameof(CommunicationChannel), request.ChannelId);
-            }
+            // Zjistím, zda-li komunikační kanál skutečně existuje.
+            _communicationChannelRepository.ThrowIfNotExists(request.ChannelId);
             
             // Vytvořím entitu naplněnou daty z příkazu.
             var entity = new CommunicationChannelRole()

@@ -36,14 +36,8 @@ namespace Chattoo.Application.Groups.Commands.Update
 
         public async Task<Unit> Handle(UpdateGroupCommand request, CancellationToken cancellationToken)
         {
-            // Vytáhnu záznam z datového zdroje.
-            var entity = await _groupRepository.GetByIdAsync(request.Id);
-
-            // Pokud se mi záznam nepodařilo najít, vrátím NotFoundException (zdroj nenalezen).
-            if (entity is null)
-            {
-                throw new NotFoundException(nameof(Group), request.Id);
-            }
+            // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
+            var entity = await _groupRepository.GetByIdAsync(request.Id, true);
 
             // Naplním entitu daty z příkazu.
             entity.Name = request.Name;

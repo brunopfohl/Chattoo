@@ -31,14 +31,8 @@ namespace Chattoo.Application.CommunicationChannelRoles.Commands.Delete
 
         public async Task<Unit> Handle(DeleteCommunicationChannelRoleCommand request, CancellationToken cancellationToken)
         {
-            // Vytáhnu záznam z datového zdroje.
-            var entity = await _communicationChannelRoleRepository.GetByIdAsync(request.Id);
-
-            // Pokud se mi záznam nepodařilo najít, vrátím NotFoundException (zdroj nenalezen).
-            if (entity is null)
-            {
-                throw new NotFoundException(nameof(CommunicationChannelRole), request.Id);
-            }
+            // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi to nepodaří).
+            var entity = await _communicationChannelRoleRepository.GetByIdAsync(request.Id, true);
             
             // Záznam se podařilo nalézt -> smažu ho a uložím změny.
             _communicationChannelRoleRepository.Remove(entity);

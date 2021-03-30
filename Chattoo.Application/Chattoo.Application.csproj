@@ -18,12 +18,10 @@
 
   <ItemGroup>
     <Folder Include="Common\Services\" />
-    <Folder Include="CommunicationChannelMessageAttachments\Commands" />
     <Folder Include="CommunicationChannelMessageAttachments\EventHandlers" />
     <Folder Include="CommunicationChannelMessageAttachments\Queries" />
     <Folder Include="CommunicationChannelMessages\Commands" />
     <Folder Include="CommunicationChannelMessages\EventHandlers" />
-    <Folder Include="CommunicationChannelMessages\Queries" />
     <Folder Include="CommunicationChannelRoles\EventHandlers" />
     <Folder Include="CommunicationChannels\EventHandlers" />
     <Folder Include="GroupRoles\Commands" />
@@ -31,9 +29,7 @@
     <Folder Include="GroupRoles\Queries" />
     <Folder Include="Groups\EventHandlers" />
     <Folder Include="UserAliases\EventHandlers" />
-    <Folder Include="Users\Commands" />
     <Folder Include="Users\EventHandlers" />
-    <Folder Include="Users\Queries" />
   </ItemGroup>
 
 </Project>

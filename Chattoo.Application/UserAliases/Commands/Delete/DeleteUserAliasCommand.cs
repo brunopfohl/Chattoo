@@ -31,14 +31,8 @@ namespace Chattoo.Application.UserAliases.Commands.Delete
 
         public async Task<Unit> Handle(DeleteUserAliasCommand request, CancellationToken cancellationToken)
         {
-            // Vytáhnu záznam z datového zdroje.
-            var entity = await _userAliasRepository.GetByIdAsync(request.Id);
-
-            // Pokud se mi záznam nepodařilo najít, vrátím NotFoundException (zdroj nenalezen).
-            if (entity is null)
-            {
-                throw new NotFoundException(nameof(UserAlias), request.Id);
-            }
+            // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
+            var entity = await _userAliasRepository.GetByIdAsync(request.Id, true);
             
             // Záznam se podařilo nalézt -> smažu ho a uložím změny.
             _userAliasRepository.Remove(entity);

@@ -1,9 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Chattoo.Application.Common.Exceptions;
 using Chattoo.Application.CommunicationChannelRoles.DTOs;
-using Chattoo.Domain.Entities;
 using Chattoo.Domain.Repositories;
 using MediatR;
 
@@ -33,19 +31,9 @@ namespace Chattoo.Application.CommunicationChannelRoles.Queries.GetById
 
         public async Task<CommunicationChannelRoleDto> Handle(GetCommunicationChannelRoleByIdQuery request, CancellationToken cancellationToken)
         {
-            // Načtu uživatelskou roli z datového zdroje.
-            var role = await _communicationChannelRoleRepository.GetByIdAsync(request.Id);
-
-            // Pokud se uživatelskou roli s daným Id nepodařilo dohledat, vracím chybu.
-            if (role is null)
-            {
-                throw new NotFoundException(nameof(CommunicationChannelRole), request.Id);
-            }
-
-            // Převedu entitu na dto.
-            var result = _mapper.Map<CommunicationChannelRoleDto>(role);
-
-            return result;
+            // Načtu uživatelskou roli z datového zdroje (vyhodím výjimku, pokud se mi to nepodaří).
+            var role = await _communicationChannelRoleRepository.GetByIdAsync<CommunicationChannelRoleDto>(request.Id, true);
+            return role;
         }
     }
 }
