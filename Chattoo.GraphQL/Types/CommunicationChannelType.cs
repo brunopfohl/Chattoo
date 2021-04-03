@@ -12,7 +12,7 @@ namespace Chattoo.GraphQL.Types
             Field(o => o.Name);
             Field(o => o.Description);
             Field(o => o.CreatedAt);
-            Field(o => o.ModifiedAt);
+            Field(o => o.ModifiedAt, nullable: true);
         }
     }
 }

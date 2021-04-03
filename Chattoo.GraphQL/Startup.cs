@@ -131,7 +131,7 @@ namespace Chattoo.Api
                 if (env.IsDevelopment())
                 {
                     //spa.UseAngularCliServer(npmScript: "start");
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
+                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
                 }
             });
         }

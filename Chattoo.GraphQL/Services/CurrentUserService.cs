@@ -12,19 +12,17 @@ namespace Chattoo.GraphQL.Services
     public class CurrentUserService : ICurrentUserService
     {
         private User _currentUser;
-        private readonly IUserRepository _userRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CurrentUserService(IHttpContextAccessor httpContextAccessor, IUserRepository userRepository)
+        public CurrentUserService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-            _userRepository = userRepository;
         }
 
         /// <summary>
         /// Vrací Id aktuálně přihlášeného uživatele.
         /// </summary>
-        public string UserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        public string UserId => _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         /// <summary>
         /// Vrací aktuálně přihlášeného uživatele.
@@ -33,11 +31,6 @@ namespace Chattoo.GraphQL.Services
         {
             get
             {
-                if (_currentUser is null || _currentUser.Id != this.UserId)
-                {
-                    _currentUser = _userRepository.GetByIdAsync(this.UserId).Result;
-                }
-
                 return _currentUser;
             }
         }

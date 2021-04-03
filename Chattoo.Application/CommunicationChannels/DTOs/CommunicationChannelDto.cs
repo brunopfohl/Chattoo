@@ -1,11 +1,13 @@
 ﻿using Chattoo.Application.Common.DTOs;
+using Chattoo.Application.Common.Mappings;
+using Chattoo.Domain.Entities;
 
 namespace Chattoo.Application.CommunicationChannels.DTOs
 {
     /// <summary>
     /// Komunikační kanál sloužící pro sdílení obsahu (zpráv) mezi uživateli.
     /// </summary>
-    public class CommunicationChannelDto : AuditableDto
+    public class CommunicationChannelDto : AuditableDto, IMapFrom<CommunicationChannel>
     {
         /// <summary>
         /// Vrací nebo nastavuje název komunikačního kanálu.

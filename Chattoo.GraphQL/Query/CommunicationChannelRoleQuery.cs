@@ -1,4 +1,5 @@
-﻿using Chattoo.Application.CommunicationChannelMessages.Queries.GetById;
+﻿using Chattoo.Application.Common.Models;
+using Chattoo.Application.CommunicationChannelMessages.Queries.GetById;
 using Chattoo.Application.CommunicationChannelRoles.DTOs;
 using Chattoo.Application.CommunicationChannelRoles.Queries.GetById;
 using Chattoo.Application.CommunicationChannels.Queries.GetForUserInChannel;
@@ -15,7 +16,7 @@ namespace Chattoo.GraphQL.Query
         {
             Name = "CommunicationChannelRoleQuery";
             
-            this.FieldAsyncWithScope<CommunicationChannelRoleType, object, object>(
+            this.FieldAsyncWithScope<CommunicationChannelRoleType, CommunicationChannelRoleDto>(
                 "get",
                 arguments: 
                 new QueryArguments
@@ -33,7 +34,7 @@ namespace Chattoo.GraphQL.Query
                 }
             );
             
-            this.FieldAsyncWithScope<PageInfoType<CommunicationChannelRoleType, CommunicationChannelRoleDto>, object, object>(
+            this.FieldAsyncWithScope<PageInfoType<CommunicationChannelRoleType, CommunicationChannelRoleDto>, PaginatedList<CommunicationChannelRoleDto>>(
                 "getForUserInChannel",
                 arguments: 
                 new QueryArgumentsWithPagination

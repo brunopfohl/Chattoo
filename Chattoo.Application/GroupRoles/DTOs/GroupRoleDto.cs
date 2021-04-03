@@ -1,4 +1,6 @@
 ﻿using Chattoo.Application.Common.DTOs;
+using Chattoo.Application.Common.Mappings;
+using Chattoo.Domain.Entities;
 using Chattoo.Domain.Enums;
 
 namespace Chattoo.Application.GroupRoles.DTOs
@@ -6,7 +8,7 @@ namespace Chattoo.Application.GroupRoles.DTOs
     /// <summary>
     /// Uživatelská role v kontextu skupiny.
     /// </summary>
-    public class GroupRoleDto : AuditableDto
+    public class GroupRoleDto : AuditableDto, IMapFrom<GroupRole>
     {
         /// <summary>
         /// Vrací nebo nastavuje název uživatelské role.

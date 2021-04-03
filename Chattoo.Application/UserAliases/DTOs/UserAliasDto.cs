@@ -1,11 +1,13 @@
 ﻿using Chattoo.Application.Common.DTOs;
+using Chattoo.Application.Common.Mappings;
+using Chattoo.Domain.Entities;
 
 namespace Chattoo.Application.UserAliases.DTOs
 {
     /// <summary>
     /// Alias (přezdívka) uživatele.
     /// </summary>
-    public class UserAliasDto : AuditableDto
+    public class UserAliasDto : AuditableDto, IMapFrom<UserAlias>
     {
         /// <summary>
         /// Vrací nebo nastavuje Id uživatele s touto přezdívkou.

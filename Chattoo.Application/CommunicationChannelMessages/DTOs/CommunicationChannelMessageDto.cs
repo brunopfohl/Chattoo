@@ -1,4 +1,6 @@
 ﻿using Chattoo.Application.Common.DTOs;
+using Chattoo.Application.Common.Mappings;
+using Chattoo.Domain.Entities;
 using Chattoo.Domain.Enums;
 
 namespace Chattoo.Application.CommunicationChannelMessages.DTOs
@@ -6,7 +8,7 @@ namespace Chattoo.Application.CommunicationChannelMessages.DTOs
     /// <summary>
     /// Zpráva z komunikačního kanálu.
     /// </summary>
-    public class CommunicationChannelMessageDto : AuditableDto
+    public class CommunicationChannelMessageDto : AuditableDto, IMapFrom<CommunicationChannelMessage>
     {
         /// <summary>
         /// Vrací nebo nastavuje Id komunikačního kanálu, které ho je tato zpráva součástí.

@@ -10,10 +10,10 @@ namespace Chattoo.GraphQL.Types
             Field(o => o.Id);
             Field(o => o.Name);
             Field(o => o.Content);
-            Field(o => o.Type);
+            Field<CommunicationChannelMessageAttachmentTypeType>(nameof(CommunicationChannelMessageAttachmentDto.Type));
             Field(o => o.MessageId);
             Field(o => o.CreatedAt);
-            Field(o => o.ModifiedAt);
+            Field(o => o.ModifiedAt, nullable: true);
         }
     }
 }

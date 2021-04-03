@@ -1,4 +1,6 @@
 ﻿using Chattoo.Application.Common.DTOs;
+using Chattoo.Application.Common.Mappings;
+using Chattoo.Domain.Entities;
 using Chattoo.Domain.Enums;
 
 namespace Chattoo.Application.CommunicationChannelRoles.DTOs
@@ -6,7 +8,7 @@ namespace Chattoo.Application.CommunicationChannelRoles.DTOs
     /// <summary>
     /// Role uživatele v komunikačním kanálu (např. admin, moderátor, guest, ...).
     /// </summary>
-    public class CommunicationChannelRoleDto : AuditableDto
+    public class CommunicationChannelRoleDto : AuditableDto, IMapFrom<CommunicationChannelRole>
     {
         /// <summary>
         /// Vrací nebo nastavuje název role.

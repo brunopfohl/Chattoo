@@ -1,14 +1,17 @@
-﻿using Chattoo.Application.Common.Models;
+﻿using System;
+using Chattoo.Application.Common.Models;
 using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Types
 {
     public class PageInfoType<TType, TDto> : ObjectGraphType<PaginatedList<TType>> where TType : ObjectGraphType<TDto>
     {
-        public PageInfoType(string name)
+        public PageInfoType()
         {
+            Name = $"PaginationList{typeof(TType).Name}";
+
             Field<ListGraphType<TType>>(
-                name,
+                "data",
                 resolve: context => context.Source.Items
             );
 

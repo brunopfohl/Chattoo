@@ -9,10 +9,11 @@ namespace Chattoo.GraphQL.Types
         {
             Field(o => o.Id);
             Field(o => o.Name);
-            Field(o => o.Permission);
+            // TODO: graphQL neumí EnumerationGraphType<flags enum>, takže musím vytvořit vlastní typ
+            //Field(o => o.Permission);
             Field(o => o.ChannelId);
             Field(o => o.CreatedAt);
-            Field(o => o.ModifiedAt);
+            Field(o => o.ModifiedAt, nullable: true);
         }
     }
 }

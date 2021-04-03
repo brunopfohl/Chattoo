@@ -80,11 +80,12 @@ namespace Chattoo.Infrastructure.Persistence
         {
             while (true)
             {
-                var domainEventEntity = ChangeTracker.Entries<IHasDomainEvent>()
+                var domainEventEntity = ChangeTracker
+                    .Entries<IHasDomainEvent>()
                     .Select(x => x.Entity.DomainEvents)
                     .SelectMany(x => x)
-                    .Where(domainEvent => !domainEvent.IsPublished)
-                    .FirstOrDefault();
+                    .FirstOrDefault(domainEvent => !domainEvent.IsPublished);
+                
                 if (domainEventEntity is null) break;
 
                 domainEventEntity.IsPublished = true;

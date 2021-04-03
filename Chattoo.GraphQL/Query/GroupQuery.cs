@@ -1,4 +1,5 @@
-﻿using Chattoo.Application.GroupRoles.Queries.GetForUser;
+﻿using Chattoo.Application.Common.Models;
+using Chattoo.Application.GroupRoles.Queries.GetForUser;
 using Chattoo.Application.Groups.DTOs;
 using Chattoo.Application.Groups.Queries.GetById;
 using Chattoo.GraphQL.Arguments;
@@ -14,7 +15,7 @@ namespace Chattoo.GraphQL.Query
         {
             Name = "GroupQuery";
             
-            this.FieldAsyncWithScope<GroupType, object, object>(
+            this.FieldAsyncWithScope<GroupType, GroupDto>(
                 "get",
                 arguments: 
                 new QueryArguments
@@ -28,11 +29,12 @@ namespace Chattoo.GraphQL.Query
                         Id = ctx.GetString("id")
                     };
 
-                    return await mediator.Send(query);
+                    var group = await mediator.Send(query);
+                    return group;
                 }
             );
             
-            this.FieldAsyncWithScope<PageInfoType<GroupType, GroupDto>, object, object>(
+            this.FieldAsyncWithScope<PageInfoType<GroupType, GroupDto>, PaginatedList<GroupDto>>(
                 "getForUser",
                 arguments: 
                 new QueryArgumentsWithPagination
@@ -48,7 +50,8 @@ namespace Chattoo.GraphQL.Query
                         PageSize = ctx.GetInt("pageSize")
                     };
 
-                    return await mediator.Send(query);
+                    var groups = await mediator.Send(query);
+                    return groups;
                 }
             );
         }

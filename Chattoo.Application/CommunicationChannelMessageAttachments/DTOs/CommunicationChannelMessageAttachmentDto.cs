@@ -1,5 +1,7 @@
 ﻿using System;
 using Chattoo.Application.Common.DTOs;
+using Chattoo.Application.Common.Mappings;
+using Chattoo.Domain.Entities;
 using Chattoo.Domain.Enums;
 
 namespace Chattoo.Application.CommunicationChannelMessageAttachments.DTOs
@@ -7,7 +9,7 @@ namespace Chattoo.Application.CommunicationChannelMessageAttachments.DTOs
     /// <summary>
     /// Příloha pro zprávu z komunikačního kanálu.
     /// </summary>
-    public class CommunicationChannelMessageAttachmentDto : AuditableDto
+    public class CommunicationChannelMessageAttachmentDto : AuditableDto, IMapFrom<CommunicationChannelMessageAttachment>
     {
         /// <summary>
         /// Vrací nebo nastavuje název této přílohy.

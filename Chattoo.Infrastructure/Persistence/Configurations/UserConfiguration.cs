@@ -8,6 +8,8 @@ namespace Chattoo.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            builder.Property(e => e.Id)
+                .ValueGeneratedOnAdd();
         }
     }
 }

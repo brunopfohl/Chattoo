@@ -11,7 +11,7 @@ namespace Chattoo.GraphQL.Types
             Field(o => o.UserId);
             Field(o => o.Alias);
             Field(o => o.CreatedAt);
-            Field(o => o.ModifiedAt);
+            Field(o => o.ModifiedAt, nullable: true);
         }
     }
 }

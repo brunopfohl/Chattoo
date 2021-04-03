@@ -34,5 +34,17 @@ namespace Chattoo.GraphQL.Extensions
 
             return o.FieldAsync<TGraphType, TReturnType>(name, description, arguments, finalResolver, deprecationReason);
         }
+
+        public static FieldType FieldAsyncWithScope<TGraphType, TReturnType>(this ObjectGraphType o,
+            string name,
+            string description = null,
+            QueryArguments arguments = null,
+            Func<IResolveFieldContext, ISender, Task<TReturnType>> resolve = null,
+            string deprecationReason = null)
+            where TGraphType : IGraphType
+        {
+            return FieldAsyncWithScope<TGraphType, TReturnType, object>(o, name, description, arguments, resolve,
+                deprecationReason);
+        }
     }
 }

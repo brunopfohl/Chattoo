@@ -8,6 +8,9 @@ namespace Chattoo.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<CommunicationChannelMessageAttachment> builder)
         {
+            builder.Property(e => e.Id)
+                .ValueGeneratedOnAdd();
+            
             builder.Property(e => e.MessageId)
                 .IsRequired();
 

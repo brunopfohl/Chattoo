@@ -1,4 +1,5 @@
-﻿using Chattoo.Application.Users.DTOs;
+﻿using Chattoo.Application.Common.Models;
+using Chattoo.Application.Users.DTOs;
 using Chattoo.Application.Users.Queries.GetForCommunicationChannel;
 using Chattoo.Application.Users.Queries.GetForGroup;
 using Chattoo.GraphQL.Arguments;
@@ -14,7 +15,7 @@ namespace Chattoo.GraphQL.Query
         {
             Name = "UserQuery";
             
-            this.FieldAsyncWithScope<PageInfoType<UserType, UserDto>, object, object>(
+            this.FieldAsyncWithScope<PageInfoType<UserType, UserDto>, PaginatedList<UserDto>>(
                 "getForCommunicationChannel",
                 arguments: 
                 new QueryArgumentsWithPagination
@@ -34,7 +35,7 @@ namespace Chattoo.GraphQL.Query
                 }
             );
             
-            this.FieldAsyncWithScope<PageInfoType<UserType, UserDto>, object, object>(
+            this.FieldAsyncWithScope<PageInfoType<UserType, UserDto>, PaginatedList<UserDto>>(
                 "getForGroup",
                 arguments: 
                 new QueryArgumentsWithPagination

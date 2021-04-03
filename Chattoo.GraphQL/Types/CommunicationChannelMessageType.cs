@@ -9,11 +9,11 @@ namespace Chattoo.GraphQL.Types
         {
             Field(o => o.Id);
             Field(o => o.Content);
-            Field(o => o.Type);
+            Field<CommunicationChannelMessageTypeType>(nameof(CommunicationChannelMessageDto.Type));
             Field(o => o.ChannelId);
             Field(o => o.UserId);
             Field(o => o.CreatedAt);
-            Field(o => o.ModifiedAt);
+            Field(o => o.ModifiedAt, nullable: true);
         }
     }
 }

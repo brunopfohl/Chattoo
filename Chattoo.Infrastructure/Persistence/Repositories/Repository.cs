@@ -34,7 +34,7 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
 
         public async Task AddOrUpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            if (entity.Id.Equals(default(TKey)))
+            if (entity.Id is null || entity.Id.Equals(default(TKey)))
             {
                 await DbSet.AddAsync(entity, cancellationToken);
             }
