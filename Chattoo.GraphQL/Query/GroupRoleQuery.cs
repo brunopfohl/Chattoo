@@ -1,6 +1,6 @@
-﻿using Chattoo.Application.CommunicationChannels.DTOs;
-using Chattoo.Application.CommunicationChannels.Queries.GetById;
-using Chattoo.Application.CommunicationChannels.Queries.GetForUser;
+﻿using Chattoo.Application.GroupRoles.DTOs;
+using Chattoo.Application.GroupRoles.Queries.GetById;
+using Chattoo.Application.GroupRoles.Queries.GetForUserInGroup;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;
@@ -8,12 +8,13 @@ using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Query
 {
-    public class CommunicationChannelQuery : ObjectGraphType
+    public class GroupRoleQuery : ObjectGraphType
     {
-        public CommunicationChannelQuery()
+        public GroupRoleQuery()
         {
-            Name = "CommunicationChannelQuery";
-            this.FieldAsyncWithScope<CommunicationChannelType, object, object>(
+            Name = "GroupRoleQuery";
+            
+            this.FieldAsyncWithScope<GroupRoleType, object, object>(
                 "get",
                 arguments: 
                 new QueryArguments
@@ -22,7 +23,7 @@ namespace Chattoo.GraphQL.Query
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var query = new GetCommunicationChannelByIdQuery()
+                    var query = new GetGroupRoleByIdQuery()
                     {
                         Id = ctx.GetString("id")
                     };
@@ -31,18 +32,20 @@ namespace Chattoo.GraphQL.Query
                 }
             );
             
-            this.FieldAsyncWithScope<PageInfoType<CommunicationChannelType, CommunicationChannelDto>, object, object>(
-                "getForUser",
+            this.FieldAsyncWithScope<PageInfoType<GroupRoleType, GroupRoleDto>, object, object>(
+                "getForUserInGroup",
                 arguments: 
                 new QueryArgumentsWithPagination
                 (
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "userId" }
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "userId" },
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "groupId" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var query = new GetCommunicationChannelsForUserQuery()
+                    var query = new GetGroupRolesForUserInGroupQuery()
                     {
                         UserId = ctx.GetString("userId"),
+                        GroupId = ctx.GetString("groupId"),
                         PageNumber = ctx.GetInt("pageNumber"),
                         PageSize = ctx.GetInt("pageSize")
                     };

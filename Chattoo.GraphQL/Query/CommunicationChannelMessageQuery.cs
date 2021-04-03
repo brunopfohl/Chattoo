@@ -1,6 +1,6 @@
-﻿using Chattoo.Application.CommunicationChannels.DTOs;
-using Chattoo.Application.CommunicationChannels.Queries.GetById;
-using Chattoo.Application.CommunicationChannels.Queries.GetForUser;
+﻿using Chattoo.Application.CommunicationChannelMessages.DTOs;
+using Chattoo.Application.CommunicationChannelMessages.Queries.GetById;
+using Chattoo.Application.CommunicationChannelMessages.Queries.GetForChannel;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;
@@ -8,12 +8,13 @@ using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Query
 {
-    public class CommunicationChannelQuery : ObjectGraphType
+    public class CommunicationChannelMessageQuery : ObjectGraphType
     {
-        public CommunicationChannelQuery()
+        public CommunicationChannelMessageQuery()
         {
-            Name = "CommunicationChannelQuery";
-            this.FieldAsyncWithScope<CommunicationChannelType, object, object>(
+            Name = "CommunicationChannelMessageQuery";
+            
+            this.FieldAsyncWithScope<CommunicationChannelMessageType, object, object>(
                 "get",
                 arguments: 
                 new QueryArguments
@@ -22,7 +23,7 @@ namespace Chattoo.GraphQL.Query
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var query = new GetCommunicationChannelByIdQuery()
+                    var query = new GetCommunicationChannelMessageByIdQuery()
                     {
                         Id = ctx.GetString("id")
                     };
@@ -31,18 +32,18 @@ namespace Chattoo.GraphQL.Query
                 }
             );
             
-            this.FieldAsyncWithScope<PageInfoType<CommunicationChannelType, CommunicationChannelDto>, object, object>(
-                "getForUser",
+            this.FieldAsyncWithScope<PageInfoType<CommunicationChannelMessageType, CommunicationChannelMessageDto>, object, object>(
+                "getForChannel",
                 arguments: 
                 new QueryArgumentsWithPagination
                 (
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "userId" }
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "channelId" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var query = new GetCommunicationChannelsForUserQuery()
+                    var query = new GetCommunicationChannelMessagesForChannelQuery()
                     {
-                        UserId = ctx.GetString("userId"),
+                        ChannelId = ctx.GetString("channelId"),
                         PageNumber = ctx.GetInt("pageNumber"),
                         PageSize = ctx.GetInt("pageSize")
                     };

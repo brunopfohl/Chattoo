@@ -1,6 +1,7 @@
-﻿using Chattoo.Application.CommunicationChannels.DTOs;
-using Chattoo.Application.CommunicationChannels.Queries.GetById;
-using Chattoo.Application.CommunicationChannels.Queries.GetForUser;
+﻿using Chattoo.Application.CommunicationChannelMessages.Queries.GetById;
+using Chattoo.Application.CommunicationChannelRoles.DTOs;
+using Chattoo.Application.CommunicationChannelRoles.Queries.GetById;
+using Chattoo.Application.CommunicationChannels.Queries.GetForUserInChannel;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;
@@ -8,12 +9,13 @@ using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Query
 {
-    public class CommunicationChannelQuery : ObjectGraphType
+    public class CommunicationChannelRoleQuery : ObjectGraphType
     {
-        public CommunicationChannelQuery()
+        public CommunicationChannelRoleQuery()
         {
-            Name = "CommunicationChannelQuery";
-            this.FieldAsyncWithScope<CommunicationChannelType, object, object>(
+            Name = "CommunicationChannelRoleQuery";
+            
+            this.FieldAsyncWithScope<CommunicationChannelRoleType, object, object>(
                 "get",
                 arguments: 
                 new QueryArguments
@@ -22,7 +24,7 @@ namespace Chattoo.GraphQL.Query
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var query = new GetCommunicationChannelByIdQuery()
+                    var query = new GetCommunicationChannelRoleByIdQuery()
                     {
                         Id = ctx.GetString("id")
                     };
@@ -31,18 +33,20 @@ namespace Chattoo.GraphQL.Query
                 }
             );
             
-            this.FieldAsyncWithScope<PageInfoType<CommunicationChannelType, CommunicationChannelDto>, object, object>(
-                "getForUser",
+            this.FieldAsyncWithScope<PageInfoType<CommunicationChannelRoleType, CommunicationChannelRoleDto>, object, object>(
+                "getForUserInChannel",
                 arguments: 
                 new QueryArgumentsWithPagination
                 (
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "userId" }
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "userId" },
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "channelId" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var query = new GetCommunicationChannelsForUserQuery()
+                    var query = new GetCommunicationChannelRolesForUserInChannelQuery()
                     {
                         UserId = ctx.GetString("userId"),
+                        ChannelId = ctx.GetString("channelId"),
                         PageNumber = ctx.GetInt("pageNumber"),
                         PageSize = ctx.GetInt("pageSize")
                     };

@@ -16,7 +16,7 @@ namespace Chattoo.Application.CommunicationChannelMessages.Queries.GetForChannel
     /// <summary>
     /// Dotaz na zprávy z komunikačního kanálu.
     /// </summary>
-    public class GetCommunicationChannelMessagesForUserInChannelQuery : PaginatedQuery<CommunicationChannelMessageDto>
+    public class GetCommunicationChannelMessagesForChannelQuery : PaginatedQuery<CommunicationChannelMessageDto>
     {
         /// <summary>
         /// Vrací nebo nastavuje Id komunikačního kanálu, ve kterém jsou hledány zprávy.
@@ -24,7 +24,7 @@ namespace Chattoo.Application.CommunicationChannelMessages.Queries.GetForChannel
         public string ChannelId { get; set; }
     }
 
-    public class GetCommunicationChannelMessagesForUserInChannelQueryHandler : PaginatedQueryHandler<GetCommunicationChannelMessagesForUserInChannelQuery, CommunicationChannelMessageDto>
+    public class GetCommunicationChannelMessagesForUserInChannelQueryHandler : PaginatedQueryHandler<GetCommunicationChannelMessagesForChannelQuery, CommunicationChannelMessageDto>
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
@@ -39,7 +39,7 @@ namespace Chattoo.Application.CommunicationChannelMessages.Queries.GetForChannel
             _communicationChannelMessageRepository = communicationChannelMessageRepository;
         }
 
-        public override async Task<PaginatedList<CommunicationChannelMessageDto>> Handle(GetCommunicationChannelMessagesForUserInChannelQuery request, CancellationToken cancellationToken)
+        public override async Task<PaginatedList<CommunicationChannelMessageDto>> Handle(GetCommunicationChannelMessagesForChannelQuery request, CancellationToken cancellationToken)
         {
             // Zjistím, zda-li komunikační kanál skutečně existuje.
             _communicationChannelRepository.ThrowIfNotExists(request.ChannelId);
