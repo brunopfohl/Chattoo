@@ -50,6 +50,7 @@ namespace Chattoo.GraphQL.Query
                         PageSize = ctx.GetInt("pageSize")
                     };
 
+            
                     var groups = await mediator.Send(query);
                     return groups;
                 }

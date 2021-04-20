@@ -18,6 +18,7 @@ namespace Chattoo.GraphQL.Mutation
                 arguments: 
                 new QueryArguments
                 (
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "userId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "channelId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "content" },
                     new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "type" }
@@ -26,6 +27,7 @@ namespace Chattoo.GraphQL.Mutation
                 {
                     var command = new CreateCommunicationChannelMessageCommand()
                     {
+                        UserId = ctx.GetString("userId"),
                         ChannelId = ctx.GetString("channelId"),
                         Content = ctx.GetString("content"),
                         Type = (CommunicationChannelMessageType)ctx.GetInt("type")

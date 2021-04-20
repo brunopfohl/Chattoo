@@ -10,6 +10,11 @@ namespace Chattoo.Domain.Entities
     /// </summary>
     public class CommunicationChannelMessage : AuditableEntity, IAuditableEntity
     {
+        public CommunicationChannelMessage()
+        {
+            Attachments = new List<CommunicationChannelMessageAttachment>();
+        }
+        
         /// <summary>
         /// Vrací nebo nastavuje Id komunikačního kanálu, které ho je tato zpráva součástí.
         /// </summary>

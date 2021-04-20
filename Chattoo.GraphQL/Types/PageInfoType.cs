@@ -4,7 +4,7 @@ using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Types
 {
-    public class PageInfoType<TType, TDto> : ObjectGraphType<PaginatedList<TType>> where TType : ObjectGraphType<TDto>
+    public class PageInfoType<TType, TDto> : ObjectGraphType<PaginatedList<TDto>> where TType : ObjectGraphType<TDto>
     {
         public PageInfoType()
         {

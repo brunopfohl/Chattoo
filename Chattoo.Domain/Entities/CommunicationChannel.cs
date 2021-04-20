@@ -9,6 +9,13 @@ namespace Chattoo.Domain.Entities
     /// </summary>
     public class CommunicationChannel : AuditableEntity, IAuditableEntity
     {
+        public CommunicationChannel()
+        {
+            Messages = new List<CommunicationChannelMessage>();
+            Users = new List<User>();
+            Roles = new List<CommunicationChannelRole>();
+        }
+        
         /// <summary>
         /// Vrací nebo nastavuje název komunikačního kanálu.
         /// </summary>

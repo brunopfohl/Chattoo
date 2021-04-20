@@ -9,6 +9,16 @@ namespace Chattoo.Domain.Entities
     /// </summary>
     public class User : AuditableEntity, IAuditableEntity
     {
+        public User()
+        {
+            Aliases = new List<UserAlias>();
+            Groups = new List<Group>();
+            GroupRoles = new List<GroupRole>();
+            Channels = new List<CommunicationChannel>();
+            ChannelMessages = new List<CommunicationChannelMessage>();
+            ChannelRoles = new List<CommunicationChannelRole>();
+        }
+        
         /// <summary>
         /// Vrací nebo nastavuje kolekci aliasů (přezdívek), které má tento uživatel napříč aplikací.
         /// </summary>

@@ -32,7 +32,8 @@ namespace Chattoo.Application.Groups.Commands.Delete
         public async Task<Unit> Handle(DeleteGroupCommand request, CancellationToken cancellationToken)
         {
             // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
-            var entity = await _groupRepository.GetByIdAsync(request.Id, true);
+            var entity = await _groupRepository.GetByIdAsync(request.Id) 
+                         ?? throw new NotFoundException(nameof(Group), request.Id);
             
             // Záznam se podařilo nalézt -> smažu ho a uložím změny.
             _groupRepository.Remove(entity);

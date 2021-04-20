@@ -1,5 +1,7 @@
-﻿using Chattoo.Application.Groups.Commands.Create;
+﻿using Chattoo.Application.Groups.Commands.AddUser;
+using Chattoo.Application.Groups.Commands.Create;
 using Chattoo.Application.Groups.Commands.Delete;
+using Chattoo.Application.Groups.Commands.RemoveUser;
 using Chattoo.Application.Groups.Commands.Update;
 using Chattoo.GraphQL.Extensions;
 using GraphQL.Types;
@@ -66,6 +68,50 @@ namespace Chattoo.GraphQL.Mutation
                     {
                         Id = ctx.GetString("id"),
                         Name = ctx.GetString("name")
+                    };
+
+                    await mediator.Send(command);
+
+                    return true;
+                }
+            );
+            
+            this.FieldAsyncWithScope<BooleanGraphType, bool>(
+                "addUser",
+                arguments: 
+                new QueryArguments
+                (
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "userId" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "groupId" }
+                ),
+                resolve: async (ctx, mediator) =>
+                {
+                    var command = new AddUserToGroupCommand()
+                    {
+                        UserId = ctx.GetString("userId"),
+                        GroupId = ctx.GetString("groupId")
+                    };
+
+                    await mediator.Send(command);
+
+                    return true;
+                }
+            );
+            
+            this.FieldAsyncWithScope<BooleanGraphType, bool>(
+                "removeUser",
+                arguments: 
+                new QueryArguments
+                (
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "userId" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "groupId" }
+                ),
+                resolve: async (ctx, mediator) =>
+                {
+                    var command = new RemoveUserFromGroupCommand()
+                    {
+                        UserId = ctx.GetString("userId"),
+                        GroupId = ctx.GetString("groupId")
                     };
 
                     await mediator.Send(command);

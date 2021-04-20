@@ -9,6 +9,12 @@ namespace Chattoo.Domain.Entities
     /// </summary>
     public class Group : AuditableEntity, IAuditableEntity
     {
+        public Group()
+        {
+            Users = new List<User>();
+            Roles = new List<GroupRole>();
+        }
+        
         /// <summary>
         /// Vrací nebo nastavuje název skupiny uživatelů.
         /// </summary>

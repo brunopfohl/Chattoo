@@ -10,6 +10,11 @@ namespace Chattoo.Domain.Entities
     /// </summary>
     public class GroupRole : AuditableEntity, IAuditableEntity
     {
+        public GroupRole()
+        {
+            Users = new List<User>();
+        }
+        
         /// <summary>
         /// Vrací nebo nastavuje Id skupiny, do které tato role patří.
         /// </summary>
