@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
 namespace Chattoo.Api
 {
@@ -103,6 +104,13 @@ namespace Chattoo.Api
             app.UseIdentityServer();
             app.UseAuthorization();
 
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller}/{action=Index}/{id?}");
+            });
+            
             // this is required for websockets support
             app.UseWebSockets();
 
@@ -117,21 +125,13 @@ namespace Chattoo.Api
 
             app.UseCors("MyPolicy");
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
-            });
-
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())
                 {
-                    //spa.UseAngularCliServer(npmScript: "start");
-                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
+                    //spa.UseReactDevelopmentServer(npmScript: "run dev");
                 }
             });
         }
