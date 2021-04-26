@@ -1,5 +1,6 @@
 import React from 'react'
 import authService from '../../components/api-authorization/AuthorizeService';
+import Loading from '../../components/loading/loading.component';
 
 interface LogoutRedirectProps {
     origin: string
@@ -8,9 +9,7 @@ interface LogoutRedirectProps {
 const Logout: React.FC<LogoutRedirectProps> = (props: LogoutRedirectProps) => {
     authService.signOut(props.origin);
     return (
-        <div>
-            Redirecting to logou
-        </div>
+        <Loading detail="Odhlašování"/>
     );
 }
 

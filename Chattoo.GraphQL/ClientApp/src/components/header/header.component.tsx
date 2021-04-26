@@ -7,23 +7,18 @@ const Container = styled.div`
     display: flex;
     padding-top: 1em;
     padding-bottom: 1em;
+    justify-content: space-between;
 `;
 
 const Header: React.FC<any> = (props: any) => {
-    let [token, setToken] = useState<string>();
-
-    useEffect(() => {
-        const getToken = async () => {
-            setToken(await authService.getAccessToken());
-        };
-
-        getToken();
-    }, []);
+    let onLogout = () => {
+        authService.signOut(window.location.href);
+    };
 
     return (
         <Container>
-            <h1>{token}</h1>
-            <Button text="Chattoo" radius="60px" backgroundColor="#C227C2" />
+            <Button text="Chattoo"/>
+            <Button text="Odhlásit se" onClick={onLogout}/>
         </Container>
     );
 }

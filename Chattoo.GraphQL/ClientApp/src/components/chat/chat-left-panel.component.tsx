@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components';
 import ProfilePicture from '../profile-picture/profile-picture.component';
 import CommunicationChannelPreview from './communication-channel-preview.component';
@@ -17,6 +17,10 @@ const Heading = styled.div`
 
 
 const ChatLeftPanel: React.FC<any> = (props: any) => {
+
+    useEffect(() => {
+        
+    }, []);
 
     return (
         <Container>
