@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import ChatLeftPanel from './chat-left-panel.component';
 import ChatRightPanel from './chat-right-panel.component';
 
+interface ChatProps {
+    
+};
+
 const Container = styled.div`
     border-radius: 20px;
     display: flex;
@@ -10,7 +14,7 @@ const Container = styled.div`
     overflow: hidden;
 `;
 
-const Chat: React.FC<any> = (props: any) => {
+const Chat: React.FC<any> = (props: ChatProps) => {
 
     return (
         <Container>

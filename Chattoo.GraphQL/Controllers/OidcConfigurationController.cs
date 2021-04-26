@@ -21,7 +21,6 @@ namespace Chattoo.GraphQL.Controllers
         {
             var parameters = ClientRequestParametersProvider.GetClientParameters(HttpContext, clientId);
 
-            int x = 5;
             return Ok(parameters);
         }
     }

@@ -131,7 +131,7 @@ export class AuthorizeService {
         return { status: AuthenticationResultStatus.Fail, message };
     }
 
-    /** Vrací chybu po vykonání operace. */
+    /** Vrací úspěch po vykonání operace. */
     private success(state?: any): AuthenticationResult {
         return { status: AuthenticationResultStatus.Success, state };
     }
@@ -146,9 +146,7 @@ export class AuthorizeService {
             return;
         }
         let response = await fetch(ApplicationPaths.ApiAuthorizationClientConfigurationUrl);
-        console.log(ApplicationPaths.ApiAuthorizationClientConfigurationUrl);
 
-        console.log(response);
         if (!response.ok) {
             throw new Error(`Could not load settings for '${ApplicationName}'`);
         }

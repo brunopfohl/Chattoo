@@ -1,6 +1,6 @@
 export const ApplicationName = 'ClientApp';
 
-const API_URL = 'https://localhost:5001';
+const API_URL = 'http://localhost:5000';
 
 export const QueryParameterNames = {
   ReturnUrl: 'returnUrl',

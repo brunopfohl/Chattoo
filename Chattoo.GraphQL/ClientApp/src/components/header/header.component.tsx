@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
+import authService from '../api-authorization/AuthorizeService';
 import Button from '../button/button.component';
 
 const Container = styled.div`
@@ -9,11 +10,20 @@ const Container = styled.div`
 `;
 
 const Header: React.FC<any> = (props: any) => {
+    let [token, setToken] = useState<string>();
+
+    useEffect(() => {
+        const getToken = async () => {
+            setToken(await authService.getAccessToken());
+        };
+
+        getToken();
+    }, []);
 
     return (
         <Container>
+            <h1>{token}</h1>
             <Button text="Chattoo" radius="60px" backgroundColor="#C227C2" />
-            <Button text="fsfd" radius="50%" backgroundColor="#C227C2" />
         </Container>
     );
 }

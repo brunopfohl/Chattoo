@@ -43,25 +43,24 @@ namespace Chattoo.Api
             services.AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
 
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
+
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/build";
+            });
+            
             services.AddControllers();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
             });
-
-            // In production, the Angular files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/dist";
-            });
-
-            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-            {
-                builder.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader();
-            }));
 
             services
                 .AddSingleton<GraphQLSchema>()
@@ -91,13 +90,13 @@ namespace Chattoo.Api
 
             app.UseHealthChecks("/health");
 
-            //app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            if (!env.IsDevelopment())
-            {
-                app.UseSpaStaticFiles();
-            }
+            app.UseCors("MyPolicy");
 
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseSpaStaticFiles();
+            
             app.UseRouting();
 
             app.UseAuthentication();
@@ -109,6 +108,17 @@ namespace Chattoo.Api
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
+            });
+            
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
+                }
             });
             
             // this is required for websockets support
@@ -122,18 +132,6 @@ namespace Chattoo.Api
 
             // use graphiQL middleware at default path /ui/graphiql
             app.UseGraphiQLServer();
-
-            app.UseCors("MyPolicy");
-
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                {
-                    //spa.UseReactDevelopmentServer(npmScript: "run dev");
-                }
-            });
         }
     }
 }

@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components';
 import ProfilePicture from '../profile-picture/profile-picture.component';
+import CommunicationChannelPreview from './communication-channel-preview.component';
+import SearchChannels from './search-channels.component';
 
 const Container = styled.div`
     background-color: #545454;
@@ -10,7 +12,9 @@ const Container = styled.div`
 const Heading = styled.div`
     display: flex;
     flex-direction: row;
+    color: white;
 `;
+
 
 const ChatLeftPanel: React.FC<any> = (props: any) => {
 
@@ -18,7 +22,12 @@ const ChatLeftPanel: React.FC<any> = (props: any) => {
         <Container>
             <Heading>
                 <ProfilePicture/>
+                <h2>Chaty</h2>
             </Heading>
+            <SearchChannels/>
+            <CommunicationChannelPreview channelName="Bruno Pfohl" channelDetail ="Já jsem mu říkal..."/>
+            <CommunicationChannelPreview channelName="Lucie Ječmeňová" channelDetail ="Já jsem mu říkal..."/>
+            <CommunicationChannelPreview channelName="Dan Právník" channelDetail ="Já jsem mu říkal..."/>
             {/* 
                 1 Header
                     1.a ProfileIcon
