@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import React from 'react';
 import styled from 'styled-components'
+import ConnectAccount from '../../components/connect-account/connect-account.component';
 import Login from '../../components/login.component';
 
 // Lineární gradient pozadí.
@@ -15,18 +16,18 @@ const RadientMain = styled.main`
     align-items: center;
 `;
 
-const LoginPage = () => {
+const ConnectAccountPage = () => {
     return (
         <div>
             <Head>
-                <title>Chattoo</title>
+                <title>Propojit účet - Chattoo</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <RadientMain>
-                <Login/>
+                <ConnectAccount/>
             </RadientMain>
         </div>
     )
 };
 
-export default LoginPage;
+export default ConnectAccountPage;

@@ -1,13 +1,15 @@
+import { useRouter } from 'next/router';
 import React from 'react'
 import authService from '../../components/api-authorization/AuthorizeService';
 import Loading from '../../components/loading/loading.component';
 
-interface LoginRedirectProps {
-    origin: string
-}
 
-const Login: React.FC<LoginRedirectProps> = (props: LoginRedirectProps) => {
-    authService.signIn(props.origin);
+const Login: React.FC = () => {
+    const router = useRouter();
+    const { origin } = router.query;
+
+    authService.signIn(origin);
+
     return (
         <Loading detail="Přihlašování"/>
     );

@@ -1,20 +1,19 @@
 import React from 'react'
 import styled from 'styled-components';
 
-type ButtonTheme = "primary" | "secondary";
-
 interface ButtonProps {
-    theme: ButtonTheme,
     text: string,
+    stretch?: boolean,
     onClick: Function
 }
 
-const Button: React.FC<any> = (props: ButtonProps) => {
+const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
     const StyledButton = styled.button`
         font-size: 12pt;
         color: white;
         cursor: pointer;
         background-color: #02B893;
+        ${props.stretch && "flex-grow: 1;"}
         border: none;
         border-radius: 2em;
         padding: 1em;

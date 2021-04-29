@@ -8,7 +8,7 @@ export class AuthorizeService {
     private _callbacks:any[] = [];
     private _nextSubscriptionId: number = 0;
     private _user: User = null;
-    private _isAuthenticated: boolean = false;
+    private _isAuthenticated: boolean;
 
     /** Vrací, zda-li je uživatel přihlášen. */
     public async isAuthenticated(): Promise<boolean> {
@@ -32,6 +32,10 @@ export class AuthorizeService {
         await this.ensureUserManagerInitialized();
         const user = await this.userManager.getUser();
         return user && user.access_token;
+    }
+
+    public getUnsafeAccessToken(): string {
+        return !!this._user ? this._user.access_token : null;
     }
 
     /** Pokusí se přihlásit uživatele. */
@@ -98,6 +102,7 @@ export class AuthorizeService {
     /** Přidá callback do kolekce "odebíraných" metod. */
     public subscribe(callback): number {
         this._callbacks.push({ callback, subscription: this._nextSubscriptionId++ });
+        callback();
         return this._nextSubscriptionId - 1;
     }
 

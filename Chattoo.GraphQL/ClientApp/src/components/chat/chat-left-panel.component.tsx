@@ -10,6 +10,7 @@ const Container = styled.div`
 `;
 
 const Heading = styled.div`
+    padding-left: 1em;
     display: flex;
     flex-direction: row;
     color: white;
@@ -25,7 +26,6 @@ const ChatLeftPanel: React.FC<any> = (props: any) => {
     return (
         <Container>
             <Heading>
-                <ProfilePicture/>
                 <h2>Chaty</h2>
             </Heading>
             <SearchChannels/>

@@ -5,7 +5,8 @@ import Loading from '../../components/loading/loading.component';
 
 
 const LogoutCallback: React.FC = () => {
-    let callbackUrl = window.location.href;
+    const router = useRouter();
+    let callbackUrl = router.asPath;
 
     authService.completeSignOut(callbackUrl).then((result: AuthenticationResult) => {
         

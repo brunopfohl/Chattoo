@@ -8,6 +8,7 @@ namespace Chattoo.GraphQL.Types
         public UserType()
         {
             Field(o => o.Id);
+            Field(o => o.UserName);
             Field(o => o.CreatedAt);
             Field(o => o.ModifiedAt, nullable: true);
         }

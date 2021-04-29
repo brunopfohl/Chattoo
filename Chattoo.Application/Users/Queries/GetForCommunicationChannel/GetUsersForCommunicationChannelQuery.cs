@@ -40,7 +40,7 @@ namespace Chattoo.Application.Users.Queries.GetForCommunicationChannel
             _communicationChannelRepository = communicationChannelRepository;
         }
 
-        public async Task<PaginatedList<UserDto>> Handle(GetUsersForCommunicationChannelQuery request, CancellationToken cancellationToken)
+        public override async Task<PaginatedList<UserDto>> Handle(GetUsersForCommunicationChannelQuery request, CancellationToken cancellationToken)
         {
             // Ověřím si, že komunikační kanál existuje.
             _communicationChannelRepository.ThrowIfNotExists(request.ChannelId);

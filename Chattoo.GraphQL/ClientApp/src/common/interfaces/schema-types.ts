@@ -146,6 +146,44 @@ export interface GetAliasesForUserVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetUsers
+// ====================================================
+
+export interface GetUsers_users_get_data {
+  __typename: "UserType";
+  id: string;
+  userName: string;
+}
+
+export interface GetUsers_users_get {
+  __typename: "PaginationListUserType";
+  data: (GetUsers_users_get_data | null)[] | null;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  pageIndex: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface GetUsers_users {
+  __typename: "UserQuery";
+  get: GetUsers_users_get | null;
+}
+
+export interface GetUsers {
+  users: GetUsers_users | null;
+}
+
+export interface GetUsersVariables {
+  searchTerm?: string | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetUsersForGroup
 // ====================================================
 

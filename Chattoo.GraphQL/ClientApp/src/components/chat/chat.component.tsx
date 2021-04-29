@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components';
+import UserSearch from '../user-search/user-search.component';
 import ChatLeftPanel from './chat-left-panel.component';
 import ChatRightPanel from './chat-right-panel.component';
 
@@ -15,11 +16,11 @@ const Container = styled.div`
 `;
 
 const Chat: React.FC<any> = (props: ChatProps) => {
-
     return (
         <Container>
             <ChatLeftPanel></ChatLeftPanel>
             <ChatRightPanel></ChatRightPanel>
+            <UserSearch/>
         </Container>
     );
 }

@@ -20,6 +20,11 @@ namespace Chattoo.Domain.Entities
         }
         
         /// <summary>
+        /// Vrací nebo nastavuje uživatelské jméno.
+        /// </summary>
+        public virtual string UserName { get; set; }
+        
+        /// <summary>
         /// Vrací nebo nastavuje kolekci aliasů (přezdívek), které má tento uživatel napříč aplikací.
         /// </summary>
         public virtual ICollection<UserAlias> Aliases { get; set; }

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Globalization;
+using System.Linq;
 using AutoMapper;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Repositories;
@@ -28,6 +30,17 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
             // TODO: Nesmysl, musím jít přes group.
             var result = GetAll()
                 .Where(u => u.Groups.Any(g => g.Id == groupId));
+
+            return result;
+        }
+        
+        public IQueryable<User> GetBySearchTerm(string searchTerm)
+        {
+            // TODO: Nesmysl, musím jít přes group.
+            var result = GetAll()
+                .Where(u =>
+                    u.UserName.ToLower().Contains(searchTerm.ToLower())
+                );
 
             return result;
         }

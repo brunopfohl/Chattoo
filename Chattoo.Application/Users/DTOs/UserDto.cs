@@ -9,6 +9,9 @@ namespace Chattoo.Application.Users.DTOs
     /// </summary>
     public class UserDto : AuditableDto, IMapFrom<User>
     {
-        
+        /// <summary>
+        /// Vrací nebo nastavuje uživatelské jméno uživatele.
+        /// </summary>
+        public string UserName { get; set; }
     }
 }

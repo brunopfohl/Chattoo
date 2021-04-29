@@ -5,15 +5,13 @@ import Loading from '../../components/loading/loading.component';
 
 
 const LoginCallback: React.FC = () => {
-    let callbackUrl = window.location.href;
+    const router = useRouter();
+    let callbackUrl = router.asPath;
 
-    let router = useRouter();
 
     authService.completeSignIn(callbackUrl).then((result: AuthenticationResult) => {
         console.log(result);
-        if (result.state === AuthenticationResultStatus.Success) {
-            router.push("/");
-        }
+        (result.status === AuthenticationResultStatus.Success) && router.push("/");
     });
 
     return (

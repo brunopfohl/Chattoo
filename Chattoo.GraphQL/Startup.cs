@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using Chattoo.GraphQL.Extensions;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
 namespace Chattoo.Api
@@ -31,6 +32,8 @@ namespace Chattoo.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureNonBreakingSameSiteCookies();
+            
             services.AddApplication();
             services.AddInfrastructure(Configuration);
 
@@ -92,12 +95,14 @@ namespace Chattoo.Api
 
             app.UseCors("MyPolicy");
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseSpaStaticFiles();
             
             app.UseRouting();
+
+            app.UseCookiePolicy();
 
             app.UseAuthentication();
             app.UseIdentityServer();
@@ -111,6 +116,18 @@ namespace Chattoo.Api
                 endpoints.MapRazorPages();
             });
             
+            // this is required for websockets support
+            app.UseWebSockets();
+
+            // use websocket middleware for ChatSchema at default path /graphql
+            app.UseGraphQLWebSockets<GraphQLSchema>();
+
+            // use HTTP middleware for ChatSchema at default path /graphql
+            app.UseGraphQL<GraphQLSchema>();
+            
+            // use graphiQL middleware at default path /ui/graphiql
+            app.UseGraphiQLServer();
+            
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
@@ -120,18 +137,6 @@ namespace Chattoo.Api
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
                 }
             });
-            
-            // this is required for websockets support
-            app.UseWebSockets();
-
-            // use websocket middleware for ChatSchema at default path /graphql
-            app.UseGraphQLWebSockets<GraphQLSchema>();
-
-            // use HTTP middleware for ChatSchema at default path /graphql
-            app.UseGraphQL<GraphQLSchema>();
-
-            // use graphiQL middleware at default path /ui/graphiql
-            app.UseGraphiQLServer();
         }
     }
 }

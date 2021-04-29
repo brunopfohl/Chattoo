@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Chattoo.Application.Common.Interfaces;
+using Chattoo.Domain.Entities;
 using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Repositories;
 using Chattoo.Infrastructure.Identity;
@@ -41,6 +42,24 @@ namespace Chattoo.Infrastructure.Persistence
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
+            var users = Set<User>();
+            
+            foreach (EntityEntry<ApplicationUser> entry in ChangeTracker.Entries<ApplicationUser>().ToList())
+            {
+                var appUser = await users.FindAsync(entry.Entity.Id);
+
+                if (appUser == null)
+                {
+                    var newAppUser = new User()
+                    {
+                        Id = entry.Entity.Id,
+                        UserName = entry.Entity.UserName
+                    };
+
+                    await users.AddAsync(newAppUser, cancellationToken);
+                }
+            }
+            
             foreach (EntityEntry<IAuditableEntity> entry in ChangeTracker.Entries<IAuditableEntity>())
             {
                 switch (entry.State)

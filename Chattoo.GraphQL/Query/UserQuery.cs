@@ -1,5 +1,6 @@
 ﻿using Chattoo.Application.Common.Models;
 using Chattoo.Application.Users.DTOs;
+using Chattoo.Application.Users.Queries.Get;
 using Chattoo.Application.Users.Queries.GetForCommunicationChannel;
 using Chattoo.Application.Users.Queries.GetForGroup;
 using Chattoo.GraphQL.Arguments;
@@ -49,6 +50,24 @@ namespace Chattoo.GraphQL.Query
                         GroupId = ctx.GetString("channelId"),
                         PageNumber = ctx.GetInt("pageNumber"),
                         PageSize = ctx.GetInt("pageSize")
+                    };
+
+                    return await mediator.Send(query);
+                }
+            );
+            
+            this.FieldAsyncWithScope<PageInfoType<UserType, UserDto>, PaginatedList<UserDto>>(
+                "get",
+                arguments: 
+                new QueryArgumentsWithPagination
+                (
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "searchTerm" }
+                ),
+                resolve: async (ctx, mediator) =>
+                {
+                    var query = new GetUsersQuery()
+                    {
+                        SearchTerm = ctx.GetString("searchTerm"),
                     };
 
                     return await mediator.Send(query);

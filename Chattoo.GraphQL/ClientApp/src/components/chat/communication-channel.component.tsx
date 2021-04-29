@@ -10,7 +10,6 @@ interface CommunicationChannelProps {
 };
 
 const Container = styled.div`
-    z-index: 100;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -19,8 +18,7 @@ const Container = styled.div`
 
 const Heading = styled.div`
     min-height: 4em;
-    background-color: #545454;
-    filter: brightness(75%);
+    background-color: #3f3f3f;
 `;
 
 const Content = styled.div`
@@ -34,8 +32,7 @@ const MessageBoxContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: #545454;
-    filter: brightness(75%);
+    background-color: #3f3f3f;
 `;
 
 const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) => {

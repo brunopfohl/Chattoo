@@ -21,5 +21,11 @@ namespace Chattoo.Domain.Repositories
         /// <param name="groupId">Id uživatelské skupiny, jejíž uživatelé se mají načíst.</param>
         /// <returns>Kolekci <see cref="User"/> uživatelů, kteřé jsou součástí dané uživatelské skupiny.</returns>
         public IQueryable<User> GetByGroupId(string groupId);
+
+        /// <summary>
+        /// Vrací všechny uživatele, kteří odpovídají hledanému výrazu.
+        /// </summary>
+        /// <param name="searchTerm">Výraz, dle kterého se mají dohledat uživatelé.</param>
+        public IQueryable<User> GetBySearchTerm(string searchTerm);
     }
 }

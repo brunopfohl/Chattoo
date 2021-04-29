@@ -16,6 +16,7 @@ const Container = styled.div`
 /* Stylovaný form prvku pro odeslání zpráv */
 const Form = styled.form`
     display: flex;
+    align-items: center;
     flex-grow: 1;
 `;
 
