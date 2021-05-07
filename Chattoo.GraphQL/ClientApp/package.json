@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.3.11",
+    "@apollo/link-error": "^2.0.0-beta.3",
     "@craco/craco": "^6.1.1",
     "@types/openid-client": "^3.7.0",
     "apollo": "^2.32.5",

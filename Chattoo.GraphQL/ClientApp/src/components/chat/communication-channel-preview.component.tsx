@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components';
+import { CommunicationChannel } from '../../common/interfaces/communication-channel.interface';
 import ProfilePicture from '../profile-picture/profile-picture.component';
+import { ChatStateContext } from './chat-state-provider.component';
 
 interface CommunicationChannelPreviewProps {
     avatarUrl: string,
-    channelName: string,
-    channelDetail: string
+    channel: CommunicationChannel,
 };
 
 const Container = styled.div`
+    cursor: pointer;
     color: white;
     display: flex;
     flex-direction: row;
@@ -37,13 +39,20 @@ const ChannelDetail = styled.span`
 `;
 
 const CommunicationChannelPreview: React.FC<any> = (props: CommunicationChannelPreviewProps) => {
+    const { channel } = props;
+    const { setCurrentChannel } = useContext(ChatStateContext);
+
+    // Po kliknutí zvolím tento komunikační kanál.
+    const onClickHandler = () => {
+        setCurrentChannel(channel);
+    }
 
     return (
-        <Container>
+        <Container onClick={onClickHandler}>
             <ProfilePicture/>
             <RightSide>
-                <ChannelName>{props.channelName}</ChannelName>
-                <ChannelDetail>{props.channelDetail}</ChannelDetail>
+                <ChannelName>{channel.name}</ChannelName>
+                <ChannelDetail>{channel.description}</ChannelDetail>
             </RightSide>
         </Container>
     );

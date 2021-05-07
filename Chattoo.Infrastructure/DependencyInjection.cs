@@ -62,14 +62,15 @@ namespace Chattoo.Infrastructure
             services.AddTransient<IDateTime, DateTimeService>();
 
             services.AddTransient<IIdentityService, IdentityService>();
-
+            
             services.AddAuthentication()
+                .AddJwtBearer()
                 .AddIdentityServerJwt();
 
-            services.AddAuthorization(options =>
+            /*services.AddAuthorization(options =>
             {
                 options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator"));
-            });
+            });*/
 
             return services;
         }

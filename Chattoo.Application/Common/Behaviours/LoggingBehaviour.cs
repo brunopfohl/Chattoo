@@ -9,20 +9,20 @@ namespace Chattoo.Application.Common.Behaviours
     public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest>
     {
         private readonly ILogger _logger;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserIdService _currentUserIdService;
         private readonly IIdentityService _identityService;
 
-        public LoggingBehaviour(ILogger<TRequest> logger, ICurrentUserService currentUserService, IIdentityService identityService)
+        public LoggingBehaviour(ILogger<TRequest> logger, ICurrentUserIdService currentUserIdService, IIdentityService identityService)
         {
             _logger = logger;
-            _currentUserService = currentUserService;
+            _currentUserIdService = currentUserIdService;
             _identityService = identityService;
         }
 
         public async Task Process(TRequest request, CancellationToken cancellationToken)
         {
             var requestName = typeof(TRequest).Name;
-            var userId = _currentUserService.UserId ?? string.Empty;
+            var userId = _currentUserIdService.UserId ?? string.Empty;
             string userName = string.Empty;
 
             if (!string.IsNullOrEmpty(userId))

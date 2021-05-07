@@ -1,12 +1,15 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, QueryResult, useQuery } from "@apollo/client";
+import { AppUser } from "../../../common/interfaces/app-user.interface";
+import { PaginatedList } from "../../../common/interfaces/paginated-list";
 import { GetUsersForChannel, GetUsersForChannelVariables } from "../../../common/interfaces/schema-types";
 
 const GET_USERS_FOR_CHANNEL = gql`
-    query GetUsersForChannel($channelId: String) {
+    query GetUsersForChannel($channelId: ID!) {
         users {
-            getForGroup(channelId: $channelId) {
+            getForCommunicationChannel(channelId: $channelId) {
                 data {
                     id
+                    userName
                     createdAt
                     modifiedAt
                 }
@@ -20,7 +23,10 @@ const GET_USERS_FOR_CHANNEL = gql`
     }
 `;
 
-export const useGetUsersForChannel = (variables: GetUsersForChannelVariables): GetUsersForChannel | undefined => {
-    const { data } = useQuery<GetUsersForChannel>(GET_USERS_FOR_CHANNEL, { variables });
-    return data;
+export const useGetUsersForChannel = (variables: GetUsersForChannelVariables): [PaginatedList<AppUser> | undefined, QueryResult<GetUsersForChannel, GetUsersForChannelVariables>] => {
+    const query = useQuery<GetUsersForChannel, GetUsersForChannelVariables>(GET_USERS_FOR_CHANNEL, {
+        variables: variables
+    });
+
+    return [query.data?.users.getForCommunicationChannel, query];
 }

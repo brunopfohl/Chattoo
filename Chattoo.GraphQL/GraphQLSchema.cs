@@ -3,16 +3,19 @@ using Chattoo.GraphQL.Query;
 using GraphQL.Types;
 using GraphQL.Utilities;
 using System;
+using Chattoo.GraphQL.Subscription;
+using Chattoo.GraphQL.Subscription.CommunicationChannelMessage;
 
 namespace Chattoo.GraphQL
 {
     public class GraphQLSchema : Schema
     {
-        public GraphQLSchema(IServiceProvider provider)
+        public GraphQLSchema(IServiceProvider provider, ICommunicationChannelMessageSubscriptionProvider communicationChannelMessageSubscriptionProvider)
             : base(provider)
         {
             Query = provider.GetRequiredService<GraphQLQuery>();
             Mutation = provider.GetRequiredService<GraphQLMutation>();
+            Subscription = provider.GetRequiredService<GraphQLSubscription>();
         }
     }
 }

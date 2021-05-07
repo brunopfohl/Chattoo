@@ -2,7 +2,6 @@ import Head from 'next/head'
 import React from 'react';
 import styled from 'styled-components'
 import ConnectAccount from '../../components/connect-account/connect-account.component';
-import Login from '../../components/login.component';
 
 // Lineární gradient pozadí.
 const RadientMain = styled.main`

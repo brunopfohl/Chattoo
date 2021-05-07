@@ -61,6 +61,18 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
             return result;
         }
 
+        public TEntity GetById(TKey id, bool throwNotFound = false)
+        {
+            var result = _dbContext.Find<TEntity>(id);
+
+            if (throwNotFound && result is null)
+            {
+                throw new NotFoundException(nameof(TKey), id);
+            }
+            
+            return result;
+        }
+        
         public async Task<TEntity> GetByIdAsync(TKey id, bool throwNotFound = false)
         {
             var result = await _dbContext.FindAsync<TEntity>(id);

@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components';
+import { Settings } from 'styled-icons/material';
 import authService from '../api-authorization/AuthorizeService';
-import Button from '../button/button.component';
+import { AppStateContext } from '../app-state-provider.component';
+import Button, { ButtonTheme } from '../button/button.component';
 
 const Container = styled.div`
     display: flex;
@@ -14,21 +16,25 @@ const Container = styled.div`
 const Left = styled.div`
     display: flex;
     flex-direction: row;
+    align-items: center;
     flex-grow: 1;
 `;
 
 const Right = styled.div`
     display: flex;
     flex-direction: row-reverse;
+    align-items: center;
     flex-grow: 1;
 `;
 
 const UserName = styled.h2`
     color: white;
+    margin-right: 1em;
 `;
 
 const Header: React.FC<any> = (props: any) => {
-    const [userName, setUserName] = useState<string>("");
+    const { appState } = useContext(AppStateContext);
+    const { user } = appState;
 
     const router = useRouter();
 
@@ -36,19 +42,14 @@ const Header: React.FC<any> = (props: any) => {
         authService.signOut(router.asPath);
     };
 
-    useEffect(() => {
-        authService.getUser().then((user) => {
-            user && setUserName(user.name)
-        });
-    }, []);
-
     return (
         <Container>
             <Left>
-                <UserName>{userName && userName}</UserName>
+                <UserName>{user && user.userName} {user && user.id}</UserName>
+                <Button onClick={() => {}} theme={ButtonTheme.pink} icon={Settings}/>
             </Left>
             <Right>
-                <Button text="Odhlásit se" onClick={onLogout}/>
+                <Button text="Odhlásit se" onClick={onLogout} theme={ButtonTheme.green}/>
             </Right>
         </Container>
     );

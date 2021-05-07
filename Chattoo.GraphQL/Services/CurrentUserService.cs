@@ -1,6 +1,4 @@
 ﻿using Chattoo.Application.Common.Interfaces;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Repositories;
 
@@ -12,27 +10,28 @@ namespace Chattoo.GraphQL.Services
     public class CurrentUserService : ICurrentUserService
     {
         private User _currentUser;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserRepository _userRepository;
+        private readonly ICurrentUserIdService _currentUserIdService;
 
-        public CurrentUserService(IHttpContextAccessor httpContextAccessor)
+        public CurrentUserService(IUserRepository userRepository, ICurrentUserIdService currentUserIdService)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _userRepository = userRepository;
+            _currentUserIdService = currentUserIdService;
         }
-
-        /// <summary>
-        /// Vrací Id aktuálně přihlášeného uživatele.
-        /// </summary>
-        public string UserId => _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         /// <summary>
         /// Vrací aktuálně přihlášeného uživatele.
         /// </summary>
-        public User User
+        public User User => GetCurrentUser();
+
+        private User GetCurrentUser()
         {
-            get
+            if (_currentUser == null && _currentUserIdService.ClaimsPrincipal?.Identity?.IsAuthenticated == true)
             {
-                return _currentUser;
+                _currentUser = _userRepository.GetById(_currentUserIdService.UserId);
             }
+
+            return _currentUser;
         }
     }
 }

@@ -1,5 +1,6 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document'
-import styled, { ServerStyleSheet } from 'styled-components';
+import Document from 'next/document'
+import React from 'react';
+import { ServerStyleSheet } from 'styled-components';
 
 
 export default class CustomDocument extends Document {

@@ -1,12 +1,11 @@
 using Chattoo.Application;
 using Chattoo.Application.Common.Interfaces;
-using Chattoo.GraphQL;
+using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Services;
+using Chattoo.GraphQL.Subscription.CommunicationChannelMessage;
 using Chattoo.Infrastructure;
-using Chattoo.Infrastructure.Identity;
 using Chattoo.Infrastructure.Persistence;
 using GraphQL.Server;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using Chattoo.GraphQL.Extensions;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
-namespace Chattoo.Api
+namespace Chattoo.GraphQL
 {
     public class Startup
     {
@@ -37,10 +33,10 @@ namespace Chattoo.Api
             services.AddApplication();
             services.AddInfrastructure(Configuration);
 
+            services.AddSingleton<ICurrentUserIdService, CurrentUserIdService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            
             services.AddDatabaseDeveloperPageExceptionFilter();
-
-            services.AddSingleton<ICurrentUserService, CurrentUserService>();
-
             services.AddHttpContextAccessor();
 
             services.AddHealthChecks()
@@ -66,6 +62,7 @@ namespace Chattoo.Api
             });
 
             services
+                .AddSingleton<ICommunicationChannelMessageSubscriptionProvider, CommunicationChannelMessageSubscriptionProvider>()
                 .AddSingleton<GraphQLSchema>()
                 .AddGraphQL((options, provider) =>
                 {
@@ -95,7 +92,7 @@ namespace Chattoo.Api
 
             app.UseCors("MyPolicy");
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseSpaStaticFiles();
@@ -126,7 +123,8 @@ namespace Chattoo.Api
             app.UseGraphQL<GraphQLSchema>();
             
             // use graphiQL middleware at default path /ui/graphiql
-            app.UseGraphiQLServer();
+            app.UseGraphQLVoyager();
+            app.UseGraphQLPlayground();
             
             app.UseSpa(spa =>
             {

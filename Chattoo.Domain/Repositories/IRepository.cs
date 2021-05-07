@@ -19,6 +19,8 @@ namespace Chattoo.Domain.Repositories
 
         IQueryable<T> GetAll<T>();
 
+        TEntity GetById(TKey id, bool throwNotFound = false);
+        
         Task<TEntity> GetByIdAsync(TKey id, bool throwNotFound = false);
 
         Task<T> GetByIdAsync<T>(TKey id, bool throwNotFound = false);

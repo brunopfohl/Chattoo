@@ -12,25 +12,40 @@ export class AuthorizeService {
 
     /** Vrací, zda-li je uživatel přihlášen. */
     public async isAuthenticated(): Promise<boolean> {
-        const user = await this.getUser();
+        const user = await this.getUserProfile();
         return !!user;
     }
 
-    /** Vrací aktuálně přihlášeného uživatele. */
-    public async getUser(): Promise<Profile> {
+    public getUserUnsafe(): User {
+        return this._user;
+    }
+
+    public async getUser(): Promise<User> {
+        await this.ensureUserManagerInitialized();
+        let user = await this.userManager.getUser();
+
+        if (!user || user.expired) {
+            await this.userManager.createSigninRequest();
+            this._user = null;
+            user = null;
+        }
+
+        return user;
+    }
+
+    /** Vrací profil aktuálně přihlášeného uživatele. */
+    public async getUserProfile(): Promise<Profile> {
         if (this._user && this._user.profile) {
             return this._user.profile;
         }
 
-        await this.ensureUserManagerInitialized();
-        const user = await this.userManager.getUser();
+        const user = await this.getUser();
         return user && user.profile;
     }
 
     /** Vrací aktuální access token. */
     public async getAccessToken(): Promise<string> {
-        await this.ensureUserManagerInitialized();
-        const user = await this.userManager.getUser();
+        const user = await this.getUser();
         return user && user.access_token;
     }
 

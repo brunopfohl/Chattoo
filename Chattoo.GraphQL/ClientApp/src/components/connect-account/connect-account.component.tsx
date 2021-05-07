@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react'
 import styled from 'styled-components';
 import { ApplicationPaths } from '../api-authorization/ApiAuthorizationConstants';
-import Button from '../button/button.component';
+import Button, { ButtonTheme } from '../button/button.component';
 
 const Container = styled.div`
     display: flex;
@@ -24,7 +24,7 @@ const ConnectAccount: React.FC<any> = () => {
 
     return (
         <Container>
-            <Button text="Přihlásit se" onClick={onLogin}/>
+            <Button text="Přihlásit se" onClick={onLogin} stretch={true} theme={ButtonTheme.green}/>
         </Container>
     );
 }

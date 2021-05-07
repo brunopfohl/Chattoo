@@ -26,18 +26,18 @@ namespace Chattoo.Infrastructure.Persistence
 
         private readonly IDateTime _dateTime;
         private readonly IDomainEventService _domainEventService;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserIdService _currentUserIdService;
 
         public ApplicationDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions,
             IDomainEventService domainEventService,
             IDateTime dateTime,
-            ICurrentUserService currentUserService) : base(options, operationalStoreOptions)
+            ICurrentUserIdService currentUserIdService) : base(options, operationalStoreOptions)
         {
             _domainEventService = domainEventService;
             _dateTime = dateTime;
-            _currentUserService = currentUserService;
+            _currentUserIdService = currentUserIdService;
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
@@ -65,12 +65,12 @@ namespace Chattoo.Infrastructure.Persistence
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = _currentUserService.UserId;
+                        entry.Entity.CreatedBy = _currentUserIdService.UserId;
                         entry.Entity.CreatedAt = _dateTime.Now;
                         break;
 
                     case EntityState.Modified:
-                        entry.Entity.ModifiedBy = _currentUserService.UserId;
+                        entry.Entity.ModifiedBy = _currentUserIdService.UserId;
                         entry.Entity.ModifiedAt = _dateTime.Now;
                         break;
                 }

@@ -11,18 +11,18 @@ namespace Chattoo.Application.Common.Behaviours
     {
         private readonly Stopwatch _timer;
         private readonly ILogger<TRequest> _logger;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserIdService _currentUserIdService;
         private readonly IIdentityService _identityService;
 
         public PerformanceBehaviour(
             ILogger<TRequest> logger, 
-            ICurrentUserService currentUserService,
+            ICurrentUserIdService currentUserIdService,
             IIdentityService identityService)
         {
             _timer = new Stopwatch();
 
             _logger = logger;
-            _currentUserService = currentUserService;
+            _currentUserIdService = currentUserIdService;
             _identityService = identityService;
         }
 
@@ -39,7 +39,7 @@ namespace Chattoo.Application.Common.Behaviours
             if (elapsedMilliseconds > 500)
             {
                 var requestName = typeof(TRequest).Name;
-                var userId = _currentUserService.UserId ?? string.Empty;
+                var userId = _currentUserIdService.UserId ?? string.Empty;
                 var userName = string.Empty;
 
                 if (!string.IsNullOrEmpty(userId))

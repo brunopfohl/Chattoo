@@ -12,14 +12,14 @@ namespace Chattoo.Application.Common.Behaviours
 {
     public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserIdService _currentUserIdService;
         private readonly IIdentityService _identityService;
 
         public AuthorizationBehaviour(
-            ICurrentUserService currentUserService,
+            ICurrentUserIdService currentUserIdService,
             IIdentityService identityService)
         {
-            _currentUserService = currentUserService;
+            _currentUserIdService = currentUserIdService;
             _identityService = identityService;
         }
 
@@ -30,7 +30,7 @@ namespace Chattoo.Application.Common.Behaviours
             if (authorizeAttributes.Any())
             {
                 // Must be authenticated user
-                if (_currentUserService.UserId is null)
+                if (_currentUserIdService.UserId is null)
                 {
                     throw new UnauthorizedAccessException();
                 }
@@ -45,7 +45,7 @@ namespace Chattoo.Application.Common.Behaviours
                         var authorized = false;
                         foreach (var role in roles)
                         {
-                            var isInRole = await _identityService.IsInRoleAsync(_currentUserService.UserId, role.Trim());
+                            var isInRole = await _identityService.IsInRoleAsync(_currentUserIdService.UserId, role.Trim());
                             if (isInRole)
                             {
                                 authorized = true;
@@ -67,7 +67,7 @@ namespace Chattoo.Application.Common.Behaviours
                 {
                     foreach(var policy in authorizeAttributesWithPolicies.Select(a => a.Policy))
                     {
-                        var authorized = await _identityService.AuthorizeAsync(_currentUserService.UserId, policy);
+                        var authorized = await _identityService.AuthorizeAsync(_currentUserIdService.UserId, policy);
 
                         if (!authorized)
                         {

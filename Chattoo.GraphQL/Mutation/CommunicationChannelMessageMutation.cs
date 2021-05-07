@@ -1,19 +1,21 @@
 ﻿using Chattoo.Application.CommunicationChannelMessages.Commands.Create;
 using Chattoo.Application.CommunicationChannelMessages.Commands.Delete;
 using Chattoo.Application.CommunicationChannelMessages.Commands.Update;
+using Chattoo.Application.CommunicationChannelMessages.DTOs;
 using Chattoo.Domain.Enums;
 using Chattoo.GraphQL.Extensions;
+using Chattoo.GraphQL.Subscription.CommunicationChannelMessage;
 using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Mutation
 {
     public class CommunicationChannelMessageMutation : ObjectGraphType
     {
-        public CommunicationChannelMessageMutation()
+        public CommunicationChannelMessageMutation(ICommunicationChannelMessageSubscriptionProvider communicationChannelMessageSubscriptionProvider)
         {
             Name = "CommunicationChannelMessageMutation";
             
-            this.FieldAsyncWithScope<StringGraphType, string>(
+            this.FieldAsyncWithScope<StringGraphType, CommunicationChannelMessageDto>(
                 "create",
                 arguments: 
                 new QueryArguments
@@ -33,9 +35,13 @@ namespace Chattoo.GraphQL.Mutation
                         Type = (CommunicationChannelMessageType)ctx.GetInt("type")
                     };
 
-                    var id = await mediator.Send(command);
+                    var communicationChannelMessageDto = await mediator.Send(command);
 
-                    return id;
+                    // Přidám zprávu do kolekce přidaných zpráv (v GraphQL kontextu), aby se mohla zaslat "notifikace" subscriberům.
+                    communicationChannelMessageSubscriptionProvider.AddCommunicationChannelMessage(
+                        communicationChannelMessageDto);
+
+                    return communicationChannelMessageDto;
                 }
             );
             

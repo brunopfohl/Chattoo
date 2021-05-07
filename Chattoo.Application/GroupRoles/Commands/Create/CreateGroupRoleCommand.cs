@@ -34,16 +34,16 @@ namespace Chattoo.Application.GroupRoles.Commands.Create
     public class CreateGroupRoleCommandHandler : IRequestHandler<CreateGroupRoleCommand, string>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserIdService _currentUserIdService;
         private readonly IGroupRepository _groupRepository;
         private readonly IGroupRoleRepository _groupRoleRepository;
 
-        public CreateGroupRoleCommandHandler(IUnitOfWork unitOfWork, IGroupRoleRepository groupRoleRepository, IGroupRepository groupRepository, ICurrentUserService currentUserService)
+        public CreateGroupRoleCommandHandler(IUnitOfWork unitOfWork, IGroupRoleRepository groupRoleRepository, IGroupRepository groupRepository, ICurrentUserIdService currentUserIdService)
         {
             _unitOfWork = unitOfWork;
             _groupRoleRepository = groupRoleRepository;
             _groupRepository = groupRepository;
-            _currentUserService = currentUserService;
+            _currentUserIdService = currentUserIdService;
         }
 
         public async Task<string> Handle(CreateGroupRoleCommand request, CancellationToken cancellationToken)
@@ -52,10 +52,10 @@ namespace Chattoo.Application.GroupRoles.Commands.Create
             var group = await _groupRepository.GetByIdAsync(request.GroupId, true);
 
             // Připravím si role aktuálně přihlášeného uživatele, abych věděl jestli má právo na přidání role.
-            var currentUserRoles = _groupRoleRepository.GetForUserInGroup(_currentUserService.UserId, request.GroupId);
+            var currentUserRoles = _groupRoleRepository.GetForUserInGroup(_currentUserIdService.UserId, request.GroupId);
             
             // Pokud nemá aktuálně přihlášený uživatel právo na přidání role, vyhodím výjimku.
-            if (group.CreatedBy != _currentUserService.UserId && currentUserRoles.Any(r => r.Permission == UserGroupPermission.Admin))
+            if (group.CreatedBy != _currentUserIdService.UserId && currentUserRoles.Any(r => r.Permission == UserGroupPermission.Admin))
             {
                 throw new ForbiddenAccessException();
             }

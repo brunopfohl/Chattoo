@@ -29,12 +29,14 @@ namespace Chattoo.Application.CommunicationChannels.Commands.Create
     public class CreateCommunicationChannelCommandHandler : IRequestHandler<CreateCommunicationChannelCommand, string>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ICurrentUserService _currentUserService;
         private readonly ICommunicationChannelRepository _communicationChannelRepository;
 
-        public CreateCommunicationChannelCommandHandler(IUnitOfWork unitOfWork, ICommunicationChannelRepository communicationChannelRepository)
+        public CreateCommunicationChannelCommandHandler(IUnitOfWork unitOfWork, ICommunicationChannelRepository communicationChannelRepository, ICurrentUserService currentUserService)
         {
             _unitOfWork = unitOfWork;
             _communicationChannelRepository = communicationChannelRepository;
+            _currentUserService = currentUserService;
         }
 
         public async Task<string> Handle(CreateCommunicationChannelCommand request, CancellationToken cancellationToken)
@@ -45,6 +47,9 @@ namespace Chattoo.Application.CommunicationChannels.Commands.Create
                 Name = request.Name,
                 Description = request.Description
             };
+            
+            // Přidám aktuálně přihlášeného uživatele do seznamu uživatelů ve skupině.
+            entity.Users.Add(_currentUserService.User);
 
             // Přidám záznam do datového zdroje a uložím.
             await _communicationChannelRepository.AddOrUpdateAsync(entity, cancellationToken);

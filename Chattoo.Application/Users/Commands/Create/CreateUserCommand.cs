@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Chattoo.Application.Common.Interfaces;
 using Chattoo.Domain.Entities;
@@ -29,25 +30,26 @@ namespace Chattoo.Application.Users.Commands.Create
 
         public async Task<string> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            // Pokusím se z datového zdroje vytáhnout uživatele, kterému se má přidat přezdívka.
-            var user = _currentUserService.User;
-
-            // Nového uživatele aplikační vrstvy má smysl tvořit, pouze pokud ještě neexistuje.
-            if (user is null)
-            {
-                // Vytvořím entitu naplněnou daty z příkazu.
-                var entity = new User()
-                {
-                    Id = _currentUserService.UserId
-                };
-                
-                // Přidám záznam do datového zdroje a uložím.`
-                await _userRepository.AddOrUpdateAsync(entity, cancellationToken);
-                await _unitOfWork.SaveChangesAsync(cancellationToken);
-            }
-
-            // Vrátím Id vytvořeného záznamu.
-            return _currentUserService.UserId;
+            // // Pokusím se z datového zdroje vytáhnout uživatele, kterému se má přidat přezdívka.
+            // var user = _currentUserService.User;
+            //
+            // // Nového uživatele aplikační vrstvy má smysl tvořit, pouze pokud ještě neexistuje.
+            // if (user is null)
+            // {
+            //     // Vytvořím entitu naplněnou daty z příkazu.
+            //     var entity = new User()
+            //     {
+            //         Id = _currentUserService.UserId
+            //     };
+            //     
+            //     // Přidám záznam do datového zdroje a uložím.`
+            //     await _userRepository.AddOrUpdateAsync(entity, cancellationToken);
+            //     await _unitOfWork.SaveChangesAsync(cancellationToken);
+            // }
+            //
+            // // Vrátím Id vytvořeného záznamu.
+            // return _currentUserService.UserId;
+            throw new NotImplementedException();
         }
     }
 }

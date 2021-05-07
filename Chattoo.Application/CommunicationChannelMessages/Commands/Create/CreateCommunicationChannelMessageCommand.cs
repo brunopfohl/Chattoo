@@ -1,7 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using AutoMapper;
 using Chattoo.Application.Common.Exceptions;
+using Chattoo.Application.CommunicationChannelMessages.DTOs;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Enums;
 using Chattoo.Domain.Repositories;
@@ -12,7 +14,7 @@ namespace Chattoo.Application.CommunicationChannelMessages.Commands.Create
     /// <summary>
     /// Příkaz pro vytvoření zprávy v komunikačním kanálu.
     /// </summary>
-    public class CreateCommunicationChannelMessageCommand : IRequest<string>
+    public class CreateCommunicationChannelMessageCommand : IRequest<CommunicationChannelMessageDto>
     {
         /// <summary>
         /// Vrací nebo nastavuje Id uživatele (autora) této zprávy.
@@ -35,22 +37,24 @@ namespace Chattoo.Application.CommunicationChannelMessages.Commands.Create
         public CommunicationChannelMessageType Type { get; set; }
     }
 
-    public class CreateCommunicationChannelMessageCommandHandler : IRequestHandler<CreateCommunicationChannelMessageCommand, string>
+    public class CreateCommunicationChannelMessageCommandHandler : IRequestHandler<CreateCommunicationChannelMessageCommand, CommunicationChannelMessageDto>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICommunicationChannelRepository _communicationChannelRepository;
         private readonly ICommunicationChannelMessageRepository _communicationChannelMessageRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
-        public CreateCommunicationChannelMessageCommandHandler(IUnitOfWork unitOfWork, ICommunicationChannelRepository communicationChannelRepository, ICommunicationChannelMessageRepository communicationChannelMessageRepository, IUserRepository userRepository)
+        public CreateCommunicationChannelMessageCommandHandler(IUnitOfWork unitOfWork, ICommunicationChannelRepository communicationChannelRepository, ICommunicationChannelMessageRepository communicationChannelMessageRepository, IUserRepository userRepository, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _communicationChannelRepository = communicationChannelRepository;
             _communicationChannelMessageRepository = communicationChannelMessageRepository;
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
-        public async Task<string> Handle(CreateCommunicationChannelMessageCommand request, CancellationToken cancellationToken)
+        public async Task<CommunicationChannelMessageDto> Handle(CreateCommunicationChannelMessageCommand request, CancellationToken cancellationToken)
         {
             // Pokusím se získat uživatele podle Id.
             // Ověřím si, zda-li uživatel existuje, pokud neexistuje, vyhodím výjimku.
@@ -87,7 +91,7 @@ namespace Chattoo.Application.CommunicationChannelMessages.Commands.Create
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             // Vrátím Id vytvořeného záznamu.
-            return entity.Id;
+            return _mapper.Map<CommunicationChannelMessageDto>(entity);
         }
     }
 }

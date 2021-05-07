@@ -1,46 +1,47 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components';
-import ProfilePicture from '../profile-picture/profile-picture.component';
-import CommunicationChannelPreview from './communication-channel-preview.component';
+import { Plus } from 'styled-icons/boxicons-regular';
+import Button from '../button/button.component';
+import { ChatStateContext } from './chat-state-provider.component';
+import CommunicationChannelCreate from '../channel/communication-channel-create-popup.component';
+import CommunicationChannelList from './communication-channel-list.component';
 import SearchChannels from './search-channels.component';
+import CommunicationChannelCreatePopup from '../channel/communication-channel-create-popup.component';
 
 const Container = styled.div`
     background-color: #545454;
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 `;
 
 const Heading = styled.div`
     padding-left: 1em;
     display: flex;
+    align-items: center;
     flex-direction: row;
     color: white;
 `;
 
+const Title = styled.h2`
+    margin-right: 0.5em;
+`;
 
 const ChatLeftPanel: React.FC<any> = (props: any) => {
-
-    useEffect(() => {
-        
-    }, []);
+    const [showCreateCommunicationChannelPopup, setShowCreateCommunicationChannelPopup] = useState<boolean>();
 
     return (
-        <Container>
-            <Heading>
-                <h2>Chaty</h2>
-            </Heading>
-            <SearchChannels/>
-            <CommunicationChannelPreview channelName="Bruno Pfohl" channelDetail ="Já jsem mu říkal..."/>
-            <CommunicationChannelPreview channelName="Lucie Ječmeňová" channelDetail ="Já jsem mu říkal..."/>
-            <CommunicationChannelPreview channelName="Dan Právník" channelDetail ="Já jsem mu říkal..."/>
-            {/* 
-                1 Header
-                    1.a ProfileIcon
-                    2.a text
-                2 SearchBox
-                3 CommunicationChannelList
-                    3.a CommunicationChannelListItem
-            */}
-        </Container>
+        <>
+            {showCreateCommunicationChannelPopup && <CommunicationChannelCreatePopup onClose={ () => { setShowCreateCommunicationChannelPopup(false) } }/>}
+            <Container>
+                <Heading>
+                    <Title>Chaty</Title>
+                    <Button onClick={() => { setShowCreateCommunicationChannelPopup(true); }} icon={Plus}/>
+                </Heading>
+                <SearchChannels/>
+                <CommunicationChannelList />
+            </Container>
+        </>
     );
 }
 
