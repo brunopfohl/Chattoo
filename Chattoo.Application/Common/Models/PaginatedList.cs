@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Chattoo.Application.Common.Models
 {
-    public class PaginatedList<T> 
+    public class PaginatedList<T>
     {
-        public List<T> Items { get; }
+        public List<T> Items { get; protected set; }
         public int PageIndex { get; }
         public int TotalPages { get; }
         public int TotalCount { get; }
@@ -29,6 +29,28 @@ namespace Chattoo.Application.Common.Models
         {
             var count = await source.CountAsync();
             var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            return new PaginatedList<T>(items, count, pageIndex, pageSize);
+        }
+        
+        public static async Task<PaginatedList<T>> CreateAsyncOrdered<TKey>(IQueryable<T> source, int pageIndex, int pageSize, Func<T, TKey> keySelector)
+            where TKey : IComparable
+        {
+            var count = await source.CountAsync();
+            var items = (await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync())
+                .OrderBy(keySelector).
+                ToList();
+
+            return new PaginatedList<T>(items, count, pageIndex, pageSize);
+        }
+        
+        public static async Task<PaginatedList<T>> CreateAsyncOrderedDescending<TKey>(IQueryable<T> source, int pageIndex, int pageSize, Func<T, TKey> keySelector)
+            where TKey : IComparable
+        {
+            var count = await source.CountAsync();
+            var items = (await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync())
+                .OrderByDescending(keySelector).
+                ToList();
 
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
         }

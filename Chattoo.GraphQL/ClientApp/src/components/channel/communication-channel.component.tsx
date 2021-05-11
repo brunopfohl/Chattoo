@@ -1,15 +1,15 @@
-import React, { useContext, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components';
 import { Settings } from 'styled-icons/evaicons-solid';
+import { Message } from '../../common/interfaces/message.interface';
 import { CreateMessageInput, useCreateMessage } from '../../hooks/messages/mutations/useCreateMessage';
-import { useGetMessagesForChannel } from '../../hooks/messages/queries/useGetMessagesForChannel';
-import { useGetUsersForChannel } from '../../hooks/users/queries/useGetUsersForChannel';
 import { AppStateContext } from '../app-state-provider.component';
 import Button from '../button/button.component';
 import { ChatStateContext } from '../chat/chat-state-provider.component';
 import MessageBox from '../chat/message-box.component';
-import Message from '../chat/message.component';
+import MessageComponent, { MessageComponentProps } from '../chat/message.component';
 import CommunicationChannelSettingsPopup from './communication-channel-settings-popup.component';
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 interface CommunicationChannelProps {
     avatarUrl: string,
@@ -51,6 +51,7 @@ const ChannelTitle = styled.h2`
 `;
 
 const Content = styled.div`
+    padding: 0.5em;
     flex-grow: 10;
     overflow: auto;
     overflow-x: hidden;
@@ -67,13 +68,12 @@ const MessageBoxContainer = styled.div`
 const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) => {
     const { appState } = useContext(AppStateContext);
     const { user } = appState;
-    const { currentChannel } = useContext(ChatStateContext);
+    const { currentChannel, currentChannelMessages, tryLoadMoreMessages } = useContext(ChatStateContext);
 
     const createMessage = useCreateMessage()
 
     const [showSettings, setShowSettings] = useState<boolean>()
 
-    const [messages, messagesQuery] = useGetMessagesForChannel({ channelId: currentChannel?.id, pageNumber: 1, pageSize: 10 });
 
     const addMessage = (msg: string) => {
         const params: CreateMessageInput = {
@@ -86,6 +86,51 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
 
         createMessage(params);
     };
+
+    const renderMessage = (message: Message, previousMesssage?: Message, nextMessage?: Message) => {
+        // Příznak, zda-li je zpráva od aktuálně přihlášeného uživatele.
+        const isFromCurrentUser = appState.user?.id === message.userId;
+        // Příznak, zda-li se jedná o první zprávu od daného uživatele.
+        const isStartOfBatch = previousMesssage?.userId !== message.userId;
+        // Příznak, zda-li následující zpráva je od jiného uživatele.
+        const isEndOfBatch = nextMessage?.userId !== message.userId;
+
+        // Parametry pro komponent se zprávou.
+        const messageProps: MessageComponentProps = {
+            content: message.content,
+            createdAt: message.createdAt,
+            isStartOfBatch: isStartOfBatch,
+            isEndOfBatch: isEndOfBatch,
+            isFromCurrentUser: isFromCurrentUser,
+            userName: message.userId
+        };
+
+        return (
+            <MessageComponent {...messageProps} />
+        );
+    }
+
+    // Element automaticky scrolluje k nově přidané zprávě.
+    const messagesRef = useRef(null);
+
+    const onScroll = useCallback(() => {
+        if (messagesRef !== null && messagesRef.current.scrollTop === 0) {
+            tryLoadMoreMessages();
+        }
+    }, [messagesRef, tryLoadMoreMessages]);
+
+    useEffect(() => {
+        // Pokud odkaz na element se zprávami není null.
+        if(messagesRef) {
+            // Přiřadím scroll eventu onScroll callback.
+            messagesRef.current.addEventListener('scroll', onScroll);
+        }
+
+        return () => {
+            // Odeberu scroll eventu onScroll callback.
+            messagesRef.current.removeEventListener('scroll', onScroll);
+        };
+    }, [onScroll]);
 
     return (
         <Container>
@@ -100,10 +145,12 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
                     <Button onClick={() => { setShowSettings(true) } } icon={Settings}/>
                 </ChannelHeaderRight>
             </ChannelHeader>
-            <Content>
-                {messages?.data && messages?.data?.map((m) =>
-                    <Message content={m.content}/>
-                )}
+            <Content id="scrollableMessages" ref={messagesRef}>
+                {currentChannelMessages?.data &&
+                    currentChannelMessages.data.map((m, i, arr) =>
+                        renderMessage(m, arr[i - 1], arr[i + 1])
+                    )
+                }
             </Content>
             <MessageBoxContainer>
                 <MessageBox callback={addMessage}/>
@@ -113,3 +160,4 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
 }
 
 export default CommunicationChannel;
+export const MemoizedCommunicationChannel = React.memo(CommunicationChannel);

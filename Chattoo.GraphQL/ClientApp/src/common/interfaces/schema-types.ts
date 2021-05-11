@@ -139,6 +139,34 @@ export interface GetMessagesForChannelVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL subscription operation: MessageAddedToChannelSubscription
+// ====================================================
+
+export interface MessageAddedToChannelSubscription_communicationChannelMessageAddedToChannel {
+  __typename: "CommunicationChannelMessageType";
+  id: string;
+  createdAt: any;
+  modifiedAt: any | null;
+  content: string;
+  channelId: string;
+  userId: string;
+  type: asdf | null;
+}
+
+export interface MessageAddedToChannelSubscription {
+  communicationChannelMessageAddedToChannel: MessageAddedToChannelSubscription_communicationChannelMessageAddedToChannel | null;
+}
+
+export interface MessageAddedToChannelSubscriptionVariables {
+  channelId: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetUsers
 // ====================================================
 

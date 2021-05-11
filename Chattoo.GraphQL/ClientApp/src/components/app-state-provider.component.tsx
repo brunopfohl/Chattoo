@@ -1,9 +1,11 @@
-import { ApolloProvider, ApolloClient, ApolloLink, HttpLink, InMemoryCache, Observable } from "@apollo/client";
+import { ApolloProvider, ApolloClient, ApolloLink, HttpLink, InMemoryCache, Observable, split } from "@apollo/client";
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { getMainDefinition } from "@apollo/client/utilities";
 import { onError } from '@apollo/link-error';
 import { Profile, User } from "oidc-client";
 import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { AppUser } from "../common/interfaces/app-user.interface";
-import { API_URL } from "./api-authorization/ApiAuthorizationConstants";
+import { API_URL, API_URL_WITHOUT_PROCOTOL } from "./api-authorization/ApiAuthorizationConstants";
 import authService from "./api-authorization/AuthorizeService";
 
 export interface AppStateContext {
@@ -87,44 +89,36 @@ const AppStateProvider = ({children}: {children: ReactNode}) => {
     // Apollo client - cache
     const cache = new InMemoryCache({});
 
-    // Apollo client - vložení autorizačního tokenu do headeru + zpracování připadné error message.
-    const requestLink = new ApolloLink((operation, forward) => 
-        new Observable(observer => {
-            let handle: any;
-            Promise.resolve(operation)
-                .then(operation => {
-                    operation.setContext({ headers: {authorization: `Bearer ${authToken}`}});
-                })
-                .then(() => {
-                    handle = forward(operation).subscribe({
-                        next: observer.next.bind(observer),
-                        error: observer.error.bind(observer),
-                        complete: observer.complete.bind(observer),
-                    });
-                })
-                .catch(observer.error.bind(observer));
+    const httpLink = new HttpLink({
+        uri: API_URL + "/graphql",
+        credentials: "include",
+        headers: {
+            authorization: `Bearer ${authToken}`
+        }
+    });
 
-            return () => {
-                handle && handle.unsubscribe();
-            };
-        })
-    );
+    const wsLink = process.browser ? new WebSocketLink({
+        uri: "wss://" + API_URL_WITHOUT_PROCOTOL + "/graphql",
+        options: {
+            reconnect: true
+        }
+    }) : null;
+
+    const splitLink = wsLink ? split(
+        ({query}) => {
+            const definition = getMainDefinition(query);
+            return (
+                definition.kind === "OperationDefinition" &&
+                definition.operation === "subscription"
+            );
+        },
+        wsLink,
+        httpLink
+    ) : null;
 
     // Apollo client pro vylovávání GraphQL dotazů.
     const client = new ApolloClient({
-        link: ApolloLink.from([
-            onError(({ graphQLErrors, networkError }) => {
-                if(graphQLErrors === undefined || graphQLErrors[0].path === undefined) return;
-                if(graphQLErrors[0].path[0] === "refresh") return;
-                const err = graphQLErrors[0].message;
-                setGqlError({ msg: err});
-            }),
-            requestLink,
-            new HttpLink({
-                uri: API_URL + "/graphql",
-                credentials: "include"
-            })
-        ]),
+        link: splitLink,
         cache,
         connectToDevTools: true
     });

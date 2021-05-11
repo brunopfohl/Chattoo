@@ -17,7 +17,7 @@ namespace Chattoo.GraphQL.Services
         /// <summary>
         /// Vrací Id aktuálně přihlášeného uživatele.
         /// </summary>
-        public string UserId => ClaimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+        public string UserId => ClaimsPrincipal?.FindFirstValue(ClaimTypes.NameIdentifier);
         
         public ClaimsPrincipal ClaimsPrincipal => _httpContextAccessor.HttpContext?.User;
     }

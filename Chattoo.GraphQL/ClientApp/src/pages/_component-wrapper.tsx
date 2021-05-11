@@ -11,7 +11,6 @@ const ComponentWrapper: React.FC<any> = ({ Component, pageProps}) => {
 
   const [isReady, setIsReady] = useState<boolean>(false);
 
-
   const isProcessingAuth = () => {
     let pn = router.pathname;
     return pn === ApplicationPaths.Login || pn === ApplicationPaths.LoginCallback || pn === "/connect-account";
@@ -27,7 +26,7 @@ const ComponentWrapper: React.FC<any> = ({ Component, pageProps}) => {
         setIsReady(true);
       });
     }
-  }, [isProcessingAuth]);
+  }, [processingAuth]);
 
   return (
     <>

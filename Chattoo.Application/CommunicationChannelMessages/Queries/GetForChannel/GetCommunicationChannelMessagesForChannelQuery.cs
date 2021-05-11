@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -46,8 +47,9 @@ namespace Chattoo.Application.CommunicationChannelMessages.Queries.GetForChannel
 
             // Načtu kolekci rolí uživatele v komunikačním kanálu a zpracuju na stránkovanou kolekci.
             var result = await _communicationChannelMessageRepository.GetByChannelId(request.ChannelId)
+                .OrderByDescending(m => m.CreatedAt)
                 .ProjectTo<CommunicationChannelMessageDto>(_mapper.ConfigurationProvider)
-                .PaginatedListAsync(request.PageNumber, request.PageSize);
+                .PaginatedListOrderedAsync(request.PageNumber, request.PageSize, m => m.CreatedAt);
 
             return result;
         }

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components';
-import CommunicationChannel from '../channel/communication-channel.component';
+import { MemoizedCommunicationChannel } from '../channel/communication-channel.component';
 
 const Container = styled.div`
     background-color: rgba(105, 116, 124, 0.6);
@@ -13,7 +13,7 @@ const ChatRightPanel: React.FC<any> = (props: any) => {
 
     return (
         <Container>
-            <CommunicationChannel/>
+            <MemoizedCommunicationChannel/>
         </Container>
     );
 }

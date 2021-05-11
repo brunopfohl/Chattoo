@@ -6,6 +6,7 @@ using Chattoo.GraphQL.Subscription.CommunicationChannelMessage;
 using Chattoo.Infrastructure;
 using Chattoo.Infrastructure.Persistence;
 using GraphQL.Server;
+using GraphQL.Server.Transports.Subscriptions.Abstractions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

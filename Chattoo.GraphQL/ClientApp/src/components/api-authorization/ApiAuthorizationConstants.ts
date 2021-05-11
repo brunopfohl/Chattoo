@@ -1,6 +1,7 @@
 export const ApplicationName = 'ClientApp';
 
-export const API_URL = 'https://localhost:5001';
+export const API_URL_WITHOUT_PROCOTOL = 'localhost:5001';
+export const API_URL = 'https://' + API_URL_WITHOUT_PROCOTOL;
 
 export const QueryParameterNames = {
   ReturnUrl: 'returnUrl',

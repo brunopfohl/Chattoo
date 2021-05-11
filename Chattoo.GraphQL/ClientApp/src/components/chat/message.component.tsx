@@ -1,26 +1,52 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components';
 
-interface MessageProps {
-    authorName: string,
-    content: string
+export interface MessageComponentProps {
+    isFromCurrentUser: boolean,
+    isStartOfBatch: boolean,
+    isEndOfBatch: boolean,
+    content: string,
+    userName: string,
+    createdAt: Date
 };
 
-const Container = styled.div`
-    padding: 0.5em 1em;
-    margin: 0.5em;
-    background-color: #02B893;
-    border-radius: 2em;
-    color: white;
-    width: auto;
-`;
 
-const Message: React.FC<any> = (props: MessageProps) => {
+const MessageComponent: React.FC<any> = (props: MessageComponentProps) => {
+    const { isFromCurrentUser, isStartOfBatch, isEndOfBatch, content, userName, createdAt } = props;
+
+    const Container = styled.div`
+        display: flex;
+        flex-direction: ${isFromCurrentUser ? "row-reverse" : "row"};
+    `;
+
+    const MessageContainer = styled.div`
+        color: white;
+        display: flex;
+        flex-direction: column;
+        flex-direction: ${isFromCurrentUser ? "flex-end" : "flex-start"};
+        margin: 1px;
+    `;
+
+    const ContentContainer = styled.div`
+        padding: 0.4em 1em;
+        color: ${isFromCurrentUser ? "white" : "black"};
+        background-color: ${isFromCurrentUser ? "rgba(2, 184, 147, 1)" : "lightgray"};
+        border-top-left-radius: ${!isFromCurrentUser && !isStartOfBatch ? "3px" : "1em"};
+        border-top-right-radius: ${isFromCurrentUser && !isStartOfBatch ? "3px" : "1em"};
+        border-bottom-left-radius: ${!isFromCurrentUser && !isEndOfBatch ? "3px" : "1em"};
+        border-bottom-right-radius: ${isFromCurrentUser && !isEndOfBatch ? "3px" : "1em"};
+    `;
+
     return (
         <Container>
-            {props.content}
+            <MessageContainer>
+                {isStartOfBatch && userName}
+                <ContentContainer>
+                    {content}
+                </ContentContainer>
+            </MessageContainer>
         </Container>
     );
 }
 
-export default Message;
+export default MessageComponent;
