@@ -7,6 +7,7 @@ import SearchBox, { SearchBoxProps } from '../search-box/search-box.component';
 import UserSearchItem from './user-search-item.component';
 
 interface UserSearchProps {
+    onClose: () => void;
     mode: UserSearchMode;
 }
 
@@ -25,11 +26,17 @@ const Container = styled.div`
     overflow: hidden;
 `;
 
+const UsersContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em;
+`;
+
 const UserSearchPopup: React.FC<UserSearchProps> = (props: UserSearchProps) => {
+    const { mode, onClose } = props;
+
     const [searchTerm, setSearchTerm] = useState<string>();
     const [users] = useGetUsers({ searchTerm: searchTerm });
-
-    
 
     // Parametry pro searchbox.
     const searchBoxProps: SearchBoxProps = {
@@ -41,17 +48,20 @@ const UserSearchPopup: React.FC<UserSearchProps> = (props: UserSearchProps) => {
 
     // Searchbox neustále způsoboval rerender, tak je uložený pomocí useMemo.
     const MemoSearchBox = useMemo(() => (<SearchBox {...searchBoxProps} />), []);
-    const { mode } = props;
+
+    const title: string = mode === UserSearchMode.multiSelect
+        ? "Výběr uživatelů"
+        : "Výběr uživatele";
 
     return (
-        <Popup>
+        <Popup title={title} onClose={onClose}>
             <Container>
-                {MemoSearchBox}
-                <div>
+                <SearchBox {...searchBoxProps}/>
+                <UsersContainer>
                     { users && users.data.map((u) => (
-                        <UserSearchItem user={u} selectMode={mode}/>
+                        <UserSearchItem user={u} selectMode={mode} key={u.id}/>
                     ))}
-                </div>
+                </UsersContainer>
                 
                 {mode === UserSearchMode.multiSelect &&
                     <Button text="Potvrdit" stretch={true} onClick={() => {}}/>

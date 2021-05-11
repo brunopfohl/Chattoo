@@ -10,6 +10,12 @@ export interface MessageComponentProps {
     createdAt: Date
 };
 
+const TimeElement = styled.span`
+    display: flex;
+    justify-content: center;
+    padding: 1em 0;
+    color: white;
+`;
 
 const MessageComponent: React.FC<any> = (props: MessageComponentProps) => {
     const { isFromCurrentUser, isStartOfBatch, isEndOfBatch, content, userName, createdAt } = props;
@@ -37,15 +43,20 @@ const MessageComponent: React.FC<any> = (props: MessageComponentProps) => {
         border-bottom-right-radius: ${isFromCurrentUser && !isEndOfBatch ? "3px" : "1em"};
     `;
 
+    const showTime = isStartOfBatch;
+
     return (
-        <Container>
-            <MessageContainer>
-                {isStartOfBatch && userName}
-                <ContentContainer>
-                    {content}
-                </ContentContainer>
-            </MessageContainer>
-        </Container>
+        <>
+            {showTime && <TimeElement>{new Date(createdAt).toUTCString()}</TimeElement> }
+            <Container>
+                <MessageContainer>
+                    {isStartOfBatch && userName}
+                    <ContentContainer>
+                        {content}
+                    </ContentContainer>
+                </MessageContainer>
+            </Container>
+        </>
     );
 }
 

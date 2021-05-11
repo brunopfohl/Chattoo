@@ -1,11 +1,10 @@
 import React, { useContext } from 'react'
+import { useEffect } from 'react';
 import styled from 'styled-components';
+import { useGetCommunicationChannelsForUser } from '../../hooks/channels/queries/useGetChannelsForUser';
+import { AppStateContext } from '../app-state-provider.component';
 import { ChatStateContext } from './chat-state-provider.component';
 import CommunicationChannelPreview from './communication-channel-preview.component';
-
-export interface CommunicationChannelListProps {
-    
-}
 
 const Container = styled.div`
     display: flex;
@@ -14,8 +13,19 @@ const Container = styled.div`
     overflow-y: auto;
 `;
 
-const CommunicationChannelList: React.FC<any> = (props: CommunicationChannelListProps) => {
-    const { channels } = useContext(ChatStateContext);
+const CommunicationChannelList: React.FC = () => {
+    const { appState } = useContext(AppStateContext);
+    const { currentChannel, setCurrentChannel } = useContext(ChatStateContext);
+    const { user } = appState;
+    const [ channels ] = useGetCommunicationChannelsForUser({ userId: user.id, pageNumber: 1, pageSize: 20 });
+
+    // Po změne pole s dostupnými komunikačními kanály nastavím aktuální komunikační kanál
+    // na první z nich, pokud uživatel ještě nezvolil žádný komunikační kanál.
+    useEffect(() => {
+        if(!currentChannel && channels?.data?.length > 0) {
+            setCurrentChannel(channels.data[0]);
+        }
+    }, [channels]);
 
     return (
         <Container>

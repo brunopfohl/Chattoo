@@ -46,7 +46,6 @@ const Header: React.FC<any> = (props: any) => {
         <Container>
             <Left>
                 <UserName>{user && user.userName} {user && user.id}</UserName>
-                <Button onClick={() => {}} theme={ButtonTheme.pink} icon={Settings}/>
             </Left>
             <Right>
                 <Button text="Odhlásit se" onClick={onLogout} theme={ButtonTheme.green}/>

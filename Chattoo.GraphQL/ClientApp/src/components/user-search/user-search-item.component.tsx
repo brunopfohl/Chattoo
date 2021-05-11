@@ -3,13 +3,13 @@ import styled from 'styled-components'
 import { Checkbox } from 'styled-icons/boxicons-regular';
 import { Check } from 'styled-icons/boxicons-regular';
 import { CheckSquare } from 'styled-icons/boxicons-regular';
-import { User } from '../../common/interfaces/user.interface';
+import { AppUser } from '../../common/interfaces/app-user.interface';
 import Button from '../button/button.component';
 import ProfilePicture from '../profile-picture/profile-picture.component';
 import { UserSearchMode } from './user-search-popup.component';
 
 export interface UserSearchItemProps {
-    user: User;
+    user: AppUser;
     selectMode: UserSearchMode;
 }
 
@@ -40,6 +40,7 @@ const Left = styled.div`
 
 const Right = styled.div`
     display: flex;
+    align-items: center;
     flex-direction: row-reverse;
 `;
 

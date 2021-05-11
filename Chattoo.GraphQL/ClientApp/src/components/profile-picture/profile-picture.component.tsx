@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { Person } from 'styled-icons/bootstrap';
 
 interface ProfilePictureProps {
-    img: string
+    img: string,
+    size: string
 }
 
 const Container = styled.div`
@@ -16,9 +17,11 @@ const PersonIcon = styled(Person)`
 `;
 
 const ProfilePicture: React.FC<any> = (props: ProfilePictureProps) => {
+    const size = props.size || "50px";
+
     return (
         <Container>
-            <PersonIcon size="50px"/>
+            <PersonIcon size={size}/>
         </Container>
     );
 }
