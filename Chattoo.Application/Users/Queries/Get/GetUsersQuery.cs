@@ -19,6 +19,11 @@ namespace Chattoo.Application.Users.Queries.Get
         /// Vrací nebo nastavuje hledaný výraz, podle kterého se mají dohledat uživatelé.
         /// </summary>
         public string SearchTerm { get; set; }
+        
+        /// <summary>
+        /// Vrací nebo nastavuje Id komunikačního kanálu, jehož uživatelé se mají z výsledku vynechat.
+        /// </summary>
+        public string ExcludeUsersFromCommunicationChannelWithId { get; set; }
     }
     
     public class GetUsersQueryHandler : PaginatedQueryHandler<GetUsersQuery, UserDto>
@@ -35,7 +40,7 @@ namespace Chattoo.Application.Users.Queries.Get
         public override async Task<PaginatedList<UserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
             // Načtu kolekci uživatelů v dané skupině a zpracuju na stránkovanou kolekci.
-            var result = await _userRepository.GetBySearchTerm(request.SearchTerm)
+            var result = await _userRepository.GetBySearchTerm(request.SearchTerm, request.ExcludeUsersFromCommunicationChannelWithId)
                 .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.PageNumber, request.PageSize);
 

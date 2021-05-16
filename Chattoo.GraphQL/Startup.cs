@@ -93,7 +93,7 @@ namespace Chattoo.GraphQL
 
             app.UseCors("MyPolicy");
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseSpaStaticFiles();

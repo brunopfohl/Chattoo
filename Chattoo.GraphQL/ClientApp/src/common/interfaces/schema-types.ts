@@ -4,6 +4,29 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: AddUserToCommunicationChannel
+// ====================================================
+
+export interface AddUserToCommunicationChannel_communicationChannels {
+  __typename: "CommunicationChannelMutation";
+  addUser: boolean | null;
+}
+
+export interface AddUserToCommunicationChannel {
+  communicationChannels: AddUserToCommunicationChannel_communicationChannels | null;
+}
+
+export interface AddUserToCommunicationChannelVariables {
+  userId: string;
+  channelId: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: CreateCommunicationChannel
 // ====================================================
 
@@ -19,6 +42,29 @@ export interface CreateCommunicationChannel {
 export interface CreateCommunicationChannelVariables {
   name: string;
   desc: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: RemoveUserFromCommunicationChannel
+// ====================================================
+
+export interface RemoveUserFromCommunicationChannel_communicationChannels {
+  __typename: "CommunicationChannelMutation";
+  removeUser: boolean | null;
+}
+
+export interface RemoveUserFromCommunicationChannel {
+  communicationChannels: RemoveUserFromCommunicationChannel_communicationChannels | null;
+}
+
+export interface RemoveUserFromCommunicationChannelVariables {
+  userId: string;
+  channelId: string;
 }
 
 /* tslint:disable */
@@ -197,6 +243,7 @@ export interface GetUsers {
 
 export interface GetUsersVariables {
   searchTerm: string;
+  excludeUsersFromChannelWithId?: string | null;
 }
 
 /* tslint:disable */

@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Castle.Core.Internal;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Repositories;
 
@@ -34,13 +35,19 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
             return result;
         }
         
-        public IQueryable<User> GetBySearchTerm(string searchTerm)
+        public IQueryable<User> GetBySearchTerm(string searchTerm, string excludeUsersFromCommunicationChannelWithId)
         {
             // TODO: Nesmysl, musím jít přes group.
             var result = GetAll()
                 .Where(u =>
-                    u.UserName.ToLower().Contains(searchTerm.ToLower())
+                    searchTerm.IsNullOrEmpty() || u.UserName.ToLower().Contains(searchTerm.ToLower())
                 );
+
+            // Pokud bylo specifikováno Id komunikačního kanálu, jehož uživatelé se mají vynechat, omezím query.
+            if (!excludeUsersFromCommunicationChannelWithId.IsNullOrEmpty())
+            {
+                result = result.Where(u => u.Channels.All(c => c.Id != excludeUsersFromCommunicationChannelWithId));
+            }
 
             return result;
         }

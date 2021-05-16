@@ -61,13 +61,15 @@ namespace Chattoo.GraphQL.Query
                 arguments: 
                 new QueryArgumentsWithPagination
                 (
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "searchTerm" }
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "searchTerm" },
+                    new QueryArgument<StringGraphType> { Name = "excludeUsersFromChannelWithId" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
                     var query = new GetUsersQuery()
                     {
                         SearchTerm = ctx.GetString("searchTerm"),
+                        ExcludeUsersFromCommunicationChannelWithId = ctx.GetString("excludeUsersFromChannelWithId"),
                     };
 
                     return await mediator.Send(query);

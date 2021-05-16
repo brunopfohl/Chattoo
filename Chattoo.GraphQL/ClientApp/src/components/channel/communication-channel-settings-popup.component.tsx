@@ -2,6 +2,9 @@ import React, { useContext, useState } from 'react'
 import styled from 'styled-components';
 import { Plus } from 'styled-icons/boxicons-regular';
 import { Remove } from 'styled-icons/material-twotone';
+import { AppUser } from '../../common/interfaces/app-user.interface';
+import { AddUserToCommunicationChannelInput, useAddUserToCommunicationChannel } from '../../hooks/channels/mutations/useAddUserToCommunicationChannel';
+import { useRemoveUserFromCommunicationChannel } from '../../hooks/channels/mutations/useRemoveUserToCommunicationChannel';
 import { useGetUsersForChannel } from '../../hooks/users/queries/useGetUsersForChannel';
 import Button from '../button/button.component';
 import { ChatStateContext } from '../chat/chat-state-provider.component';
@@ -75,22 +78,43 @@ const RightFlexContainer = styled.div`
 
 
 const CommunicationChannelSettings: React.FC<CommunicationChannelSettingsProps> = (props: CommunicationChannelSettingsProps) => {
+    console.log('render');
     const [showUserSearchPopup, setShowUserSearchPopup] = useState<boolean>(false);
 
     const { currentChannel } = useContext(ChatStateContext);
 
     const [channelUsers, channelUsersQuery] = useGetUsersForChannel({ channelId: currentChannel?.id});
 
+    // Metoda pro přidání uživatele do komunikačního kanálu (pošle request na server).
+    const addUserToCommunicationChannel = useAddUserToCommunicationChannel();
+
+    // Metoda pro odebrání uživatele z komunikačního kanálu (pošle request na server).
+    const removeUserFromCommunicationChannel = useRemoveUserFromCommunicationChannel();
+
+    // Metoda, kterou zavolá okno pro vyhledání uživatelů po jeho potvrzení.
+    const onUserSearchSubmit = (users: AppUser[]) => {
+        users.forEach((user: AppUser) => {
+            const mutationInput: AddUserToCommunicationChannelInput = {
+                variables: {
+                    userId: user.id,
+                    channelId: currentChannel.id
+                }
+            };
+
+            addUserToCommunicationChannel(mutationInput);
+        });
+    };
+
     return (
         <>
             {showUserSearchPopup &&
-                <UserSearchPopup mode={UserSearchMode.multiSelect} onClose={() => setShowUserSearchPopup(false) }/>
+                <UserSearchPopup mode={UserSearchMode.multiSelect} channelId={currentChannel?.id} onClose={() => setShowUserSearchPopup(false) } onSubmit={onUserSearchSubmit}/>
             }
             <Container>
                 <ParticipantsTitle>Seznam účastníků</ParticipantsTitle>
                 <ParticipantsContainer>
                     {channelUsers?.data && channelUsers.data.map(user => (
-                        <ParticipantsRow>
+                        <ParticipantsRow key={user.id}>
                             <ParticipantsRowLeft>
                                 <ProfilePicture size="2em"/>
                             </ParticipantsRowLeft>

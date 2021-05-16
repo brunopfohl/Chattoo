@@ -4,9 +4,9 @@ import { PaginatedList } from "../../../common/interfaces/paginated-list";
 import { GetUsers, GetUsersVariables } from "../../../common/interfaces/schema-types";
 
 export const GET_USERS = gql`
-    query GetUsers($searchTerm: String!) {
+    query GetUsers($searchTerm: String!, $excludeUsersFromChannelWithId: String) {
         users {
-            get(searchTerm: $searchTerm) {
+            get(searchTerm: $searchTerm, excludeUsersFromChannelWithId: $excludeUsersFromChannelWithId) {
                 data {
                     id
                     userName

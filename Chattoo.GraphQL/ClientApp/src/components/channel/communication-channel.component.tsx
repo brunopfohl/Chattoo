@@ -69,6 +69,8 @@ const MessageBoxContainer = styled.div`
 `;
 
 const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) => {
+    console.log('Render CommunicationChannel');
+
     const { appState } = useContext(AppStateContext);
     const { user } = appState;
 
@@ -219,6 +221,7 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
             messagesRef.current.removeEventListener('scroll', onScroll);
         };
     }, [onScroll]);
+
 
     return (
         <Container>

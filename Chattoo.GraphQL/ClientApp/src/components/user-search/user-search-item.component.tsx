@@ -10,7 +10,10 @@ import { UserSearchMode } from './user-search-popup.component';
 
 export interface UserSearchItemProps {
     user: AppUser;
+    isSelected: boolean;
     selectMode: UserSearchMode;
+    addUser: (user: AppUser) => void;
+    removeUser: (user: AppUser) => void;
 }
 
 const Container = styled.div`
@@ -51,23 +54,34 @@ const UserName = styled.span`
 `;
 
 const UserSearchItem: React.FC<UserSearchItemProps> = (props: UserSearchItemProps) => {
-    const { selectMode } = props;
-    const { userName } = props.user;
+    // Vytáhnu hodnoty z props.
+    const { user, selectMode, addUser, removeUser, isSelected } = props;
+    const { userName } = user;
 
-    const [isSelected, setIsSelected] = useState(false);
+    // Metoda pro vybrání/odvybrání uživatele.
+    const toggleIsSelected = () => {
+        // Pokud je uživatel vybraný, přidám ho do pole vybraných uživatelů.
+        if(!isSelected) {
+            addUser(user);
+        }
+        else { // Pokud uživatel není vybraný, odeberu ho z pole vybraných uživatelů.
+            removeUser(user);
+        }
+    };
 
+    // Metoda pro vyrenderování tlačítka na vybrání/odvybrání uživatele.
     const renderButton = () => {
         switch(selectMode) {
             case UserSearchMode.multiSelect:
-                return (<Button onClick={() => setIsSelected(!isSelected)} icon={isSelected ? CheckSquare : Checkbox} />);
+                return (<Button onClick={toggleIsSelected} icon={isSelected ? CheckSquare : Checkbox} />);
             case UserSearchMode.normal:
             default:
-                return (<Button onClick={() => setIsSelected(!isSelected)} icon={Check} />);
+                return (<Button onClick={toggleIsSelected} icon={Check} />);
         }
     }
 
     return (
-        <Container>
+        <Container onClick={toggleIsSelected}>
             <ProfilePicture />
             <UserInfo>
                 <Left>

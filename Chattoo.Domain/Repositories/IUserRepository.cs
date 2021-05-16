@@ -26,6 +26,7 @@ namespace Chattoo.Domain.Repositories
         /// Vrací všechny uživatele, kteří odpovídají hledanému výrazu.
         /// </summary>
         /// <param name="searchTerm">Výraz, dle kterého se mají dohledat uživatelé.</param>
-        public IQueryable<User> GetBySearchTerm(string searchTerm);
+        /// <param name="excludeUsersFromCommunicationChannelWithId">Id komunikačního kanálu, jehož uživatelé se z výsledku mají vynechat.</param>
+        public IQueryable<User> GetBySearchTerm(string searchTerm, string excludeUsersFromCommunicationChannelWithId);
     }
 }

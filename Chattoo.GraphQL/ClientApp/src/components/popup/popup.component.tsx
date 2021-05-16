@@ -60,6 +60,8 @@ const Container = styled.div`
 
 
 const Popup: React.FC<PopupProps> = (props: PopupProps) => {
+    console.log('Render Popup');
+
     const { children, onClose, title } = props;
     const zIndex = 1000;
 
