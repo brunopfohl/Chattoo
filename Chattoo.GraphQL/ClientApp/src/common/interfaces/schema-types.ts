@@ -30,9 +30,14 @@ export interface AddUserToCommunicationChannelVariables {
 // GraphQL mutation operation: CreateCommunicationChannel
 // ====================================================
 
+export interface CreateCommunicationChannel_communicationChannels_create {
+  __typename: "CommunicationChannel";
+  id: string;
+}
+
 export interface CreateCommunicationChannel_communicationChannels {
   __typename: "CommunicationChannelMutation";
-  create: string | null;
+  create: CreateCommunicationChannel_communicationChannels_create | null;
 }
 
 export interface CreateCommunicationChannel {
@@ -116,6 +121,32 @@ export interface GetChannelsForUserVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL subscription operation: UserAddedToChannelSubscription
+// ====================================================
+
+export interface UserAddedToChannelSubscription_communicationChannelAddedForUser {
+  __typename: "CommunicationChannel";
+  id: string;
+  name: string;
+  description: string;
+  createdAt: any;
+  modifiedAt: any | null;
+}
+
+export interface UserAddedToChannelSubscription {
+  communicationChannelAddedForUser: UserAddedToChannelSubscription_communicationChannelAddedForUser | null;
+}
+
+export interface UserAddedToChannelSubscriptionVariables {
+  userId: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: CreateMessage
 // ====================================================
 
@@ -147,6 +178,7 @@ export interface GetMessagesForChannel_communicationChannelMessages_getForChanne
   __typename: "CommunicationChannelMessageType";
   id: string;
   content: string;
+  userName: string;
   type: asdf | null;
   userId: string;
   channelId: string;

@@ -10,7 +10,7 @@ import MessageBox from '../chat/message-box.component';
 import MessageComponent, { MessageComponentProps } from '../chat/message.component';
 import CommunicationChannelSettingsPopup from './communication-channel-settings-popup.component';
 import { GetMessagesForChannel, GetMessagesForChannelVariables, MessageAddedToChannelSubscription, MessageAddedToChannelSubscriptionVariables } from '../../common/interfaces/schema-types';
-import { useQuery } from '@apollo/client';
+import { useQuery, useSubscription } from '@apollo/client';
 import { GET_MESSAGES_FOR_CHANNEL } from '../../hooks/messages/queries/useGetMessagesForChannel';
 import { MESSAGE_ADDED_TO_CHANNEL_SUBSCRIPTION } from '../../hooks/messages/subscriptions/useMessageAddedToChannelSubscription';
 
@@ -27,11 +27,10 @@ const Container = styled.div`
 `;
 
 const ChannelHeader = styled.div`
+    height: 4em;
     display: flex;
     flex-direction: row;
-    flex-grow: 1;
     padding: 0 1em;
-    min-height: 4em;
     background-color: #3f3f3f;
 `;
 
@@ -108,7 +107,7 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
                     return Object.assign({}, prev,  {
                         communicationChannelMessages: {
                             getForChannel: {
-                                data: [ ...newEntries.data, ...prev.communicationChannelMessages.getForChannel.data].filter((v, i, a) => a.indexOf(v) === i),
+                                data: [ ...(newEntries?.data || []), ...prev.communicationChannelMessages.getForChannel.data].filter((v, i, a) => a.indexOf(v) === i),
                                 hasNextPage: newEntries.hasNextPage,
                                 hasPreviousPage: newEntries.hasPreviousPage,
                                 pageIndex: newEntries.pageIndex,
@@ -130,6 +129,8 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
                 channelId: currentChannel.id
             },
             updateQuery: (prev, { subscriptionData }) => {
+                console.log('ejj');
+                console.log(subscriptionData);
                 // Pokud nemám žádná nová data, vrátím původní hodnotu.
                 if (!subscriptionData.data) {
                     return prev;
@@ -155,7 +156,7 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
         return () => {
             unsub();
         }
-    }, []);
+    }, [currentChannel]);
 
 
     // Proměnná určující, jestli je zobrazený panel s nastavením komunikačního kanálu.
@@ -191,7 +192,7 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
             isStartOfBatch: isStartOfBatch,
             isEndOfBatch: isEndOfBatch,
             isFromCurrentUser: isFromCurrentUser,
-            userName: message.userId
+            userName: message.userName
         };
 
         return (
@@ -230,7 +231,7 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
             }
             <ChannelHeader>
                 <ChannelHeaderLeft>
-                    <ChannelTitle>{currentChannel?.name}{currentChannel?.id}</ChannelTitle>
+                    <ChannelTitle>{currentChannel?.name}</ChannelTitle>
                 </ChannelHeaderLeft>
                 <ChannelHeaderRight>
                     <Button onClick={() => { setShowSettings(true) } } icon={Settings}/>

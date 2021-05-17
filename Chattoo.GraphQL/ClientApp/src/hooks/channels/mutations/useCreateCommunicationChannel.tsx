@@ -8,7 +8,9 @@ export interface CreateCommunicationChannelInput {
 export const CREATE_COMMUNICATION_CHANNEL = gql`
     mutation CreateCommunicationChannel($name: String!, $desc: String!) {
         communicationChannels {
-            create(name: $name, desc: $desc)
+            create(name: $name, desc: $desc) {
+                id
+            }
         }
     }
 `;

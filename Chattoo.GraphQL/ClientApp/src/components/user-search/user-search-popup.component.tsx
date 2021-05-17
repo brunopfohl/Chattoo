@@ -128,7 +128,7 @@ const UserSearch: React.FC<UserSearchProps> = (props: UserSearchProps) => {
                         Návrhy
                     </UsersContainerTitle>
                 }
-                { users
+                { users?.data && users.data.length > 0
                     ? users.data.map((u) => (
                         <UserSearchItem user={u} isSelected={isUserSelected(u)} selectMode={mode} key={u.id} addUser={addUser} removeUser={removeUser}/>
                     ))

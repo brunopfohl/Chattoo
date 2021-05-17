@@ -1,6 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Chattoo.Application.Common.Exceptions;
+using Chattoo.Application.CommunicationChannels.DTOs;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Repositories;
 using MediatR;
@@ -10,7 +12,7 @@ namespace Chattoo.Application.CommunicationChannels.Commands.RemoveUser
     /// <summary>
     /// Příkaz pro odebrání uživatele z komunikačního kanálu.
     /// </summary>
-    public class RemoveUserFromCommunicationChannelCommand : IRequest<Unit>
+    public class RemoveUserFromCommunicationChannelCommand : IRequest<CommunicationChannelDto>
     {
         /// <summary>
         /// Vrací nebo nastavuje Id uživatele, který se má odebrat ze skupiny.
@@ -23,20 +25,22 @@ namespace Chattoo.Application.CommunicationChannels.Commands.RemoveUser
         public string ChannelId { get; set; }
     }
 
-    public class RemoveUserFromCommunicationChannelCommandHandler : IRequestHandler<RemoveUserFromCommunicationChannelCommand, Unit>
+    public class RemoveUserFromCommunicationChannelCommandHandler : IRequestHandler<RemoveUserFromCommunicationChannelCommand, CommunicationChannelDto>
     {
+        private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICommunicationChannelRepository _communicationChannelRepository;
         private readonly IUserRepository _userRepository;
 
-        public RemoveUserFromCommunicationChannelCommandHandler(IUnitOfWork unitOfWork, ICommunicationChannelRepository communicationChannelRepository, IUserRepository userRepository)
+        public RemoveUserFromCommunicationChannelCommandHandler(IUnitOfWork unitOfWork, ICommunicationChannelRepository communicationChannelRepository, IUserRepository userRepository, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _communicationChannelRepository = communicationChannelRepository;
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
-        public async Task<Unit> Handle(RemoveUserFromCommunicationChannelCommand request, CancellationToken cancellationToken)
+        public async Task<CommunicationChannelDto> Handle(RemoveUserFromCommunicationChannelCommand request, CancellationToken cancellationToken)
         {
             // Získám uživatele pomocí jeho Id.
             // Vyhodím výjimku, pokud uživatel s předaným Id neexistuje.
@@ -57,10 +61,13 @@ namespace Chattoo.Application.CommunicationChannels.Commands.RemoveUser
                 );
             }
             
+            // Odeberu uživatele z komunikačního kanálu.
+            channel.Users.Remove(user);
+            
             // Promítnu změny do datového zdroje.
             _unitOfWork.SaveChanges();
-            
-            return Unit.Value;
+
+            return _mapper.Map<CommunicationChannelDto>(channel);
         }
     }
 }

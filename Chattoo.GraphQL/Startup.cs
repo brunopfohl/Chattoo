@@ -63,6 +63,7 @@ namespace Chattoo.GraphQL
             });
 
             services
+                .AddSingleton<ICommunicationChannelSubscriptionProvider, CommunicationChannelSubscriptionProvider>()
                 .AddSingleton<ICommunicationChannelMessageSubscriptionProvider, CommunicationChannelMessageSubscriptionProvider>()
                 .AddSingleton<GraphQLSchema>()
                 .AddGraphQL((options, provider) =>
@@ -93,7 +94,7 @@ namespace Chattoo.GraphQL
 
             app.UseCors("MyPolicy");
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseSpaStaticFiles();

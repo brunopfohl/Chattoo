@@ -11,6 +11,7 @@ export const GET_MESSAGES_FOR_CHANNEL = gql`
             data {
                 id,
                 content,
+                userName,
                 type,
                 userId,
                 channelId,

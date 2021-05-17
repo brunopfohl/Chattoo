@@ -3,18 +3,24 @@ using Chattoo.Application.CommunicationChannels.Commands.Create;
 using Chattoo.Application.CommunicationChannels.Commands.Delete;
 using Chattoo.Application.CommunicationChannels.Commands.RemoveUser;
 using Chattoo.Application.CommunicationChannels.Commands.Update;
+using Chattoo.Application.CommunicationChannels.DTOs;
 using Chattoo.GraphQL.Extensions;
+using Chattoo.GraphQL.Subscription.CommunicationChannelMessage;
+using Chattoo.GraphQL.Types;
 using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Mutation
 {
     public class CommunicationChannelMutation : ObjectGraphType
     {
-        public CommunicationChannelMutation()
+        private readonly ICommunicationChannelSubscriptionProvider _communicationChannelSubscriptionProvider;
+        
+        public CommunicationChannelMutation(ICommunicationChannelSubscriptionProvider communicationChannelSubscriptionProvider)
         {
+            _communicationChannelSubscriptionProvider = communicationChannelSubscriptionProvider;
             Name = "CommunicationChannelMutation";
             
-            this.FieldAsyncWithScope<StringGraphType, string>(
+            this.FieldAsyncWithScope<CommunicationChannelType, CommunicationChannelDto>(
                 "create",
                 arguments: 
                 new QueryArguments
@@ -30,9 +36,11 @@ namespace Chattoo.GraphQL.Mutation
                         Description = ctx.GetString("desc")
                     };
 
-                    var id = await mediator.Send(command);
+                    var channel = await mediator.Send(command);
 
-                    return id;
+                    _communicationChannelSubscriptionProvider.UpdateCommunicationChannel(channel);
+
+                    return channel;
                 }
             );
             
@@ -96,7 +104,9 @@ namespace Chattoo.GraphQL.Mutation
                         ChannelId = ctx.GetString("channelId")
                     };
 
-                    await mediator.Send(command);
+                    var channel = await mediator.Send(command);
+                    
+                    _communicationChannelSubscriptionProvider.UpdateCommunicationChannel(channel);
 
                     return true;
                 }
@@ -118,7 +128,9 @@ namespace Chattoo.GraphQL.Mutation
                         ChannelId = ctx.GetString("channelId")
                     };
 
-                    await mediator.Send(command);
+                    var channel = await mediator.Send(command);
+                    
+                    _communicationChannelSubscriptionProvider.UpdateCommunicationChannel(channel);
 
                     return true;
                 }

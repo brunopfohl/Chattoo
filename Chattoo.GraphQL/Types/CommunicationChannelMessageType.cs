@@ -9,6 +9,7 @@ namespace Chattoo.GraphQL.Types
         {
             Field(o => o.Id);
             Field(o => o.Content);
+            Field(o => o.UserName);
             Field<CommunicationChannelMessageTypeType>(nameof(CommunicationChannelMessageDto.Type));
             Field(o => o.ChannelId);
             Field(o => o.UserId);

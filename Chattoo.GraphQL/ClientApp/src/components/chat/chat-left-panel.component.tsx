@@ -1,14 +1,12 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components';
 import { Plus } from 'styled-icons/boxicons-regular';
 import Button from '../button/button.component';
-import { ChatStateContext } from './chat-state-provider.component';
-import CommunicationChannelCreate from '../channel/communication-channel-create-popup.component';
 import CommunicationChannelList from './communication-channel-list.component';
-import SearchChannels from './search-channels.component';
 import CommunicationChannelCreatePopup from '../channel/communication-channel-create-popup.component';
 
 const Container = styled.div`
+    min-width: 150px;
     background-color: #545454;
     flex-grow: 1;
     display: flex;
@@ -38,7 +36,6 @@ const ChatLeftPanel: React.FC<any> = (props: any) => {
                     <Title>Chaty</Title>
                     <Button onClick={() => { setShowCreateCommunicationChannelPopup(true); }} icon={Plus}/>
                 </Heading>
-                <SearchChannels/>
                 <CommunicationChannelList />
             </Container>
         </>

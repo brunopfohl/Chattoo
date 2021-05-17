@@ -9,8 +9,7 @@ namespace Chattoo.GraphQL.Subscription.CommunicationChannelMessage
     public interface ICommunicationChannelMessageSubscriptionProvider
     {
         IObservable<CommunicationChannelMessageDto> CommunicationChannelMessages();
-        CommunicationChannelMessageDto AddCommunicationChannelMessage(
-            CommunicationChannelMessageDto communicationChannelMessage);
+        CommunicationChannelMessageDto AddCommunicationChannelMessage(CommunicationChannelMessageDto communicationChannelMessage);
         
         ConcurrentStack<CommunicationChannelMessageDto> AllCommunicationChannelMessages { get; } 
     }

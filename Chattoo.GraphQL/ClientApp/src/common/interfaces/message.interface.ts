@@ -4,6 +4,7 @@ export interface Message {
     type: string,
     userId: string,
     channelId: string,
+    userName: string,
     createdAt: Date,
     modifiedAt: Date
 }

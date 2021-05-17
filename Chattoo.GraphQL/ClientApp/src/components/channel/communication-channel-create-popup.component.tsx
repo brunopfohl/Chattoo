@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { useCallback } from 'react';
+import React, { useRef, useState } from 'react'
+import { useEffect } from 'react';
 import styled from 'styled-components';
-import { Close } from 'styled-icons/evil';
+import { createCommunicationChannelFormValidationSchema } from '../../common/validations/createCommunicationChannelFormValidationSchema';
 import { CreateCommunicationChannelInput, useCreateCommunicationChannel } from '../../hooks/channels/mutations/useCreateCommunicationChannel';
 import Button from '../button/button.component';
-import Input from '../input/input.component';
+import { MemoizedInput } from '../input/input.component';
 import Popup from '../popup/popup.component';
 import Separator from '../separator.component';
 
@@ -25,32 +25,95 @@ const InputWrapper = styled.div`
     margin: 0.5em 0;
 `;
 
+const ValidationError = styled.span`
+    font-size: 12pt;
+    padding-left: 1em;
+    color: red;
+`;
+
 const CommunicationChannelCreate: React.FC<CommunicationChannelCreatePopupProps> = (props: CommunicationChannelCreatePopupProps) => {
-    
+    const { onClose } = props;
+
+    const isInitialized = useRef(false);
+
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
 
+    const [validationErrors, setValidationErrors] = useState({});
 
     const createCommunicationChannel = useCreateCommunicationChannel();
 
-    const onSubmit = () => {
-        const submitValues: CreateCommunicationChannelInput = {
-            variables: {
-                name: name,
-                desc: description
-            }
-        };
+    const isValid = async () => {
+        let isValid = true;
+        setValidationErrors({});
 
-        createCommunicationChannel(submitValues)
+        await createCommunicationChannelFormValidationSchema.validate({
+            name: name,
+            description: description
+        },
+        {
+            abortEarly: false
+        })
+        .catch((err) => {
+            let errors = {};
+
+            err.inner.forEach(e => {
+                errors[e.path] = e.errors;
+            });
+
+            isValid = false;
+
+            setValidationErrors(errors);
+        });
+
+        return isValid;
     };
+
+    const onSubmit = () => {
+        isValid().then((success) => {
+            if(success) {
+                const submitValues: CreateCommunicationChannelInput = {
+                    variables: {
+                        name: name,
+                        desc: description
+                    }
+                };
+
+                createCommunicationChannel(submitValues)
+
+                onClose();
+            }
+        });
+    };
+
+    let typingTimeout: NodeJS.Timeout = null;
+    useEffect(() => {
+        if(isInitialized.current) {
+            typingTimeout && clearTimeout(typingTimeout);
+
+            typingTimeout = setTimeout(() => {
+                isValid();
+            }, 200);
+        }
+    }, [name, description]);
+
+    useEffect(() => {
+        isInitialized.current = true;
+    }, []);
 
     return (
         <Container>
-            <InputWrapper key="fdsf">
-                <Input type="text" onValueChange={setName} placeholder="Zadejte název skupiny" label="Název"/>
+            <InputWrapper>
+                <MemoizedInput type="text" onValueChange={setName} placeholder="Zadejte název skupiny" label="Název"/>
+                {validationErrors["name"] && validationErrors["name"].map((e) => (
+                    <ValidationError>{e}</ValidationError>
+                ))}
             </InputWrapper>
-            <InputWrapper key="wtf">
-                <Input type="text" onValueChange={setDescription} placeholder="Zadejte popis skupiny" label="Popis"/>
+            <InputWrapper>
+                <MemoizedInput type="text" onValueChange={setDescription} placeholder="Zadejte popis skupiny" label="Popis"/>
+                {validationErrors["description"] && validationErrors["description"].map((e) => (
+                    <ValidationError>{e}</ValidationError>
+                ))}
             </InputWrapper>
             <Separator />
             <Button text="Vytvořit" onClick={onSubmit} />

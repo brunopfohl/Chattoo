@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components';
-import { Settings } from 'styled-icons/material';
 import authService from '../api-authorization/AuthorizeService';
 import { AppStateContext } from '../app-state-provider.component';
 import Button, { ButtonTheme } from '../button/button.component';
@@ -45,7 +44,7 @@ const Header: React.FC<any> = (props: any) => {
     return (
         <Container>
             <Left>
-                <UserName>{user && user.userName} {user && user.id}</UserName>
+                <UserName>{user && user.userName}</UserName>
             </Left>
             <Right>
                 <Button text="Odhlásit se" onClick={onLogout} theme={ButtonTheme.green}/>

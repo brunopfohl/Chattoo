@@ -1,5 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import { RemoveUserFromCommunicationChannelVariables } from "../../../common/interfaces/schema-types";
+import { GET_USERS_FOR_CHANNEL } from "../../users/queries/useGetUsersForChannel";
 
 export interface RemoveUserFromCommunicationChannelInput {
     variables: RemoveUserFromCommunicationChannelVariables

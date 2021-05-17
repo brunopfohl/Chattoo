@@ -4,7 +4,7 @@ import { Plus } from 'styled-icons/boxicons-regular';
 import { Remove } from 'styled-icons/material-twotone';
 import { AppUser } from '../../common/interfaces/app-user.interface';
 import { AddUserToCommunicationChannelInput, useAddUserToCommunicationChannel } from '../../hooks/channels/mutations/useAddUserToCommunicationChannel';
-import { useRemoveUserFromCommunicationChannel } from '../../hooks/channels/mutations/useRemoveUserToCommunicationChannel';
+import { RemoveUserFromCommunicationChannelInput, useRemoveUserFromCommunicationChannel } from '../../hooks/channels/mutations/useRemoveUserToCommunicationChannel';
 import { useGetUsersForChannel } from '../../hooks/users/queries/useGetUsersForChannel';
 import Button from '../button/button.component';
 import { ChatStateContext } from '../chat/chat-state-provider.component';
@@ -101,8 +101,45 @@ const CommunicationChannelSettings: React.FC<CommunicationChannelSettingsProps> 
                 }
             };
 
-            addUserToCommunicationChannel(mutationInput);
+
+            addUserToCommunicationChannel(mutationInput).then(() => {
+                channelUsersQuery.refetch();
+            });
         });
+    };
+
+    // Metoda, která odebere uživatele.
+    const onUserRemove = (user: AppUser) => {
+        const mutationInput: RemoveUserFromCommunicationChannelInput = {
+            variables: {
+                userId: user.id,
+                channelId: currentChannel.id
+            }
+        };
+
+        // Po odebrání uživatele, znovu načtu uživatele.
+        removeUserFromCommunicationChannel(mutationInput).then(() => {
+            channelUsersQuery.refetch();
+        });
+    };
+
+    // Metoda pro render všech účastníků konverzace.
+    const renderParticipants = () => {
+        return (
+            channelUsers?.data && channelUsers.data.map(user => (
+                <ParticipantsRow key={user.id}>
+                    <ParticipantsRowLeft>
+                        <ProfilePicture size="2em"/>
+                    </ParticipantsRowLeft>
+                    <ParticipantsRowRight>
+                        <ParticipantUserName>{user.userName}</ParticipantUserName>
+                        <RightFlexContainer>
+                            <Button icon={Remove} onClick={() => onUserRemove(user)}/>
+                        </RightFlexContainer>
+                    </ParticipantsRowRight>
+                </ParticipantsRow>
+            ))
+        );
     };
 
     return (
@@ -113,26 +150,12 @@ const CommunicationChannelSettings: React.FC<CommunicationChannelSettingsProps> 
             <Container>
                 <ParticipantsTitle>Seznam účastníků</ParticipantsTitle>
                 <ParticipantsContainer>
-                    {channelUsers?.data && channelUsers.data.map(user => (
-                        <ParticipantsRow key={user.id}>
-                            <ParticipantsRowLeft>
-                                <ProfilePicture size="2em"/>
-                            </ParticipantsRowLeft>
-                            <ParticipantsRowRight>
-                                <ParticipantUserName>{user.userName}</ParticipantUserName>
-                                <RightFlexContainer>
-                                    <Button icon={Remove} onClick={() => {}}/>
-                                </RightFlexContainer>
-                            </ParticipantsRowRight>
-                        </ParticipantsRow>
-                    ))}
+                    {renderParticipants()}
                 </ParticipantsContainer>
                 <AddNewParticipantsContainer>
                     <Button icon={Plus} onClick={() => setShowUserSearchPopup(true) }/>
                     <AddNewParticipantsTitle>Přidat lidi</AddNewParticipantsTitle>
                 </AddNewParticipantsContainer>
-                <Separator />
-                <Button text="Uložit" onClick={() => setShowUserSearchPopup(true) }/>
             </Container>
         </>
     );

@@ -3,7 +3,7 @@ import { AppUser } from "../../../common/interfaces/app-user.interface";
 import { PaginatedList } from "../../../common/interfaces/paginated-list";
 import { GetUsersForChannel, GetUsersForChannelVariables } from "../../../common/interfaces/schema-types";
 
-const GET_USERS_FOR_CHANNEL = gql`
+export const GET_USERS_FOR_CHANNEL = gql`
     query GetUsersForChannel($channelId: ID!) {
         users {
             getForCommunicationChannel(channelId: $channelId) {

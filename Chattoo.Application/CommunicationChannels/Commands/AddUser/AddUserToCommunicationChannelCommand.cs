@@ -1,6 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Chattoo.Application.Common.Exceptions;
+using Chattoo.Application.CommunicationChannels.DTOs;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Repositories;
 using MediatR;
@@ -10,7 +12,7 @@ namespace Chattoo.Application.CommunicationChannels.Commands.AddUser
     /// <summary>
     /// Příkaz pro přidání uživatele do komunikačního kanálu.
     /// </summary>
-    public class AddUserToCommunicationChannelCommand : IRequest<Unit>
+    public class AddUserToCommunicationChannelCommand : IRequest<CommunicationChannelDto>
     {
         /// <summary>
         /// Vrací nebo nastavuje Id uživatele, který se má přidat do skupiny.
@@ -23,20 +25,22 @@ namespace Chattoo.Application.CommunicationChannels.Commands.AddUser
         public string ChannelId { get; set; }
     }
 
-    public class AddUserToCommunicationChannelCommandHandler : IRequestHandler<AddUserToCommunicationChannelCommand, Unit>
+    public class AddUserToCommunicationChannelCommandHandler : IRequestHandler<AddUserToCommunicationChannelCommand, CommunicationChannelDto>
     {
+        private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICommunicationChannelRepository _communicationChannelRepository;
         private readonly IUserRepository _userRepository;
 
-        public AddUserToCommunicationChannelCommandHandler(IUnitOfWork unitOfWork, ICommunicationChannelRepository communicationChannelRepository, IUserRepository userRepository)
+        public AddUserToCommunicationChannelCommandHandler(IUnitOfWork unitOfWork, ICommunicationChannelRepository communicationChannelRepository, IUserRepository userRepository, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _communicationChannelRepository = communicationChannelRepository;
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
-        public async Task<Unit> Handle(AddUserToCommunicationChannelCommand request, CancellationToken cancellationToken)
+        public async Task<CommunicationChannelDto> Handle(AddUserToCommunicationChannelCommand request, CancellationToken cancellationToken)
         {
             // Získám uživatele pomocí jeho Id.
             // Vyhodím výjimku, pokud uživatel s předaným Id neexistuje.
@@ -54,8 +58,8 @@ namespace Chattoo.Application.CommunicationChannels.Commands.AddUser
             
             // Promítnu změny do datového zdroje.
             _unitOfWork.SaveChanges();
-            
-            return Unit.Value;
+
+            return _mapper.Map<CommunicationChannelDto>(channel);
         }
     }
 }

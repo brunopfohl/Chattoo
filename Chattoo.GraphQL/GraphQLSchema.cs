@@ -10,12 +10,12 @@ namespace Chattoo.GraphQL
 {
     public class GraphQLSchema : Schema
     {
-        public GraphQLSchema(IServiceProvider provider, ICommunicationChannelMessageSubscriptionProvider communicationChannelMessageSubscriptionProvider)
+        public GraphQLSchema(IServiceProvider provider, ICommunicationChannelMessageSubscriptionProvider communicationChannelMessageSubscriptionProvider, ICommunicationChannelSubscriptionProvider communicationChannelSubscriptionProvider)
             : base(provider)
         {
             Query = provider.GetRequiredService<GraphQLQuery>();
             Mutation = provider.GetRequiredService<GraphQLMutation>();
-            Subscription = new GraphQLSubscription(communicationChannelMessageSubscriptionProvider);
+            Subscription = new GraphQLSubscription(communicationChannelMessageSubscriptionProvider, communicationChannelSubscriptionProvider);
         }
     }
 }

@@ -27,7 +27,6 @@ namespace Chattoo.Application.Common.Mappings
                     ?? type.GetInterface("IMapFrom`1").GetMethod("Mapping");
                 
                 methodInfo?.Invoke(instance, new object[] { this });
-
             }
         }
     }

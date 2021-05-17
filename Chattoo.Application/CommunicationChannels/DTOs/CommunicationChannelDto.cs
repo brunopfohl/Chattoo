@@ -1,5 +1,7 @@
-﻿using Chattoo.Application.Common.DTOs;
+﻿using System.Collections.Generic;
+using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.Common.Mappings;
+using Chattoo.Application.Users.DTOs;
 using Chattoo.Domain.Entities;
 
 namespace Chattoo.Application.CommunicationChannels.DTOs
@@ -18,5 +20,10 @@ namespace Chattoo.Application.CommunicationChannels.DTOs
         /// Vrací nebo nastavuje popis komunikačního kanálu.
         /// </summary>
         public string Description { get; set; }
+        
+        /// <summary>
+        /// Vrací nebo nastavuje uživatele, kteří jsou součástí tohoto komunikačního kanálu.
+        /// </summary>
+        public ICollection<UserDto> Users { get; set; }
     }
 }

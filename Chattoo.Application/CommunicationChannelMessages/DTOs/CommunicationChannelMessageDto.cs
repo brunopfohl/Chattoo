@@ -1,5 +1,7 @@
-﻿using Chattoo.Application.Common.DTOs;
+﻿using AutoMapper;
+using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.Common.Mappings;
+using Chattoo.Application.CommunicationChannels.DTOs;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Enums;
 
@@ -21,6 +23,11 @@ namespace Chattoo.Application.CommunicationChannelMessages.DTOs
         public string UserId { get; set; }
         
         /// <summary>
+        /// Vrací nebo nastavuje jméno uživatele, který je autorem této zprávy.
+        /// </summary>
+        public string UserName { get; set; }
+        
+        /// <summary>
         /// Vrací nebo nastavuje typ zprávy (bežná zpráva, oznámení, ...).
         /// </summary>
         public CommunicationChannelMessageType Type { get; set; }
@@ -29,5 +36,11 @@ namespace Chattoo.Application.CommunicationChannelMessages.DTOs
         /// Vrací nebo nastavuje obsah zprávy.
         /// </summary>
         public string Content { get; set; }
+        
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<CommunicationChannelMessage, CommunicationChannelMessageDto>()
+                .ForMember(d => d.UserName, opt => opt.MapFrom(s => s.User.UserName));
+        }
     }
 }

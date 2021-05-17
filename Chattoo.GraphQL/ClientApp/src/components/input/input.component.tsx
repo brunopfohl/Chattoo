@@ -75,4 +75,6 @@ const Input: React.FC<InputProps> = (props: InputProps) => {
     );
 }
 
+export const MemoizedInput = React.memo(Input);
+
 export default Input;
