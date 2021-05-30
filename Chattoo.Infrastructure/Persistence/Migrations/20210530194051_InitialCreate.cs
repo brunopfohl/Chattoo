@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Chattoo.Infrastructure.Persistence.Migrations
 {
-    public partial class MigrationName : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -299,6 +299,41 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CommunicationChannelCalendarEvent",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StartsAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndsAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CommunicationChannelId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CommunicationChannelCalendarEvent", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CommunicationChannelCalendarEvent_CommunicationChannel_CommunicationChannelId",
+                        column: x => x.CommunicationChannelId,
+                        principalTable: "CommunicationChannel",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CommunicationChannelCalendarEvent_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CommunicationChannelMessage",
                 columns: table => new
                 {
@@ -519,6 +554,16 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CommunicationChannelCalendarEvent_CommunicationChannelId",
+                table: "CommunicationChannelCalendarEvent",
+                column: "CommunicationChannelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CommunicationChannelCalendarEvent_UserId",
+                table: "CommunicationChannelCalendarEvent",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CommunicationChannelMessage_ChannelId",
                 table: "CommunicationChannelMessage",
                 column: "ChannelId");
@@ -611,6 +656,9 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "CommunicationChannelCalendarEvent");
 
             migrationBuilder.DropTable(
                 name: "CommunicationChannelMessageAttachment");

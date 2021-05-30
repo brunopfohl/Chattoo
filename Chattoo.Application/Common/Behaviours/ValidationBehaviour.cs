@@ -30,6 +30,7 @@ namespace Chattoo.Application.Common.Behaviours
                 if (failures.Count is not 0)
                     throw new ValidationException(failures);
             }
+            
             return await next();
         }
     }
