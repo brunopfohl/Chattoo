@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chattoo.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210507134528_MigrationName")]
-    partial class MigrationName
+    [Migration("20210530194051_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,6 +57,59 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CommunicationChannel");
+                });
+
+            modelBuilder.Entity("Chattoo.Domain.Entities.CommunicationChannelCalendarEvent", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CommunicationChannelId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EndsAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("StartsAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommunicationChannelId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CommunicationChannelCalendarEvent");
                 });
 
             modelBuilder.Entity("Chattoo.Domain.Entities.CommunicationChannelMessage", b =>
@@ -707,6 +760,21 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Chattoo.Domain.Entities.CommunicationChannelCalendarEvent", b =>
+                {
+                    b.HasOne("Chattoo.Domain.Entities.CommunicationChannel", "CommunicationChannel")
+                        .WithMany()
+                        .HasForeignKey("CommunicationChannelId");
+
+                    b.HasOne("Chattoo.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("CommunicationChannel");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Chattoo.Domain.Entities.CommunicationChannelMessage", b =>
