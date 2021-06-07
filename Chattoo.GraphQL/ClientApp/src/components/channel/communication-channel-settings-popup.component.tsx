@@ -78,7 +78,6 @@ const RightFlexContainer = styled.div`
 
 
 const CommunicationChannelSettings: React.FC<CommunicationChannelSettingsProps> = (props: CommunicationChannelSettingsProps) => {
-    console.log('render');
     const [showUserSearchPopup, setShowUserSearchPopup] = useState<boolean>(false);
 
     const { currentChannel } = useContext(ChatStateContext);

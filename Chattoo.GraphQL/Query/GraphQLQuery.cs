@@ -15,6 +15,7 @@ namespace Chattoo.GraphQL.Query
             Field<CommunicationChannelQuery>("communicationChannels", resolve: context => new { });
             Field<CommunicationChannelMessageQuery>("communicationChannelMessages", resolve: context => new { });
             Field<CommunicationChannelRoleQuery>("communicationChannelRoles", resolve: context => new { });
+            Field<CommunicationChannelCalendarEventQuery>("communicationChannelCalendarEvents", resolve: context => new { });
         }
     }
 }

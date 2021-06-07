@@ -4,6 +4,147 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: CreateChannelCalendarEvent
+// ====================================================
+
+export interface CreateChannelCalendarEvent_communicationChannelCalendarEvents_create {
+  __typename: "CommunicationChannelCalendarEventType";
+  id: string;
+  startsAt: any;
+  endsAt: any | null;
+  name: string;
+  description: string;
+  authorId: string;
+  authorName: string;
+  createdAt: any;
+  modifiedAt: any | null;
+}
+
+export interface CreateChannelCalendarEvent_communicationChannelCalendarEvents {
+  __typename: "CommunicationChannelCalendarEventMutation";
+  create: CreateChannelCalendarEvent_communicationChannelCalendarEvents_create | null;
+}
+
+export interface CreateChannelCalendarEvent {
+  communicationChannelCalendarEvents: CreateChannelCalendarEvent_communicationChannelCalendarEvents | null;
+}
+
+export interface CreateChannelCalendarEventVariables {
+  channelId: string;
+  name: string;
+  desc: string;
+  startsAt: any;
+  endsAt: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: DeleteChannelCalendarEvent
+// ====================================================
+
+export interface DeleteChannelCalendarEvent_communicationChannelCalendarEvents {
+  __typename: "CommunicationChannelCalendarEventMutation";
+  delete: boolean | null;
+}
+
+export interface DeleteChannelCalendarEvent {
+  communicationChannelCalendarEvents: DeleteChannelCalendarEvent_communicationChannelCalendarEvents | null;
+}
+
+export interface DeleteChannelCalendarEventVariables {
+  id: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetCalendarEventsForChannel
+// ====================================================
+
+export interface GetCalendarEventsForChannel_communicationChannelCalendarEvents_getForCommunicationChannel_data {
+  __typename: "CommunicationChannelCalendarEventType";
+  id: string;
+  startsAt: any;
+  endsAt: any | null;
+  name: string;
+  description: string;
+  authorId: string;
+  authorName: string;
+  createdAt: any;
+  modifiedAt: any | null;
+}
+
+export interface GetCalendarEventsForChannel_communicationChannelCalendarEvents_getForCommunicationChannel {
+  __typename: "PaginationListCommunicationChannelCalendarEventType";
+  data: (GetCalendarEventsForChannel_communicationChannelCalendarEvents_getForCommunicationChannel_data | null)[] | null;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  pageIndex: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface GetCalendarEventsForChannel_communicationChannelCalendarEvents {
+  __typename: "CommunicationChannelCalendarEventQuery";
+  getForCommunicationChannel: GetCalendarEventsForChannel_communicationChannelCalendarEvents_getForCommunicationChannel | null;
+}
+
+export interface GetCalendarEventsForChannel {
+  communicationChannelCalendarEvents: GetCalendarEventsForChannel_communicationChannelCalendarEvents | null;
+}
+
+export interface GetCalendarEventsForChannelVariables {
+  channelId: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetChannelCalendarEvent
+// ====================================================
+
+export interface GetChannelCalendarEvent_communicationChannelCalendarEvents_get {
+  __typename: "CommunicationChannelCalendarEventType";
+  id: string;
+  startsAt: any;
+  endsAt: any | null;
+  name: string;
+  description: string;
+  authorId: string;
+  authorName: string;
+  createdAt: any;
+  modifiedAt: any | null;
+}
+
+export interface GetChannelCalendarEvent_communicationChannelCalendarEvents {
+  __typename: "CommunicationChannelCalendarEventQuery";
+  get: GetChannelCalendarEvent_communicationChannelCalendarEvents_get | null;
+}
+
+export interface GetChannelCalendarEvent {
+  communicationChannelCalendarEvents: GetChannelCalendarEvent_communicationChannelCalendarEvents | null;
+}
+
+export interface GetChannelCalendarEventVariables {
+  id: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: AddUserToCommunicationChannel
 // ====================================================
 

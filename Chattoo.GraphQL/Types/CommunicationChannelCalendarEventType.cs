@@ -9,7 +9,7 @@ namespace Chattoo.GraphQL.Types
         {
             Field(o => o.Id);
             Field(o => o.StartsAt);
-            Field(o => o.EndsAt);
+            Field(o => o.EndsAt, true);
             Field(o => o.Name);
             Field(o => o.Description);
             Field(o => o.AuthorId);

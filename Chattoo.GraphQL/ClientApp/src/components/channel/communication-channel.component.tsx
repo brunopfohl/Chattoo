@@ -13,6 +13,8 @@ import { GetMessagesForChannel, GetMessagesForChannelVariables, MessageAddedToCh
 import { useQuery, useSubscription } from '@apollo/client';
 import { GET_MESSAGES_FOR_CHANNEL } from '../../hooks/messages/queries/useGetMessagesForChannel';
 import { MESSAGE_ADDED_TO_CHANNEL_SUBSCRIPTION } from '../../hooks/messages/subscriptions/useMessageAddedToChannelSubscription';
+import { Calendar } from 'styled-icons/boxicons-regular';
+import CommunicationChannelCalendarEventsPopup from '../channel-calendar-events/communication-channel-calendar-events-popup.component';
 
 interface CommunicationChannelProps {
     avatarUrl: string,
@@ -68,8 +70,6 @@ const MessageBoxContainer = styled.div`
 `;
 
 const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) => {
-    console.log('Render CommunicationChannel');
-
     const { appState } = useContext(AppStateContext);
     const { user } = appState;
 
@@ -160,7 +160,10 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
 
 
     // Proměnná určující, jestli je zobrazený panel s nastavením komunikačního kanálu.
-    const [showSettings, setShowSettings] = useState<boolean>()
+    const [showSettings, setShowSettings] = useState<boolean>();
+
+    // Proměnná určující, jestli je zobrazený panel s události z komunikačního kanálu.
+    const [showCalendarEvents, setShowCalendarEvents] = useState<boolean>();
 
     // Metoda pro přidání nové zprávy.
     const createMessage = useCreateMessage()
@@ -226,6 +229,9 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
 
     return (
         <Container>
+            { showCalendarEvents &&
+                <CommunicationChannelCalendarEventsPopup onClose={() => { setShowCalendarEvents(false) }}/>
+            }
             { showSettings &&
                 <CommunicationChannelSettingsPopup onClose={() => { setShowSettings(false) }}/>
             }
@@ -235,6 +241,7 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
                 </ChannelHeaderLeft>
                 <ChannelHeaderRight>
                     <Button onClick={() => { setShowSettings(true) } } icon={Settings}/>
+                    <Button onClick={() => { setShowCalendarEvents(true) } } icon={Calendar}/>
                 </ChannelHeaderRight>
             </ChannelHeader>
             <Content id="scrollableMessages" ref={messagesRef}>

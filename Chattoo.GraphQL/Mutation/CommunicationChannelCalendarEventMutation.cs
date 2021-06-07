@@ -36,9 +36,9 @@ namespace Chattoo.GraphQL.Mutation
                         CommunicationChannelId = ctx.GetString("channelId")
                     };
 
-                    var channel = await mediator.Send(command);
+                    var calendarEvent = await mediator.Send(command);
 
-                    return channel;
+                    return calendarEvent;
                 }
             );
             
