@@ -5,6 +5,7 @@ using Chattoo.Application.CommunicationChannelMessages.DTOs;
 using Chattoo.Domain.Enums;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Subscription.CommunicationChannelMessage;
+using Chattoo.GraphQL.Types;
 using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Mutation
@@ -15,7 +16,7 @@ namespace Chattoo.GraphQL.Mutation
         {
             Name = "CommunicationChannelMessageMutation";
             
-            this.FieldAsyncWithScope<StringGraphType, CommunicationChannelMessageDto>(
+            this.FieldAsyncWithScope<CommunicationChannelMessageGraphType, CommunicationChannelMessageDto>(
                 "create",
                 arguments: 
                 new QueryArguments

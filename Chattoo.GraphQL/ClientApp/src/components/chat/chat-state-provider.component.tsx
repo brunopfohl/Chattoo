@@ -1,5 +1,5 @@
+import { CommunicationChannel } from "graphql/graphql-types";
 import React, { createContext, ReactNode, useState } from "react";
-import { CommunicationChannel } from "../../common/interfaces/communication-channel.interface";
 
 export interface ChatStateContext {
     currentChannel: CommunicationChannel;

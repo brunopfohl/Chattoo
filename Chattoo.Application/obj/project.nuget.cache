@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "dgSpecHash": "8FIF6wUzlpnqeKFP7lxLl91QZcijk3vAfc6TeOV/t/1Ak1xFkfnPXjtpg7BoRWZA0QH136ZsffC+GIYbVfZy/w==",
+  "success": true,
+  "projectFilePath": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/Chattoo.Application.csproj",
+  "expectedPackageFiles": [
+    "/home/brunopfohl/.nuget/packages/automapper/10.1.1/automapper.10.1.1.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/8.1.1/automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/fluentvalidation/9.5.0/fluentvalidation.9.5.0.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/fluentvalidation.aspnetcore/9.5.0/fluentvalidation.aspnetcore.9.5.0.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/fluentvalidation.dependencyinjectionextensions/9.5.0/fluentvalidation.dependencyinjectionextensions.9.5.0.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/mediatr/9.0.0/mediatr.9.0.0.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/mediatr.extensions.microsoft.dependencyinjection/9.0.0/mediatr.extensions.microsoft.dependencyinjection.9.0.0.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/microsoft.csharp/4.7.0/microsoft.csharp.4.7.0.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/microsoft.entityframeworkcore/5.0.2/microsoft.entityframeworkcore.5.0.2.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/microsoft.entityframeworkcore.abstractions/5.0.2/microsoft.entityframeworkcore.abstractions.5.0.2.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/microsoft.entityframeworkcore.analyzers/5.0.2/microsoft.entityframeworkcore.analyzers.5.0.2.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/microsoft.extensions.caching.abstractions/5.0.0/microsoft.extensions.caching.abstractions.5.0.0.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/microsoft.extensions.caching.memory/5.0.0/microsoft.extensions.caching.memory.5.0.0.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/microsoft.extensions.dependencyinjection/5.0.1/microsoft.extensions.dependencyinjection.5.0.1.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/5.0.0/microsoft.extensions.dependencyinjection.abstractions.5.0.0.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/microsoft.extensions.logging/5.0.0/microsoft.extensions.logging.5.0.0.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/microsoft.extensions.logging.abstractions/5.0.0/microsoft.extensions.logging.abstractions.5.0.0.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/microsoft.extensions.options/5.0.0/microsoft.extensions.options.5.0.0.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/microsoft.extensions.primitives/5.0.0/microsoft.extensions.primitives.5.0.0.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/system.collections.immutable/5.0.0/system.collections.immutable.5.0.0.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/system.componentmodel.annotations/5.0.0/system.componentmodel.annotations.5.0.0.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/system.diagnostics.diagnosticsource/5.0.1/system.diagnostics.diagnosticsource.5.0.1.nupkg.sha512",
+    "/home/brunopfohl/.nuget/packages/system.reflection.emit/4.7.0/system.reflection.emit.4.7.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,332 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/Chattoo.GraphQL.csproj": {}
+  },
+  "projects": {
+    "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/Chattoo.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/Chattoo.Application.csproj",
+        "projectName": "Chattoo.Application",
+        "projectPath": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/Chattoo.Application.csproj",
+        "packagesPath": "/home/brunopfohl/.nuget/packages/",
+        "outputPath": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/brunopfohl/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Domain/Chattoo.Domain.csproj": {
+                "projectPath": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Domain/Chattoo.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[8.1.1, )"
+            },
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[9.5.0, )"
+            },
+            "MediatR.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
+            "Microsoft.Extensions.Logging.Abstractions": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/5.0.403/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Domain/Chattoo.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Domain/Chattoo.Domain.csproj",
+        "projectName": "Chattoo.Domain",
+        "projectPath": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Domain/Chattoo.Domain.csproj",
+        "packagesPath": "/home/brunopfohl/.nuget/packages/",
+        "outputPath": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/brunopfohl/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/5.0.403/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/Chattoo.GraphQL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/Chattoo.GraphQL.csproj",
+        "projectName": "Chattoo.GraphQL",
+        "projectPath": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/Chattoo.GraphQL.csproj",
+        "packagesPath": "/home/brunopfohl/.nuget/packages/",
+        "outputPath": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/brunopfohl/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/Chattoo.Application.csproj": {
+                "projectPath": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/Chattoo.Application.csproj"
+              },
+              "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/Chattoo.Infrastructure.csproj": {
+                "projectPath": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/Chattoo.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "GraphQL": {
+              "target": "Package",
+              "version": "[3.3.2, )"
+            },
+            "GraphQL.Server.Transports.AspNetCore": {
+              "target": "Package",
+              "version": "[4.4.1, )"
+            },
+            "GraphQL.Server.Transports.AspNetCore.SystemTextJson": {
+              "target": "Package",
+              "version": "[4.4.1, )"
+            },
+            "GraphQL.Server.Transports.WebSockets": {
+              "target": "Package",
+              "version": "[4.4.1, )"
+            },
+            "GraphQL.Server.Ui.GraphiQL": {
+              "target": "Package",
+              "version": "[4.4.1, )"
+            },
+            "GraphQL.Server.Ui.Playground": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
+            "GraphQL.Server.Ui.Voyager": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
+            "Microsoft.AspNetCore.SpaServices.Extensions": {
+              "target": "Package",
+              "version": "[5.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
+            "Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/5.0.403/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/Chattoo.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/Chattoo.Infrastructure.csproj",
+        "projectName": "Chattoo.Infrastructure",
+        "projectPath": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/Chattoo.Infrastructure.csproj",
+        "packagesPath": "/home/brunopfohl/.nuget/packages/",
+        "outputPath": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/brunopfohl/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/Chattoo.Application.csproj": {
+                "projectPath": "/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/Chattoo.Application.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.ApiAuthorization.IdentityServer": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
+            "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.Proxies": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/5.0.403/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

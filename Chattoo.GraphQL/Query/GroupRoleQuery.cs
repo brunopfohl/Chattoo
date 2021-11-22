@@ -15,7 +15,7 @@ namespace Chattoo.GraphQL.Query
         {
             Name = "GroupRoleQuery";
             
-            this.FieldAsyncWithScope<GroupRoleType, GroupRoleDto>(
+            this.FieldAsyncWithScope<GroupRoleGraphType, GroupRoleDto>(
                 "get",
                 arguments: 
                 new QueryArguments
@@ -34,7 +34,7 @@ namespace Chattoo.GraphQL.Query
                 }
             );
             
-            this.FieldAsyncWithScope<PageInfoType<GroupRoleType, GroupRoleDto>, PaginatedList<GroupRoleDto>>(
+            this.FieldAsyncWithScope<PageInfoGraphType<GroupRoleGraphType, GroupRoleDto>, PaginatedList<GroupRoleDto>>(
                 "getForUserInGroup",
                 arguments: 
                 new QueryArgumentsWithPagination

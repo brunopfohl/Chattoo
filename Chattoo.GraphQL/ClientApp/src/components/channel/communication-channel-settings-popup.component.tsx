@@ -1,16 +1,13 @@
+import { useGetUsersForChannelQuery, useRemoveUserFromCommunicationChannelMutation } from 'graphql/graphql-types';
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components';
 import { Plus } from 'styled-icons/boxicons-regular';
 import { Remove } from 'styled-icons/material-twotone';
 import { AppUser } from '../../common/interfaces/app-user.interface';
-import { AddUserToCommunicationChannelInput, useAddUserToCommunicationChannel } from '../../hooks/channels/mutations/useAddUserToCommunicationChannel';
-import { RemoveUserFromCommunicationChannelInput, useRemoveUserFromCommunicationChannel } from '../../hooks/channels/mutations/useRemoveUserToCommunicationChannel';
-import { useGetUsersForChannel } from '../../hooks/users/queries/useGetUsersForChannel';
 import Button from '../button/button.component';
 import { ChatStateContext } from '../chat/chat-state-provider.component';
 import Popup from '../popup/popup.component';
 import ProfilePicture from '../profile-picture/profile-picture.component';
-import Separator from '../separator.component';
 import UserSearchPopup, { UserSearchMode } from '../user-search/user-search-popup.component';
 
 interface CommunicationChannelSettingsProps {
@@ -76,56 +73,43 @@ const RightFlexContainer = styled.div`
     flex-direction: row-reverse;
 `;
 
-
 const CommunicationChannelSettings: React.FC<CommunicationChannelSettingsProps> = (props: CommunicationChannelSettingsProps) => {
     const [showUserSearchPopup, setShowUserSearchPopup] = useState<boolean>(false);
 
     const { currentChannel } = useContext(ChatStateContext);
 
-    const [channelUsers, channelUsersQuery] = useGetUsersForChannel({ channelId: currentChannel?.id});
+    const getUsersForChannelQuery = useGetUsersForChannelQuery({
+        variables: { 
+            channelId: currentChannel?.id
+        }
+    });
 
-    // Metoda pro přidání uživatele do komunikačního kanálu (pošle request na server).
-    const addUserToCommunicationChannel = useAddUserToCommunicationChannel();
+    const users = getUsersForChannelQuery.data?.users?.getForCommunicationChannel?.data;
 
     // Metoda pro odebrání uživatele z komunikačního kanálu (pošle request na server).
-    const removeUserFromCommunicationChannel = useRemoveUserFromCommunicationChannel();
+    const [removeUserFromCommunicationChannel, { data, loading, error }] = useRemoveUserFromCommunicationChannelMutation();
 
     // Metoda, kterou zavolá okno pro vyhledání uživatelů po jeho potvrzení.
     const onUserSearchSubmit = (users: AppUser[]) => {
-        users.forEach((user: AppUser) => {
-            const mutationInput: AddUserToCommunicationChannelInput = {
-                variables: {
-                    userId: user.id,
-                    channelId: currentChannel.id
-                }
-            };
-
-
-            addUserToCommunicationChannel(mutationInput).then(() => {
-                channelUsersQuery.refetch();
-            });
-        });
+        users.forEach(onUserRemove);
     };
 
     // Metoda, která odebere uživatele.
     const onUserRemove = (user: AppUser) => {
-        const mutationInput: RemoveUserFromCommunicationChannelInput = {
+        removeUserFromCommunicationChannel({
             variables: {
                 userId: user.id,
                 channelId: currentChannel.id
             }
-        };
-
-        // Po odebrání uživatele, znovu načtu uživatele.
-        removeUserFromCommunicationChannel(mutationInput).then(() => {
-            channelUsersQuery.refetch();
+        }).then(() => {
+            getUsersForChannelQuery.refetch();
         });
     };
 
     // Metoda pro render všech účastníků konverzace.
     const renderParticipants = () => {
         return (
-            channelUsers?.data && channelUsers.data.map(user => (
+            users && users.map(user => (
                 <ParticipantsRow key={user.id}>
                     <ParticipantsRowLeft>
                         <ProfilePicture size="2em"/>

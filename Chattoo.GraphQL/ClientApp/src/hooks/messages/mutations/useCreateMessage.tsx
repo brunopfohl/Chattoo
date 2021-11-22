@@ -1,22 +1,43 @@
 
-import { gql, useMutation } from "@apollo/client";
-import { CreateMessageVariables } from "../../../common/interfaces/schema-types";
+import { useMutation } from "@apollo/client";
+import { CreateMessageVariables, CreateMessage, GetMessagesForChannel, GetMessagesForChannelVariables, GetChannelsForUser, GetChannelsForUserVariables } from "../../../common/interfaces/schema-types";
+import { GET_MESSAGES_FOR_CHANNEL } from "graphql/queries/messages/getMessagesForChannel";
+import { CREATE_MESSAGE } from "graphql/mutations/messages/createMessage";
 
 export interface CreateMessageInput {
     variables: CreateMessageVariables
 }
 
-export const CREATE_MESSAGE = gql`
-    mutation CreateMessage($userId: String!, $channelId: String!, $content: String!) {
-        communicationChannelMessages {
-            create(userId: $userId, channelId: $channelId, content: $content, type: 1)
-        }
-    }
-`;
+export const useCreateMessage = (): ((input: CreateMessageInput) => any) => {
+    const [createCommunicationChannel] = useMutation<CreateMessage, CreateMessageVariables>(CREATE_MESSAGE, {
+        update(cache, { data }) {
+            const msg = data.communicationChannelMessages.create;
 
-export const useCreateMessage = (): ((
-    input: CreateMessageInput,
-) => any) => {
-    const [createCommunicationChannel] = useMutation(CREATE_MESSAGE);
+            const variables = {
+                channelId: msg.channelId,
+                pageNumber: 1,
+                pageSize: 20
+            };
+
+            const prevData = cache.readQuery<GetMessagesForChannel, GetMessagesForChannelVariables>({
+                query: GET_MESSAGES_FOR_CHANNEL,
+                variables
+            });
+
+            cache.writeQuery<GetMessagesForChannel>({
+                query: GET_MESSAGES_FOR_CHANNEL,
+                data: {
+                    communicationChannelMessages: {
+                        ...prevData.communicationChannelMessages,
+                        getForChannel: {
+                            ...prevData.communicationChannelMessages.getForChannel,
+                            data: [...prevData.communicationChannelMessages.getForChannel.data, msg]
+                        }
+                    }
+                }
+            });
+        }
+    });
+
     return createCommunicationChannel;
 }

@@ -15,7 +15,7 @@ namespace Chattoo.GraphQL.Query
         {
             
             Name = "CommunicationChannelCalendarEventQuery";
-            this.FieldAsyncWithScope<CommunicationChannelCalendarEventType, CommunicationChannelCalendarEventDto>(
+            this.FieldAsyncWithScope<CommunicationChannelCalendarEventGraphType, CommunicationChannelCalendarEventDto>(
                 "get",
                 arguments: 
                 new QueryArguments
@@ -33,7 +33,7 @@ namespace Chattoo.GraphQL.Query
                 }
             );
             
-            this.FieldAsyncWithScope<PageInfoType<CommunicationChannelCalendarEventType, CommunicationChannelCalendarEventDto>, PaginatedList<CommunicationChannelCalendarEventDto>>(
+            this.FieldAsyncWithScope<PageInfoGraphType<CommunicationChannelCalendarEventGraphType, CommunicationChannelCalendarEventDto>, PaginatedList<CommunicationChannelCalendarEventDto>>(
                 "getForCommunicationChannel",
                 arguments: 
                 new QueryArgumentsWithPagination

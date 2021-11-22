@@ -16,7 +16,7 @@ namespace Chattoo.GraphQL.Query
         {
             Name = "CommunicationChannelRoleQuery";
             
-            this.FieldAsyncWithScope<CommunicationChannelRoleType, CommunicationChannelRoleDto>(
+            this.FieldAsyncWithScope<CommunicationChannelRoleGraphType, CommunicationChannelRoleDto>(
                 "get",
                 arguments: 
                 new QueryArguments
@@ -34,7 +34,7 @@ namespace Chattoo.GraphQL.Query
                 }
             );
             
-            this.FieldAsyncWithScope<PageInfoType<CommunicationChannelRoleType, CommunicationChannelRoleDto>, PaginatedList<CommunicationChannelRoleDto>>(
+            this.FieldAsyncWithScope<PageInfoGraphType<CommunicationChannelRoleGraphType, CommunicationChannelRoleDto>, PaginatedList<CommunicationChannelRoleDto>>(
                 "getForUserInChannel",
                 arguments: 
                 new QueryArgumentsWithPagination

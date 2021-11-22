@@ -1,10 +1,9 @@
-import { useQuery, useSubscription } from '@apollo/client';
+import { useQuery } from '@apollo/client';
+import { WATAFAK } from 'common/classes/CustomQueryResult';
+import { GetChannelsForUserDocument, GetChannelsForUserQuery, GetChannelsForUserQueryVariables, useGetChannelsForUserQuery, useUserAddedToChannelSubscription, WTF } from 'graphql/graphql-types';
 import React, { useContext } from 'react'
 import { useEffect } from 'react';
 import styled from 'styled-components';
-import { GetChannelsForUser, GetChannelsForUserVariables, UserAddedToChannelSubscription, UserAddedToChannelSubscriptionVariables } from '../../common/interfaces/schema-types';
-import { GET_CHANNELS_FOR_USER, useGetCommunicationChannelsForUser } from '../../hooks/channels/queries/useGetChannelsForUser';
-import { USER_ADDED_TO_COMMUNICATION_CHANNEL_SUBSCRIPTION } from '../../hooks/channels/subscriptions/useUserAddedtoChannelSubscription';
 import { AppStateContext } from '../app-state-provider.component';
 import { ChatStateContext } from './chat-state-provider.component';
 import CommunicationChannelPreview from './communication-channel-preview.component';
@@ -21,16 +20,26 @@ const CommunicationChannelList: React.FC = () => {
     const { currentChannel, setCurrentChannel } = useContext(ChatStateContext);
     const { user } = appState;
 
-    const { loading, error, data, refetch, subscribeToMore } = useQuery<GetChannelsForUser, GetChannelsForUserVariables>(
-        GET_CHANNELS_FOR_USER,
-        {
-            variables: {
-                userId: user.id,
-                pageNumber: 1, 
-                pageSize: 20
-            }
+    if (WATAFAK === undefined) {
+        console.log('je to v pici');
+    }
+
+    console.log(GetChannelsForUserDocument);
+    const x = useQuery<GetChannelsForUserQuery, GetChannelsForUserQueryVariables>(GetChannelsForUserDocument, {
+        variables: {
+            userId: user.id,
+            pageNumber: 1, 
+            pageSize: 20
         }
-    );
+    });
+
+    const { data, loading, error, refetch, subscribeToMore } = useGetChannelsForUserQuery({
+        variables: {
+            userId: user.id,
+            pageNumber: 1, 
+            pageSize: 20
+        }
+    });
 
     const channels = data?.communicationChannels?.getForUser;
 
@@ -42,14 +51,14 @@ const CommunicationChannelList: React.FC = () => {
         }
     }, [channels]);
 
-    useSubscription<UserAddedToChannelSubscription, UserAddedToChannelSubscriptionVariables>(USER_ADDED_TO_COMMUNICATION_CHANNEL_SUBSCRIPTION, {
+    useUserAddedToChannelSubscription({
         variables: {
             userId: user.id
         },
         onSubscriptionData: () => {
             refetch();
         }
-    });
+    })
 
     return (
         <Container>

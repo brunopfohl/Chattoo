@@ -32,7 +32,7 @@ namespace Chattoo.GraphQL.Subscription
                 Arguments = new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "channelId" }
                 ),
-                Type = typeof(CommunicationChannelMessageType),
+                Type = typeof(CommunicationChannelMessageGraphType),
                 Resolver = new FuncFieldResolver<CommunicationChannelMessageDto>(ResolveCommunicationChannelMessage),
                 Subscriber = new EventStreamResolver<CommunicationChannelMessageDto>(SubscribeByCommunicationChannelId)
             });
@@ -43,7 +43,7 @@ namespace Chattoo.GraphQL.Subscription
                 Arguments = new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "userId" }
                 ),
-                Type = typeof(CommunicationChannelType),
+                Type = typeof(CommunicationChannelGraphType),
                 Resolver = new FuncFieldResolver<CommunicationChannelDto>(ResolveCommunicationChannel),
                 Subscriber = new EventStreamResolver<CommunicationChannelDto>(SubscribeToCommunicationChannelByUserId)
             });

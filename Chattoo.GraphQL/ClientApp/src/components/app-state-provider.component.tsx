@@ -1,8 +1,7 @@
 import { ApolloProvider, ApolloClient, ApolloLink, HttpLink, InMemoryCache, Observable, split } from "@apollo/client";
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from "@apollo/client/utilities";
-import { onError } from '@apollo/link-error';
-import { Profile, User } from "oidc-client";
+import { User } from "oidc-client";
 import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { AppUser } from "../common/interfaces/app-user.interface";
 import { API_URL, API_URL_WITHOUT_PROCOTOL } from "./api-authorization/ApiAuthorizationConstants";
@@ -120,7 +119,12 @@ const AppStateProvider = ({children}: {children: ReactNode}) => {
     const client = new ApolloClient({
         link: splitLink,
         cache,
-        connectToDevTools: true
+        connectToDevTools: true,
+        defaultOptions: {
+            watchQuery: {
+                fetchPolicy: "cache-first"
+            }
+        }
     });
     
     // Render komponenty (children obalené ApolloClientem a ContextProviderem).

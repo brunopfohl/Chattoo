@@ -1,8 +1,8 @@
+import { useCreateCommunicationChannelMutation } from 'graphql/graphql-types';
 import React, { useRef, useState } from 'react'
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import { createCommunicationChannelFormValidationSchema } from '../../common/validations/createCommunicationChannelFormValidationSchema';
-import { CreateCommunicationChannelInput, useCreateCommunicationChannel } from '../../hooks/channels/mutations/useCreateCommunicationChannel';
 import Button from '../button/button.component';
 import { MemoizedInput } from '../input/input.component';
 import Popup from '../popup/popup.component';
@@ -41,7 +41,7 @@ const CommunicationChannelCreate: React.FC<CommunicationChannelCreatePopupProps>
 
     const [validationErrors, setValidationErrors] = useState({});
 
-    const createCommunicationChannel = useCreateCommunicationChannel();
+    const [createCommunicationChannel, createCommunicationChannelRes] = useCreateCommunicationChannelMutation();
 
     const isValid = async () => {
         let isValid = true;
@@ -72,14 +72,12 @@ const CommunicationChannelCreate: React.FC<CommunicationChannelCreatePopupProps>
     const onSubmit = () => {
         isValid().then((success) => {
             if(success) {
-                const submitValues: CreateCommunicationChannelInput = {
+                createCommunicationChannel({
                     variables: {
                         name: name,
                         desc: description
                     }
-                };
-
-                createCommunicationChannel(submitValues)
+                })
 
                 onClose();
             }

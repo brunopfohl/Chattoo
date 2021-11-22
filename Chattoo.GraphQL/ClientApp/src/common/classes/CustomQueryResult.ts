@@ -25,3 +25,5 @@ export const GetQuery: React.FC<any> = (props: any) => {
 
     return null;
 }
+
+export const WATAFAK = "watafak";

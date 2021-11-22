@@ -14,7 +14,7 @@ namespace Chattoo.GraphQL.Mutation
         {
             Name = "CommunicationChannelCalendarEventMutation";
             
-            this.FieldAsyncWithScope<CommunicationChannelCalendarEventType, CommunicationChannelCalendarEventDto>(
+            this.FieldAsyncWithScope<CommunicationChannelCalendarEventGraphType, CommunicationChannelCalendarEventDto>(
                 "create",
                 arguments: 
                 new QueryArguments

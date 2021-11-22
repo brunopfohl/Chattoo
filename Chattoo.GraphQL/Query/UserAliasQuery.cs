@@ -15,7 +15,7 @@ namespace Chattoo.GraphQL.Query
         {
             Name = "UserAliasQuery";
             
-            this.FieldAsyncWithScope<UserAliasType, UserAliasDto>(
+            this.FieldAsyncWithScope<UserAliasGraphType, UserAliasDto>(
                 "get",
                 arguments: 
                 new QueryArguments
@@ -34,7 +34,7 @@ namespace Chattoo.GraphQL.Query
                 }
             );
             
-            this.FieldAsyncWithScope<PageInfoType<UserAliasType, UserAliasDto>, PaginatedList<UserAliasDto>>(
+            this.FieldAsyncWithScope<PageInfoGraphType<UserAliasGraphType, UserAliasDto>, PaginatedList<UserAliasDto>>(
                 "getForUser",
                 arguments: 
                 new QueryArgumentsWithPagination

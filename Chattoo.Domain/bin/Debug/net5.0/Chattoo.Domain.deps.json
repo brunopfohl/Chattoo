@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "Chattoo.Domain/1.0.0": {
+        "runtime": {
+          "Chattoo.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Chattoo.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

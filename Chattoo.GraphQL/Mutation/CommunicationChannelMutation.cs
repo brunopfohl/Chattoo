@@ -20,7 +20,7 @@ namespace Chattoo.GraphQL.Mutation
             _communicationChannelSubscriptionProvider = communicationChannelSubscriptionProvider;
             Name = "CommunicationChannelMutation";
             
-            this.FieldAsyncWithScope<CommunicationChannelType, CommunicationChannelDto>(
+            this.FieldAsyncWithScope<CommunicationChannelGraphType, CommunicationChannelDto>(
                 "create",
                 arguments: 
                 new QueryArguments

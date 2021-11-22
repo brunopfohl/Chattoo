@@ -1,6 +1,6 @@
+import { CommunicationChannel } from 'graphql/graphql-types';
 import React, { useContext } from 'react'
 import styled from 'styled-components';
-import { CommunicationChannel } from '../../common/interfaces/communication-channel.interface';
 import ProfilePicture from '../profile-picture/profile-picture.component';
 import { ChatStateContext } from './chat-state-provider.component';
 

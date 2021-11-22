@@ -16,10 +16,6 @@ const Container = styled.div`
     overflow: hidden;
 `;
 
-interface ChatBodyProps {
-    currentChannelId: string;
-}
-
 const Chat: React.FC<any> = (props: ChatProps) => {
     return (
         <ChatStateProvider>

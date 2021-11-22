@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useGetUsersQuery } from 'graphql/graphql-types';
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { AppUser } from '../../common/interfaces/app-user.interface';
-import { useGetUsers} from '../../hooks/users/queries/useGetUsers';
 import Button from '../button/button.component';
 import Popup from '../popup/popup.component';
 import SearchBox, { SearchBoxProps } from '../search-box/search-box.component';
@@ -59,11 +59,17 @@ const SelectedUserTitle = styled.span`
 `;
 
 const UserSearch: React.FC<UserSearchProps> = (props: UserSearchProps) => {
-    console.log('Render UserSearchPopup');
     const { mode, onClose, onSubmit, channelId } = props;
 
     const [searchTerm, setSearchTerm] = useState<string>();
-    const [users] = useGetUsers({ searchTerm: searchTerm, excludeUsersFromChannelWithId: channelId });
+
+    const getUsersQuery = useGetUsersQuery({
+        variables: {
+            searchTerm: searchTerm, excludeUsersFromChannelWithId: channelId
+        }
+    });
+
+    const users = getUsersQuery.data?.users?.get?.data;
 
     // Pole vybraných uživatelů.
     const [selectedUsers, setSelectedUsers] = useState<AppUser[]>([]);
@@ -123,13 +129,13 @@ const UserSearch: React.FC<UserSearchProps> = (props: UserSearchProps) => {
             </SelectedUsersContainer>
             <UsersContainer>
                 {
-                    users?.data && users.data.length > 0 &&
+                    users && users.length > 0 &&
                     <UsersContainerTitle>
                         Návrhy
                     </UsersContainerTitle>
                 }
-                { users?.data && users.data.length > 0
-                    ? users.data.map((u) => (
+                { users && users.length > 0
+                    ? users.map((u) => (
                         <UserSearchItem user={u} isSelected={isUserSelected(u)} selectMode={mode} key={u.id} addUser={addUser} removeUser={removeUser}/>
                     ))
                     : <NoSearchResults>Nebyly nalezeny žádné výsledky</NoSearchResults>

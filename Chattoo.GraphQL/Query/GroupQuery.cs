@@ -15,7 +15,7 @@ namespace Chattoo.GraphQL.Query
         {
             Name = "GroupQuery";
             
-            this.FieldAsyncWithScope<GroupType, GroupDto>(
+            this.FieldAsyncWithScope<GroupGraphType, GroupDto>(
                 "get",
                 arguments: 
                 new QueryArguments
@@ -34,7 +34,7 @@ namespace Chattoo.GraphQL.Query
                 }
             );
             
-            this.FieldAsyncWithScope<PageInfoType<GroupType, GroupDto>, PaginatedList<GroupDto>>(
+            this.FieldAsyncWithScope<PageInfoGraphType<GroupGraphType, GroupDto>, PaginatedList<GroupDto>>(
                 "getForUser",
                 arguments: 
                 new QueryArgumentsWithPagination

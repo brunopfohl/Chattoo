@@ -1,0 +1,17 @@
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/bin/Debug/net5.0/Chattoo.Infrastructure.deps.json
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/bin/Debug/net5.0/Chattoo.Infrastructure.dll
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/bin/Debug/net5.0/ref/Chattoo.Infrastructure.dll
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/bin/Debug/net5.0/Chattoo.Infrastructure.pdb
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/bin/Debug/net5.0/Chattoo.Application.dll
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/bin/Debug/net5.0/Chattoo.Domain.dll
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/bin/Debug/net5.0/Chattoo.Application.pdb
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/bin/Debug/net5.0/Chattoo.Domain.pdb
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/obj/Debug/net5.0/Chattoo.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/obj/Debug/net5.0/Chattoo.Infrastructure.AssemblyInfoInputs.cache
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/obj/Debug/net5.0/Chattoo.Infrastructure.AssemblyInfo.cs
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/obj/Debug/net5.0/Chattoo.Infrastructure.csproj.CoreCompileInputs.cache
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/obj/Debug/net5.0/Chattoo.Infrastructure.csproj.CopyComplete
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/obj/Debug/net5.0/Chattoo.Infrastructure.dll
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/obj/Debug/net5.0/ref/Chattoo.Infrastructure.dll
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/obj/Debug/net5.0/Chattoo.Infrastructure.pdb
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Infrastructure/obj/Debug/net5.0/Chattoo.Infrastructure.csproj.AssemblyReference.cache
