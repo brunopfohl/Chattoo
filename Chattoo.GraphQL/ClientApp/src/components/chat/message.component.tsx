@@ -16,42 +16,41 @@ const TimeElement = styled.span`
     padding: 1em 0;
     color: white;
 `;
+const Container = styled.div<{isFromCurrentUser: Boolean}>`
+    display: flex;
+    flex-direction: ${props => props.isFromCurrentUser ? "row-reverse" : "row"};
+`;
+
+const MessageContainer = styled.div<{isFromCurrentUser: Boolean}>`
+    color: white;
+    display: flex;
+    flex-direction: column;
+    flex-direction: ${props => props.isFromCurrentUser ? "flex-end" : "flex-start"};
+    margin: 1px;
+`;
+
+const ContentContainer = styled.div<{isFromCurrentUser: Boolean, isStartOfBatch: Boolean, isEndOfBatch: Boolean}>`
+    padding: 0.4em 1em;
+    color: ${props => props.isFromCurrentUser ? "white" : "black"};
+    background-color: ${props => props.isFromCurrentUser ? "rgba(2, 184, 147, 1)" : "lightgray"};
+    border-top-left-radius: ${props => !props.isFromCurrentUser && !props.isStartOfBatch ? "3px" : "1em"};
+    border-top-right-radius: ${props => props.isFromCurrentUser && !props.isStartOfBatch ? "3px" : "1em"};
+    border-bottom-left-radius: ${props => !props.isFromCurrentUser && !props.isEndOfBatch ? "3px" : "1em"};
+    border-bottom-right-radius: ${props => props.isFromCurrentUser && !props.isEndOfBatch ? "3px" : "1em"};
+`;
 
 const MessageComponent: React.FC<any> = (props: MessageComponentProps) => {
     const { isFromCurrentUser, isStartOfBatch, isEndOfBatch, content, userName, createdAt } = props;
-
-    const Container = styled.div`
-        display: flex;
-        flex-direction: ${isFromCurrentUser ? "row-reverse" : "row"};
-    `;
-
-    const MessageContainer = styled.div`
-        color: white;
-        display: flex;
-        flex-direction: column;
-        flex-direction: ${isFromCurrentUser ? "flex-end" : "flex-start"};
-        margin: 1px;
-    `;
-
-    const ContentContainer = styled.div`
-        padding: 0.4em 1em;
-        color: ${isFromCurrentUser ? "white" : "black"};
-        background-color: ${isFromCurrentUser ? "rgba(2, 184, 147, 1)" : "lightgray"};
-        border-top-left-radius: ${!isFromCurrentUser && !isStartOfBatch ? "3px" : "1em"};
-        border-top-right-radius: ${isFromCurrentUser && !isStartOfBatch ? "3px" : "1em"};
-        border-bottom-left-radius: ${!isFromCurrentUser && !isEndOfBatch ? "3px" : "1em"};
-        border-bottom-right-radius: ${isFromCurrentUser && !isEndOfBatch ? "3px" : "1em"};
-    `;
 
     const showTime = isStartOfBatch;
 
     return (
         <>
             {showTime && <TimeElement>{new Date(createdAt).toUTCString()}</TimeElement> }
-            <Container>
-                <MessageContainer>
+            <Container {...{isFromCurrentUser}}>
+                <MessageContainer {...{isFromCurrentUser}}>
                     {isStartOfBatch && userName}
-                    <ContentContainer>
+                    <ContentContainer {...{isFromCurrentUser, isStartOfBatch, isEndOfBatch}}>
                         {content}
                     </ContentContainer>
                 </MessageContainer>

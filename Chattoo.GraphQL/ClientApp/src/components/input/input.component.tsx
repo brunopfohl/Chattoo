@@ -49,27 +49,18 @@ const StyledInput = styled.input`
 `;
 
 const Input: React.FC<InputProps> = (props: InputProps) => {
-    const { onChange, onValueChange, placeholder, value, icon, type, label } = props;
+    const { onChange, onValueChange, placeholder, value, type, label } = props;
 
     const onChangeSafe = (e: React.ChangeEvent<HTMLInputElement>) => {
         onChange && onChange(e);
         onValueChange && onValueChange(e.target.value);
     };
 
-    const Icon = icon && styled(icon)`
-        top: 0px;
-        right: 0px;
-        height: 100%;
-        padding: 0.5em;
-        position: absolute;
-    `;
-
     return (
         <Container>
             {label && <Label>{label}</Label> }
             <InputContainer>
                 <StyledInput type={type} onChange={onChangeSafe} placeholder={placeholder} defaultValue={value} />
-                {Icon && <Icon />}
             </InputContainer>
         </Container>
     );

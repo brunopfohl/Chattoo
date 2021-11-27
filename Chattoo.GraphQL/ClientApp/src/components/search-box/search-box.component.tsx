@@ -13,15 +13,6 @@ export interface SearchBoxProps {
 const SearchBox: React.FC<SearchBoxProps> = (props: SearchBoxProps) => {
     const { text, placeholder, onValueChanged, onValueChangedTimeout } = props;
 
-    const Container = styled.div`
-        position: relative;
-        border: 2px solid #69747C;
-        color: #69747C;
-        border-radius: 30px;
-        height: 3em;
-        background-color: white;
-    `;
-
     let typingTimeout: NodeJS.Timeout = null;
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let value = e.target.value;

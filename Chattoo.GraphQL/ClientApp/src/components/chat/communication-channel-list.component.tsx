@@ -1,6 +1,4 @@
-import { useQuery } from '@apollo/client';
-import { WATAFAK } from 'common/classes/CustomQueryResult';
-import { GetChannelsForUserDocument, GetChannelsForUserQuery, GetChannelsForUserQueryVariables, useGetChannelsForUserQuery, useUserAddedToChannelSubscription, WTF } from 'graphql/graphql-types';
+import { useGetChannelsForUserQuery, useUserAddedToChannelSubscription } from 'graphql/graphql-types';
 import React, { useContext } from 'react'
 import { useEffect } from 'react';
 import styled from 'styled-components';
@@ -19,19 +17,6 @@ const CommunicationChannelList: React.FC = () => {
     const { appState } = useContext(AppStateContext);
     const { currentChannel, setCurrentChannel } = useContext(ChatStateContext);
     const { user } = appState;
-
-    if (WATAFAK === undefined) {
-        console.log('je to v pici');
-    }
-
-    console.log(GetChannelsForUserDocument);
-    const x = useQuery<GetChannelsForUserQuery, GetChannelsForUserQueryVariables>(GetChannelsForUserDocument, {
-        variables: {
-            userId: user.id,
-            pageNumber: 1, 
-            pageSize: 20
-        }
-    });
 
     const { data, loading, error, refetch, subscribeToMore } = useGetChannelsForUserQuery({
         variables: {

@@ -9,6 +9,7 @@ export const MESSAGE_ADDED_TO_CHANNEL_SUBSCRIPTION = gql`
             id,
             createdAt,
             modifiedAt,
+            userName,
             content,
             channelId,
             userId,

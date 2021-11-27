@@ -8,7 +8,9 @@ import { ChatStateContext } from '../chat/chat-state-provider.component';
 import MessageBox from '../chat/message-box.component';
 import MessageComponent, { MessageComponentProps } from '../chat/message.component';
 import CommunicationChannelSettingsPopup from './communication-channel-settings-popup.component';
-import { CommunicationChannelMessage, useGetMessagesForChannelQuery } from 'graphql/graphql-types';
+import { CommunicationChannelMessage, GetMessagesForChannelQueryVariables, MessageAddedToChannelSubscription, MessageAddedToChannelSubscriptionVariables, useCreateMessageMutation, useGetMessagesForChannelQuery } from 'graphql/graphql-types';
+import produce from 'immer';
+import { MESSAGE_ADDED_TO_CHANNEL_SUBSCRIPTION } from 'graphql/subscriptions/messages/messageAddedToChannel';
 
 interface CommunicationChannelProps {
     avatarUrl: string,
@@ -70,103 +72,101 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
     // Aktuálně využívaný komunikační kanál.
     const { currentChannel } = useContext(ChatStateContext);
 
-    const { loading, error, data, fetchMore, subscribeToMore } = useGetMessagesForChannelQuery({
-        variables: {
-            channelId: currentChannel.id,
-            pageNumber: 1,
-            pageSize: 20
-        },
-        fetchPolicy: "cache-first"
+    const messagesQueryVariables: GetMessagesForChannelQueryVariables = {
+        channelId: currentChannel.id,
+        pageNumber: 1,
+        pageSize: 20
+    }
+
+    const { data, fetchMore, subscribeToMore } = useGetMessagesForChannelQuery({
+        variables: messagesQueryVariables
     });
 
-    // Pomocná proměnná pro přehlednější přístup k aktuálně načteným zprávám.
-    const messages = data?.communicationChannelMessages?.getForChannel?.data;
+    // Pomocné proměnné pro přehlednější přístup k aktuálně načteným zprávám.
+    const getForChannelRes = data?.communicationChannelMessages?.getForChannel;
+    const messages = getForChannelRes?.data;
     
     // Metoda, po jejíž zavolání se načtou další zprávy (pokud jsou nějaké dostupné).
     const tryLoadMoreMessages = () => {
         if(data?.communicationChannelMessages?.getForChannel.hasNextPage)
         {
-            // fetchMore({
-            //     variables: {...queryVariables, pageNumber: data.communicationChannelMessages.getForChannel.pageIndex + 1},
-            //     updateQuery: (prev, {fetchMoreResult}) => {
-            //         if(!fetchMoreResult) {
-            //             return prev;
-            //         }
+            fetchMore({
+                variables: { ...messagesQueryVariables, pageNumber: getForChannelRes.pageIndex + 1},
+                updateQuery: (prev, { fetchMoreResult }) => {
+                    if(!fetchMoreResult) {
+                        return prev;
+                    }
 
-            //         const newEntries = fetchMoreResult.communicationChannelMessages.getForChannel;
+                    const getForChannel = fetchMoreResult.communicationChannelMessages?.getForChannel;
 
-            //         return Object.assign({}, prev,  {
-            //             communicationChannelMessages: {
-            //                 getForChannel: {
-            //                     data: [ ...(newEntries?.data || []), ...prev.communicationChannelMessages.getForChannel.data].filter((v, i, a) => a.indexOf(v) === i),
-            //                     hasNextPage: newEntries.hasNextPage,
-            //                     hasPreviousPage: newEntries.hasPreviousPage,
-            //                     pageIndex: newEntries.pageIndex,
-            //                     totalCount: newEntries.totalCount,
-            //                     totalPages: newEntries.totalPages,
-            //                 }
-            //             }
-            //         });
-            //     }
-            // });
+                    if (!getForChannel)
+                        return prev;
+
+                    const { data: newPageData, ...newPage } = getForChannel;
+
+                    let res = produce(prev, draftState => {
+                        let prevPage = draftState.communicationChannelMessages?.getForChannel;
+                        let prevPageData = prevPage?.data;
+
+                        if (prevPageData) {
+                            prevPageData.unshift(...newPageData);
+                            prevPageData = prevPageData.filter((v, i, a) => a.indexOf(v) === i && v.channelId === currentChannel.id);
+
+                            prevPage.pageIndex = newPage.pageIndex;
+                            prevPage.hasNextPage = newPage.hasNextPage;
+                        }
+                    });
+
+                    return res;
+                }
+            });
         }
     }
 
     // UseEffect pro nastavení callbacku po přijetí nové zprávy z websocketu.
-    // useEffect(() => {
-    //     const unsub = subscribeToMore<MessageAddedToChannelSubscription, MessageAddedToChannelSubscriptionVariables>({
-    //         document: MESSAGE_ADDED_TO_CHANNEL_SUBSCRIPTION,
-    //         variables: {
-    //             channelId: currentChannel.id
-    //         },
-    //         updateQuery: (prev, { subscriptionData }) => {
-    //             // Pokud nemám žádná nová data, vrátím původní hodnotu.
-    //             if (!subscriptionData.data) {
-    //                 return prev;
-    //             }
+    useEffect(() => {
+        const unsub = subscribeToMore<MessageAddedToChannelSubscription, MessageAddedToChannelSubscriptionVariables>({
+            document: MESSAGE_ADDED_TO_CHANNEL_SUBSCRIPTION,
+            variables: {
+                channelId: currentChannel.id
+            },
+            updateQuery: (prev, { subscriptionData }) => {
+                // Pokud nemám žádná nová data, vrátím původní hodnotu.
+                if (!subscriptionData.data)
+                    return prev;
 
-    //             // Vytáhnu si novou zprávu.
-    //             const newMessage = subscriptionData.data.communicationChannelMessageAddedToChannel;
+                // Vytáhnu si novou zprávu.
+                const newMessage = subscriptionData.data.communicationChannelMessageAddedToChannel;
 
-    //             produce(prev, draftState => {
-    //                 draftState.communicationChannelMessages.getForChannel.data.push(newMessage)
-    //             });
+                return produce(prev, draftState => {
+                    let data = draftState.communicationChannelMessages?.getForChannel?.data;
 
-    //             // Přidám novou zprávu do kolekce aktuálně načtených zpráv.
-    //             // TODO: Úprava kolekce z nějakého důvodu způsobuje znovu načtení query.
-    //             return {
-    //                 ...prev,
-    //                 communicationChannelMessages: {
-    //                     ...prev.communicationChannelMessages,
-    //                     getForChannel: {
-    //                         ...prev.communicationChannelMessages.getForChannel,
-    //                         data: [...prev.communicationChannelMessages.getForChannel.data, newMessage]
-    //                     }
-    //                 }
-    //             };
-    //         }
-    //     });
+                    if (data) {
+                        data.push(newMessage)
+                        data = data.filter((v, i, a) => a.indexOf(v) === i && v.channelId == currentChannel.id);
+                    }
+                });
+            }
+        });
 
-    //     return () => {
-    //         unsub();
-    //     }
-    // }, [currentChannel]);
+        return () => {
+            unsub();
+        }
+    }, [currentChannel]);
 
     // Proměnná určující, jestli je zobrazený panel s nastavením komunikačního kanálu.
     const [showSettings, setShowSettings] = useState<boolean>();
 
     // Metoda pro přidání nové zprávy.
-    const createMessage = useCreateMessage()
+    const [createMessage] = useCreateMessageMutation();
     const addMessage = (msg: string) => {
-        const params: CreateMessageInput = {
+        createMessage({
             variables: {
                 channelId: currentChannel.id,
                 userId: user.id,
                 content: msg
             }
-        }
-
-        createMessage(params);
+        })
     };
 
     // Pomocná metoda pro render prvku se zprávou.
@@ -216,7 +216,6 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
         };
     }, [onScroll]);
 
-
     return (
         <Container>
             { showSettings &&
@@ -228,7 +227,6 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
                 </ChannelHeaderLeft>
                 <ChannelHeaderRight>
                     <Button onClick={() => { setShowSettings(true) } } icon={Settings}/>
-                    {/* <Button onClick={() => { setShowCalendarEvents(true) } } icon={Calendar}/> */}
                 </ChannelHeaderRight>
             </ChannelHeader>
             <Content id="scrollableMessages" ref={messagesRef}>

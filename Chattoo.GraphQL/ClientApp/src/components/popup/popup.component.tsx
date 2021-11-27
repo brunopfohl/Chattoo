@@ -58,30 +58,26 @@ const Container = styled.div`
     position: relative;
 `;
 
+const FullScreenContainer = styled.div<{zIndex: number}>`
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: ${props => props.zIndex};
+`;
 
 const Popup: React.FC<PopupProps> = (props: PopupProps) => {
-    console.log('Render Popup');
-
     const { children, onClose, title } = props;
-    const zIndex = 1000;
-
-    const FullScreenContainer = styled.div`
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        top: 0px;
-        bottom: 0px;
-        left: 0px;
-        right: 0px;
-        z-index: ${zIndex};
-    `;
 
     return (
         <>
             <Blur/>
-            <FullScreenContainer>
+            <FullScreenContainer zIndex={1000}>
                 <Container>
                     <HeadingContainer>
                         <HeadingTitleContainer>

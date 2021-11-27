@@ -103,14 +103,14 @@ const CommunicationChannelCreate: React.FC<CommunicationChannelCreatePopupProps>
         <Container>
             <InputWrapper>
                 <MemoizedInput type="text" onValueChange={setName} placeholder="Zadejte název skupiny" label="Název"/>
-                {validationErrors["name"] && validationErrors["name"].map((e) => (
-                    <ValidationError>{e}</ValidationError>
+                {validationErrors["name"] && validationErrors["name"].map((e, i) => (
+                    <ValidationError key={i}>{e}</ValidationError>
                 ))}
             </InputWrapper>
             <InputWrapper>
                 <MemoizedInput type="text" onValueChange={setDescription} placeholder="Zadejte popis skupiny" label="Popis"/>
-                {validationErrors["description"] && validationErrors["description"].map((e) => (
-                    <ValidationError>{e}</ValidationError>
+                {validationErrors["description"] && validationErrors["description"].map((e, i) => (
+                    <ValidationError key={i}>{e}</ValidationError>
                 ))}
             </InputWrapper>
             <Separator />

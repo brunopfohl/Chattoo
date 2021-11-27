@@ -1,4 +1,4 @@
-import { useGetUsersForChannelQuery, useRemoveUserFromCommunicationChannelMutation } from 'graphql/graphql-types';
+import { useAddUserToCommunicationChannelMutation, useGetUsersForChannelQuery, useRemoveUserFromCommunicationChannelMutation } from 'graphql/graphql-types';
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components';
 import { Plus } from 'styled-icons/boxicons-regular';
@@ -87,11 +87,33 @@ const CommunicationChannelSettings: React.FC<CommunicationChannelSettingsProps> 
     const users = getUsersForChannelQuery.data?.users?.getForCommunicationChannel?.data;
 
     // Metoda pro odebrání uživatele z komunikačního kanálu (pošle request na server).
-    const [removeUserFromCommunicationChannel, { data, loading, error }] = useRemoveUserFromCommunicationChannelMutation();
+    const [removeUserFromCommunicationChannel] = useRemoveUserFromCommunicationChannelMutation();
+
+    // Metoda pro přidání uživatele do komunikačního kanálu (pošle request na server).
+    const [addUserToCommunicationChannel] = useAddUserToCommunicationChannelMutation();
 
     // Metoda, kterou zavolá okno pro vyhledání uživatelů po jeho potvrzení.
-    const onUserSearchSubmit = (users: AppUser[]) => {
-        users.forEach(onUserRemove);
+    const onUserSearchSubmit = (selectedUsers: AppUser[]) => {
+        selectedUsers.forEach(onUserAdd);
+    };
+
+    let userEditTimeout: NodeJS.Timeout = null;
+    const refreshUsersWithTimeOut = () => {
+        userEditTimeout && clearTimeout(userEditTimeout);
+
+        userEditTimeout = setTimeout(() => {
+            getUsersForChannelQuery.refetch();
+        }, 200);
+    };
+
+    // Metoda, která přidá uživatele.
+    const onUserAdd = (user: AppUser) => {
+        addUserToCommunicationChannel({
+            variables: {
+                userId: user.id,
+                channelId: currentChannel.id
+            }
+        }).then(refreshUsersWithTimeOut);
     };
 
     // Metoda, která odebere uživatele.
@@ -155,3 +177,7 @@ const CommunicationChannelSettingsPopup: React.FC<CommunicationChannelSettingsPr
 }
 
 export default CommunicationChannelSettingsPopup;
+
+function addUserToCommunicationChannel(arg0: { variables: { userId: string; channelId: string; }; }) {
+    throw new Error('Function not implemented.');
+}

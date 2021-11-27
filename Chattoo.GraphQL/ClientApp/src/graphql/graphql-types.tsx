@@ -662,6 +662,15 @@ export type RemoveUserFromCommunicationChannelMutationVariables = Exact<{
 
 export type RemoveUserFromCommunicationChannelMutation = { __typename?: 'Mutation', communicationChannels?: { __typename?: 'CommunicationChannelMutation', removeUser?: boolean | null | undefined } | null | undefined };
 
+export type CreateMessageMutationVariables = Exact<{
+  userId: Scalars['String'];
+  channelId: Scalars['String'];
+  content: Scalars['String'];
+}>;
+
+
+export type CreateMessageMutation = { __typename?: 'Mutation', communicationChannelMessages?: { __typename?: 'CommunicationChannelMessageMutation', create?: { __typename?: 'CommunicationChannelMessage', id: string, content: string, userName: string, type?: CommunicationChannelMessageType | null | undefined, userId: string, channelId: string, createdAt: any, modifiedAt?: any | null | undefined } | null | undefined } | null | undefined };
+
 export type GetCalendarEventsForChannelQueryVariables = Exact<{
   channelId: Scalars['String'];
 }>;
@@ -721,7 +730,7 @@ export type MessageAddedToChannelSubscriptionVariables = Exact<{
 }>;
 
 
-export type MessageAddedToChannelSubscription = { __typename?: 'Subscription', communicationChannelMessageAddedToChannel?: { __typename?: 'CommunicationChannelMessage', id: string, createdAt: any, modifiedAt?: any | null | undefined, content: string, channelId: string, userId: string, type?: CommunicationChannelMessageType | null | undefined } | null | undefined };
+export type MessageAddedToChannelSubscription = { __typename?: 'Subscription', communicationChannelMessageAddedToChannel?: { __typename?: 'CommunicationChannelMessage', id: string, createdAt: any, modifiedAt?: any | null | undefined, userName: string, content: string, channelId: string, userId: string, type?: CommunicationChannelMessageType | null | undefined } | null | undefined };
 
 
 export const CreateChannelCalendarEventDocument = gql`
@@ -914,6 +923,50 @@ export function useRemoveUserFromCommunicationChannelMutation(baseOptions?: Apol
 export type RemoveUserFromCommunicationChannelMutationHookResult = ReturnType<typeof useRemoveUserFromCommunicationChannelMutation>;
 export type RemoveUserFromCommunicationChannelMutationResult = Apollo.MutationResult<RemoveUserFromCommunicationChannelMutation>;
 export type RemoveUserFromCommunicationChannelMutationOptions = Apollo.BaseMutationOptions<RemoveUserFromCommunicationChannelMutation, RemoveUserFromCommunicationChannelMutationVariables>;
+export const CreateMessageDocument = gql`
+    mutation CreateMessage($userId: String!, $channelId: String!, $content: String!) {
+  communicationChannelMessages {
+    create(userId: $userId, channelId: $channelId, content: $content, type: 1) {
+      id
+      content
+      userName
+      type
+      userId
+      channelId
+      createdAt
+      modifiedAt
+    }
+  }
+}
+    `;
+export type CreateMessageMutationFn = Apollo.MutationFunction<CreateMessageMutation, CreateMessageMutationVariables>;
+
+/**
+ * __useCreateMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMessageMutation, { data, loading, error }] = useCreateMessageMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      channelId: // value for 'channelId'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateMessageMutation, CreateMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMessageMutation, CreateMessageMutationVariables>(CreateMessageDocument, options);
+      }
+export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
+export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
+export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
 export const GetCalendarEventsForChannelDocument = gql`
     query GetCalendarEventsForChannel($channelId: String!) {
   communicationChannelCalendarEvents {
@@ -1011,7 +1064,6 @@ export function useGetChannelCalendarEventLazyQuery(baseOptions?: Apollo.LazyQue
 export type GetChannelCalendarEventQueryHookResult = ReturnType<typeof useGetChannelCalendarEventQuery>;
 export type GetChannelCalendarEventLazyQueryHookResult = ReturnType<typeof useGetChannelCalendarEventLazyQuery>;
 export type GetChannelCalendarEventQueryResult = Apollo.QueryResult<GetChannelCalendarEventQuery, GetChannelCalendarEventQueryVariables>;
-export const WTF = "ahooj";
 export const GetChannelsForUserDocument = gql`
     query GetChannelsForUser($userId: String!, $pageNumber: Int!, $pageSize: Int!) {
   communicationChannels {
@@ -1255,6 +1307,7 @@ export const MessageAddedToChannelDocument = gql`
     id
     createdAt
     modifiedAt
+    userName
     content
     channelId
     userId

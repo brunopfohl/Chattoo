@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import styled from 'styled-components';
 import CommunicationChannel from '../channel/communication-channel.component';
 import { ChatStateContext } from './chat-state-provider.component';
