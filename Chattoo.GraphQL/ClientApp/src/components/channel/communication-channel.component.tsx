@@ -1,9 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import styled from 'styled-components';
-import { Settings } from 'styled-icons/evaicons-solid';
-import { CreateMessageInput, useCreateMessage } from '../../hooks/messages/mutations/useCreateMessage';
 import { AppStateContext } from '../app-state-provider.component';
-import Button from '../button/button.component';
 import { ChatStateContext } from '../chat/chat-state-provider.component';
 import MessageBox from '../chat/message-box.component';
 import MessageComponent, { MessageComponentProps } from '../chat/message.component';
@@ -11,59 +7,13 @@ import CommunicationChannelSettingsPopup from './communication-channel-settings-
 import { CommunicationChannelMessage, GetMessagesForChannelQueryVariables, MessageAddedToChannelSubscription, MessageAddedToChannelSubscriptionVariables, useCreateMessageMutation, useGetMessagesForChannelQuery } from 'graphql/graphql-types';
 import produce from 'immer';
 import { MESSAGE_ADDED_TO_CHANNEL_SUBSCRIPTION } from 'graphql/subscriptions/messages/messageAddedToChannel';
+import { Box, Divider, IconButton, Stack, Typography } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 interface CommunicationChannelProps {
     avatarUrl: string,
     channelName: string
 };
-
-const Container = styled.div`
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-`;
-
-const ChannelHeader = styled.div`
-    height: 4em;
-    display: flex;
-    flex-direction: row;
-    padding: 0 1em;
-    background-color: #3f3f3f;
-`;
-
-const ChannelHeaderLeft = styled.div`
-    display: flex;
-    flex-direction: row;
-    flex-grow: 1;
-    align-items: center;
-`;
-
-const ChannelHeaderRight = styled.div`
-    display: flex;
-    flex-grow: 1;
-    flex-direction: row-reverse;
-    align-items: center;
-`;
-
-const ChannelTitle = styled.h2`
-    color: white;
-`;
-
-const Content = styled.div`
-    padding: 0.5em;
-    flex-grow: 10;
-    overflow: auto;
-    overflow-x: hidden;
-`;
-
-const MessageBoxContainer = styled.div`
-    min-height: 4em;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: #3f3f3f;
-`;
 
 const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) => {
     const { appState } = useContext(AppStateContext);
@@ -217,29 +167,28 @@ const CommunicationChannel: React.FC<any> = (props: CommunicationChannelProps) =
     }, [onScroll]);
 
     return (
-        <Container>
+        <Stack sx={{p: 1}}>
             { showSettings &&
                 <CommunicationChannelSettingsPopup onClose={() => { setShowSettings(false) }}/>
             }
-            <ChannelHeader>
-                <ChannelHeaderLeft>
-                    <ChannelTitle>{currentChannel?.name}</ChannelTitle>
-                </ChannelHeaderLeft>
-                <ChannelHeaderRight>
-                    <Button onClick={() => { setShowSettings(true) } } icon={Settings}/>
-                </ChannelHeaderRight>
-            </ChannelHeader>
-            <Content id="scrollableMessages" ref={messagesRef}>
+            <Stack direction="row" justifyContent="space-between">
+                <Typography variant="h5">{currentChannel?.name}</Typography>
+                <IconButton color="primary" onClick={() => { setShowSettings(true) }}>
+                    <SettingsIcon />
+                </IconButton>
+            </Stack>
+            <Divider />
+            <Stack sx={{p: 1}} id="scrollableMessages" ref={messagesRef}>
                 {messages &&
                     messages.map((msg, i, arr) =>
                         renderMessage(msg, arr[i - 1], arr[i + 1])
                     )
                 }
-            </Content>
-            <MessageBoxContainer>
+            </Stack>
+            <Box>
                 <MessageBox callback={addMessage}/>
-            </MessageBoxContainer>
-        </Container>
+            </Box>
+        </Stack>
     );
 }
 

@@ -1,41 +1,23 @@
+import { Box, CircularProgress, Container, LinearProgress, Paper, Stack, Typography } from '@mui/material';
 import React from 'react'
-import styled from 'styled-components'
 
 interface LoadingProps {
     detail?: string
 }
 
-const Container = styled.div`
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-`;
-
-const Spinner = styled.div`
-    width: 250px;
-    height: 250px;
-    border: 15px solid #f3f3f3;
-    border-radius: 50%;
-    animation: spin 2s linear infinite;
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); border-top-color: #27A0DD; }
-        34% { border-top-color: #02B893; }
-        66% { border-top-color: #C227C2; }
-        100% { transform: rotate(360deg); }
-    }
-`;
-
 const Loading: React.FC<LoadingProps> = (props: LoadingProps) => {
     return (
-        <Container>
-            <Spinner/>
-            {props.detail &&
-                <h2>{props.detail}</h2>
-            }
+        <Container maxWidth="xs">
+            <Paper sx={{ p: 1}} elevation={0}>
+                <Stack alignItems="center">
+                    <Typography mb={2} variant="h5" textAlign="center">{props?.detail ? props.detail : "Načítání"}</Typography>
+                    <Box sx={{position: "relative", height: "4em", width: "4em"}} mb={2}>
+                        <CircularProgress color="success" size="4em" sx={{position: "absolute"}}/>
+                        <CircularProgress color="primary" size="3.75em" sx={{position: "absolute"}}/>
+                        <CircularProgress color="secondary" size="3.5em" sx={{position: "absolute"}}/>
+                    </Box>
+                </Stack>
+            </Paper>
         </Container>
     );
 }

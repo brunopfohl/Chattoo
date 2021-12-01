@@ -4,7 +4,9 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "esnext",
+      "es6",
+      "dom"
     ],
     "baseUrl": "./src/",
     "paths": {
@@ -15,6 +17,9 @@
       "@components/*": [ "./components/*" ],
       "@hooks/*": [ "./hooks/*" ],
     },
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,

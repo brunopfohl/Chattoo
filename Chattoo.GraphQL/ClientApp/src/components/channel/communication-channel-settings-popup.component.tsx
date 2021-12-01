@@ -1,77 +1,14 @@
+import { Button } from '@mui/material';
 import { useAddUserToCommunicationChannelMutation, useGetUsersForChannelQuery, useRemoveUserFromCommunicationChannelMutation } from 'graphql/graphql-types';
 import React, { useContext, useState } from 'react'
-import styled from 'styled-components';
-import { Plus } from 'styled-icons/boxicons-regular';
-import { Remove } from 'styled-icons/material-twotone';
 import { AppUser } from '../../common/interfaces/app-user.interface';
-import Button from '../button/button.component';
 import { ChatStateContext } from '../chat/chat-state-provider.component';
 import Popup from '../popup/popup.component';
-import ProfilePicture from '../profile-picture/profile-picture.component';
-import UserSearchPopup, { UserSearchMode } from '../user-search/user-search-popup.component';
+import UserSearchPopup from '../user-search/user-search-popup.component';
 
 interface CommunicationChannelSettingsProps {
     onClose: () => void
 }
-
-const Container = styled.div`
-    color: white;
-    display: flex;
-    flex-direction: column;
-    background-color: #545454;
-    width: 30vw;
-    min-width: 400px;
-    padding: 1em;
-    overflow: hidden;
-`;
-
-const ParticipantsTitle = styled.h3`
-    margin: 0;
-`;
-
-const ParticipantsContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    max-height: 20em;
-    padding: 0.5em 0;
-`;
-
-const ParticipantsRow = styled.div`
-    display: flex;
-    height: 4em;
-    padding: 0.5em 0.2em;
-    border-bottom: 1px solid white;
-`;
-
-const ParticipantsRowLeft = styled.div`
-    display: flex;
-`;
-
-const ParticipantsRowRight = styled.div`
-    display: flex;
-    flex-grow: 1;
-    align-items: center;
-`;
-
-const ParticipantUserName = styled.span`
-    font-size: 16pt;
-    font-weight: thin;
-`;
-
-const AddNewParticipantsContainer = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const AddNewParticipantsTitle = styled.div`
-    margin-left: 1em;
-`;
-
-const RightFlexContainer = styled.div`
-    display: flex;
-    flex-grow: 1;
-    flex-direction: row-reverse;
-`;
 
 const CommunicationChannelSettings: React.FC<CommunicationChannelSettingsProps> = (props: CommunicationChannelSettingsProps) => {
     const [showUserSearchPopup, setShowUserSearchPopup] = useState<boolean>(false);
@@ -132,17 +69,19 @@ const CommunicationChannelSettings: React.FC<CommunicationChannelSettingsProps> 
     const renderParticipants = () => {
         return (
             users && users.map(user => (
-                <ParticipantsRow key={user.id}>
-                    <ParticipantsRowLeft>
-                        <ProfilePicture size="2em"/>
-                    </ParticipantsRowLeft>
-                    <ParticipantsRowRight>
-                        <ParticipantUserName>{user.userName}</ParticipantUserName>
-                        <RightFlexContainer>
-                            <Button icon={Remove} onClick={() => onUserRemove(user)}/>
-                        </RightFlexContainer>
-                    </ParticipantsRowRight>
-                </ParticipantsRow>
+                <div key={user.id}>
+                    <div>
+                        <span>profilka</span>
+                    </div>
+                    <div>
+                        <span>{user.userName}</span>
+                        <div>
+                            <Button onClick={() => onUserRemove(user)}>
+                                Remove
+                            </Button>
+                        </div>
+                    </div>
+                </div>
             ))
         );
     };
@@ -150,18 +89,18 @@ const CommunicationChannelSettings: React.FC<CommunicationChannelSettingsProps> 
     return (
         <>
             {showUserSearchPopup &&
-                <UserSearchPopup mode={UserSearchMode.multiSelect} channelId={currentChannel?.id} onClose={() => setShowUserSearchPopup(false) } onSubmit={onUserSearchSubmit}/>
+                <UserSearchPopup channelId={currentChannel?.id} onClose={() => setShowUserSearchPopup(false) } onSubmit={onUserSearchSubmit}/>
             }
-            <Container>
-                <ParticipantsTitle>Seznam účastníků</ParticipantsTitle>
-                <ParticipantsContainer>
+            <div>
+                <span>Seznam účastníků</span>
+                <div>
                     {renderParticipants()}
-                </ParticipantsContainer>
-                <AddNewParticipantsContainer>
-                    <Button icon={Plus} onClick={() => setShowUserSearchPopup(true) }/>
-                    <AddNewParticipantsTitle>Přidat lidi</AddNewParticipantsTitle>
-                </AddNewParticipantsContainer>
-            </Container>
+                </div>
+                <div>
+                    <Button onClick={() => setShowUserSearchPopup(true) }/>
+                    <span>Přidat lidi</span>
+                </div>
+            </div>
         </>
     );
 }
@@ -177,7 +116,3 @@ const CommunicationChannelSettingsPopup: React.FC<CommunicationChannelSettingsPr
 }
 
 export default CommunicationChannelSettingsPopup;
-
-function addUserToCommunicationChannel(arg0: { variables: { userId: string; channelId: string; }; }) {
-    throw new Error('Function not implemented.');
-}

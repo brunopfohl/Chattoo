@@ -1,42 +1,17 @@
+import CustomInput from '@components/input/input.component';
+import { Box, IconButton, Stack } from '@mui/material';
 import React, { useState } from 'react'
-import styled from 'styled-components';
+import SendIcon from '@mui/icons-material/Send';
 
 interface MessageBoxProps {
     callback: Function;
 }
 
-/* Stylovaný kontejner prvku pro odeslání zprávy */
-const Container = styled.div`
-    display: flex;
-    flex-grow: 1;
-    flex-direction: row;
-    overflow: hidden;
-`;
-
-/* Stylovaný form prvku pro odeslání zpráv */
-const Form = styled.form`
-    display: flex;
-    align-items: center;
-    flex-grow: 1;
-`;
-
-/* Stylovaný input pro zadání zprávy */
-const MessageInput = styled.input`
-    border: none;
-    border-radius: 15px;
-    flex-grow: 1;
-    margin-left: 1em;
-    height: 1em;
-    font-size: 15pt;
-    padding: 1em;
-    margin-right: 1em;
-`;
-
 const MessageBox: React.FC<any> = (props: MessageBoxProps) => {
     const [text, setText] = useState("");
 
-    const onSubmit = (event :React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const onSubmit = (ev: any) => {
+        ev.preventDefault();
 
         if(text) {
             setText("");
@@ -45,11 +20,18 @@ const MessageBox: React.FC<any> = (props: MessageBoxProps) => {
     };
 
     return (
-        <Container>
-            <Form onSubmit={onSubmit}>
-                <MessageInput placeholder="Zadejte zprávu..." value={text} onChange={event => setText(event.target.value)}/>
-            </Form>
-        </Container>
+        <div>
+            <form onSubmit={onSubmit}>
+                <Stack direction="row">
+                    <CustomInput placeholder="Zadejte zprávu..." value={text} onChange={ev => setText(ev.target.value)} size="small"/>
+                    {text.length > 0 &&
+                        <IconButton color="primary" onClick={onSubmit}>
+                            <SendIcon />
+                        </IconButton>
+                    }
+                </Stack>
+            </form>
+        </div>
     );
 }
 

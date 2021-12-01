@@ -1,6 +1,4 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Search } from 'styled-icons/boxicons-regular';
 import Input from '../input/input.component';
 
 export interface SearchBoxProps {
@@ -31,7 +29,7 @@ const SearchBox: React.FC<SearchBoxProps> = (props: SearchBoxProps) => {
     };
 
     return (
-        <Input type="text" onChange={onInputChange} placeholder={placeholder} value={text} icon={Search} />
+        <Input type="text" onChange={onInputChange} placeholder={placeholder} value={text} />
     );
 }
 

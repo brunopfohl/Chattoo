@@ -1,35 +1,14 @@
+import { Button } from '@mui/material';
 import { useCreateCommunicationChannelMutation } from 'graphql/graphql-types';
 import React, { useRef, useState } from 'react'
 import { useEffect } from 'react';
-import styled from 'styled-components';
 import { createCommunicationChannelFormValidationSchema } from '../../common/validations/createCommunicationChannelFormValidationSchema';
-import Button from '../button/button.component';
 import { MemoizedInput } from '../input/input.component';
 import Popup from '../popup/popup.component';
-import Separator from '../separator.component';
 
 interface CommunicationChannelCreatePopupProps {
     onClose: () => void;
 };
-
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    background-color: #545454;
-    width: 30vw;
-    padding: 1.5em;
-    overflow: hidden;
-`;
-
-const InputWrapper = styled.div`
-    margin: 0.5em 0;
-`;
-
-const ValidationError = styled.span`
-    font-size: 12pt;
-    padding-left: 1em;
-    color: red;
-`;
 
 const CommunicationChannelCreate: React.FC<CommunicationChannelCreatePopupProps> = (props: CommunicationChannelCreatePopupProps) => {
     const { onClose } = props;
@@ -100,22 +79,23 @@ const CommunicationChannelCreate: React.FC<CommunicationChannelCreatePopupProps>
     }, []);
 
     return (
-        <Container>
-            <InputWrapper>
+        <div>
+            <div>
                 <MemoizedInput type="text" onValueChange={setName} placeholder="Zadejte název skupiny" label="Název"/>
                 {validationErrors["name"] && validationErrors["name"].map((e, i) => (
-                    <ValidationError key={i}>{e}</ValidationError>
+                    <span key={i}>{e}</span>
                 ))}
-            </InputWrapper>
-            <InputWrapper>
+            </div>
+            <div>
                 <MemoizedInput type="text" onValueChange={setDescription} placeholder="Zadejte popis skupiny" label="Popis"/>
                 {validationErrors["description"] && validationErrors["description"].map((e, i) => (
-                    <ValidationError key={i}>{e}</ValidationError>
+                    <span key={i}>{e}</span>
                 ))}
-            </InputWrapper>
-            <Separator />
-            <Button text="Vytvořit" onClick={onSubmit} />
-        </Container>
+            </div>
+            <Button onClick={onSubmit} variant="outlined">
+                Vytvořit
+            </Button>
+        </div>
     );
 };
 

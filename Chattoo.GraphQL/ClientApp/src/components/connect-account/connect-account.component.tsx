@@ -1,16 +1,8 @@
+import { Box, Button, Container, Paper, Stack, SxProps, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react'
-import styled from 'styled-components';
 import { ApplicationPaths } from '../api-authorization/ApiAuthorizationConstants';
-import Button, { ButtonTheme } from '../button/button.component';
-
-const Container = styled.div`
-    display: flex;
-    width: 30vw;
-    padding: 2em;
-    background-color: #545454;
-    border-radius: 30px;
-`;
+import { PersonOutlineOutlined } from '@mui/icons-material';
 
 const ConnectAccount: React.FC<any> = () => {
     let router = useRouter();
@@ -22,9 +14,28 @@ const ConnectAccount: React.FC<any> = () => {
         });
     };
 
+    let onRegister = () => {
+        router.push({
+            pathname: ApplicationPaths.Register,
+            query: { origin: router.asPath }
+        });
+    };
+
     return (
-        <Container>
-            <Button text="Přihlásit se" onClick={onLogin} stretch={true} theme={ButtonTheme.green}/>
+        <Container maxWidth="sm">
+            <Typography variant="h2" pb={2} align="center">
+                Chattoo
+            </Typography>
+            <Paper elevation={3} sx={{ padding: 2 }}>
+                <Stack alignItems="center" spacing={0.5} sx={{verticalAlign: "center"}}>
+                    <Button onClick={onLogin} size="large" variant="outlined" color="primary" fullWidth>
+                        Přihlásit se
+                    </Button>
+                    <Button onClick={onRegister} size="large" variant="outlined" color="secondary" fullWidth>
+                        Registrovat
+                    </Button>
+                </Stack>
+            </Paper>
         </Container>
     );
 }

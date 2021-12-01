@@ -1,4 +1,4 @@
-import { ApolloProvider, ApolloClient, ApolloLink, HttpLink, InMemoryCache, Observable, split } from "@apollo/client";
+import { ApolloProvider, ApolloClient, HttpLink, InMemoryCache, split } from "@apollo/client";
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from "@apollo/client/utilities";
 import { User } from "oidc-client";
@@ -36,8 +36,6 @@ const AppStateProvider = ({children}: {children: ReactNode}) => {
     const [appState, setAppState] = useState<AppState>(initial.appState)
     // Poslední GraphQL error.
     const [gqlError, setGqlError] = useState<GQLError>(initial.gqlError)
-    // Aktuálně přihlášený uživatel.
-    const [user, setUser] = useState<User>();
 
     // Přihlášení
     const appSetLogin = (user: User) => {

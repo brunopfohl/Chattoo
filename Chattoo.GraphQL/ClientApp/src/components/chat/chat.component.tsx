@@ -1,28 +1,20 @@
+import { Grid } from '@mui/material';
 import React from 'react'
-import styled from 'styled-components';
 import ChatLeftPanel from './chat-left-panel.component';
 import ChatRightPanel from './chat-right-panel.component';
 import ChatStateProvider from './chat-state-provider.component';
 
-interface ChatProps {
-    
-};
-
-const Container = styled.div`
-    min-width: 700px;
-    border-radius: 20px;
-    display: flex;
-    height: 80vh;
-    overflow: hidden;
-`;
-
-const Chat: React.FC<any> = (props: ChatProps) => {
+const Chat: React.FC<any> = () => {
     return (
         <ChatStateProvider>
-            <Container>
-                <ChatLeftPanel></ChatLeftPanel>
-                <ChatRightPanel></ChatRightPanel>
-            </Container>
+            <Grid container spacing={1}>
+                <Grid item md={3}>
+                    <ChatLeftPanel />
+                </Grid>
+                <Grid item md={9}>
+                    <ChatRightPanel />
+                </Grid>
+            </Grid>
         </ChatStateProvider>
     );
 }

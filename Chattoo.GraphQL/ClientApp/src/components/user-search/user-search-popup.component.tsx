@@ -1,8 +1,7 @@
+import { Button } from '@mui/material';
 import { useGetUsersQuery } from 'graphql/graphql-types';
 import React, { useMemo, useState } from 'react'
-import styled from 'styled-components'
 import { AppUser } from '../../common/interfaces/app-user.interface';
-import Button from '../button/button.component';
 import Popup from '../popup/popup.component';
 import SearchBox, { SearchBoxProps } from '../search-box/search-box.component';
 import UserSearchItem from './user-search-item.component';
@@ -10,56 +9,11 @@ import UserSearchItem from './user-search-item.component';
 interface UserSearchProps {
     onClose: () => void;
     onSubmit: (users: AppUser[]) => void;
-    mode: UserSearchMode;
     channelId?: string;
 }
 
-export enum UserSearchMode {
-    normal,
-    multiSelect
-};
-
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    background-color: #545454;
-    color: white;
-    width: 30vw;
-    min-width: 400px;
-    padding: 1em;
-    border-radius: 30px;
-    overflow: hidden;
-`;
-
-const UsersContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 0.5em;
-`;
-
-const UsersContainerTitle = styled.h4`
-    margin: 0;
-`;
-
-const NoSearchResults = styled.span`
-    padding: 1em 0em;
-`;
-
-const SelectedUsersContainer = styled.div`
-    display: flex;
-`;
-
-const SelectedUserContainer = styled.div`
-    color: white;
-`;
-
-const SelectedUserTitle = styled.span`
-    font-weight: thin;
-    font-size: 10pt;
-`;
-
 const UserSearch: React.FC<UserSearchProps> = (props: UserSearchProps) => {
-    const { mode, onClose, onSubmit, channelId } = props;
+    const { onClose, onSubmit, channelId } = props;
 
     const [searchTerm, setSearchTerm] = useState<string>();
 
@@ -116,48 +70,44 @@ const UserSearch: React.FC<UserSearchProps> = (props: UserSearchProps) => {
     }
 
     return (
-        <Container>
+        <div>
             {MemoSearchBox}
-            <SelectedUsersContainer>
+            <div>
                 {selectedUsers.length > 0 && (
-                    <SelectedUserContainer>
-                        <SelectedUserTitle>
+                    <div>
+                        <span>
                             {selectedUsers.map((user: AppUser) => user.userName).join(', ')}
-                        </SelectedUserTitle>
-                    </SelectedUserContainer>
+                        </span>
+                    </div>
                 )}
-            </SelectedUsersContainer>
-            <UsersContainer>
+            </div>
+            <div>
                 {
                     users && users.length > 0 &&
-                    <UsersContainerTitle>
+                    <span>
                         Návrhy
-                    </UsersContainerTitle>
+                    </span>
                 }
                 { users && users.length > 0
                     ? users.map((u) => (
-                        <UserSearchItem user={u} isSelected={isUserSelected(u)} selectMode={mode} key={u.id} addUser={addUser} removeUser={removeUser}/>
+                        <UserSearchItem user={u} isSelected={isUserSelected(u)} key={u.id} addUser={addUser} removeUser={removeUser}/>
                     ))
-                    : <NoSearchResults>Nebyly nalezeny žádné výsledky</NoSearchResults>
+                    : <span>Nebyly nalezeny žádné výsledky</span>
                 }
-            </UsersContainer>
+            </div>
             
-            {mode === UserSearchMode.multiSelect &&
-                <Button text="Potvrdit" stretch={true} onClick={onSubmitHandler}/>
-            }
-        </Container>
+            <Button onClick={onSubmitHandler}>
+                Hotovo
+            </Button>
+        </div>
     );
 }
 
 const UserSearchPopup: React.FC<UserSearchProps> = (props: UserSearchProps) => {
-    const { mode, onClose } = props;
-
-    const title: string = mode === UserSearchMode.multiSelect
-        ? "Výběr uživatelů"
-        : "Výběr uživatele";
+    const { onClose } = props;
 
     return (
-        <Popup title={title} onClose={onClose}>
+        <Popup title="Výběr uživatelů" onClose={onClose}>
             <UserSearch {...props} />
         </Popup>
     );
