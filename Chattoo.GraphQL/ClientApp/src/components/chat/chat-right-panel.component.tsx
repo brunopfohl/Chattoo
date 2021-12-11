@@ -1,19 +1,24 @@
 import { Paper } from '@mui/material';
-import React, { useContext } from 'react'
-import CommunicationChannel from '../channel/communication-channel.component';
+import { FC, useContext } from 'react'
+import CommunicationChannelMemo from '../channel/communication-channel.component';
 import { ChatStateContext } from './chat-state-provider.component';
 
-const ChatRightPanel: React.FC = () => {
+/**
+ * Komponenta - pravá strany komponenty chatu.
+ */
+const ChatRightPanel: FC = () => {
     const { currentChannel } = useContext(ChatStateContext);
 
     return (
-        <Paper>
+        // Komponenta komunikačního kanálu je obalena Paperem
+        <Paper sx={{ p: 1, height: "100%" }}>
             {currentChannel
-                ? <CommunicationChannel/>
+                ? <CommunicationChannelMemo />
                 : <h4>Nebyl zvolen komunikační kanál.</h4>
             }
         </Paper>
     );
 }
 
+ChatRightPanel.displayName = "ChatRightPanelComponent";
 export default ChatRightPanel;

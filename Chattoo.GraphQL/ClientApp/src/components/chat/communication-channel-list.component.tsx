@@ -1,12 +1,21 @@
+import { AppStateContext } from '@components/app-state-provider.component';
 import { Divider, List } from '@mui/material';
 import { useGetChannelsForUserQuery, useUserAddedToChannelSubscription } from 'graphql/graphql-types';
-import React, { useContext } from 'react'
+import { FC, useContext } from 'react'
 import { useEffect } from 'react';
-import { AppStateContext } from '../app-state-provider.component';
 import { ChatStateContext } from './chat-state-provider.component';
 import CommunicationChannelPreview from './communication-channel-preview.component';
 
-const CommunicationChannelList: React.FC = () => {
+/** Počet kanálů na stránku */
+const CHANNELS_PAGE_SIZE = 20;
+
+/** Číslo 1. stránky */
+const CHANNELS_FIRST_PAGE = 1;
+
+/**
+ * Komponenta se seznamem komunikačních kanálů.
+ */
+const CommunicationChannelList: FC = () => {
     const { appState } = useContext(AppStateContext);
     const { currentChannel, setCurrentChannel } = useContext(ChatStateContext);
     const { user } = appState;
@@ -14,8 +23,8 @@ const CommunicationChannelList: React.FC = () => {
     const { data, refetch } = useGetChannelsForUserQuery({
         variables: {
             userId: user.id,
-            pageNumber: 1, 
-            pageSize: 20
+            pageNumber: CHANNELS_FIRST_PAGE,
+            pageSize: CHANNELS_PAGE_SIZE
         }
     });
 
@@ -33,7 +42,7 @@ const CommunicationChannelList: React.FC = () => {
     // Po změne pole s dostupnými komunikačními kanály nastavím aktuální komunikační kanál
     // na první z nich, pokud uživatel ještě nezvolil žádný komunikační kanál.
     useEffect(() => {
-        if(!currentChannel && channels?.length > 0) {
+        if (!currentChannel && channels?.length > 0) {
             setCurrentChannel(channels[0]);
         }
     }, [channels]);
@@ -52,5 +61,5 @@ const CommunicationChannelList: React.FC = () => {
         </List>
     );
 }
-
+CommunicationChannelList.displayName = "CommunicationChannelListComponent";
 export default CommunicationChannelList;

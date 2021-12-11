@@ -1,14 +1,12 @@
 
-import React from 'react';
+import { FC } from 'react';
 import AppStateProvider from '../../components/app-state-provider.component';
 import App from '../_app';
 
-const AppWithProvider: React.FC<any> = (props) => {
-    return (
+const AppWithProvider: FC<any> = (props) => (
     <AppStateProvider>
         <App {...props} />
     </AppStateProvider>
-    );
-};
+);
 
 export default AppWithProvider;

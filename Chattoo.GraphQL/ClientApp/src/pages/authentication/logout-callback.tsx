@@ -1,10 +1,12 @@
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import authService, { AuthenticationResult, AuthenticationResultStatus } from '../../components/api-authorization/AuthorizeService';
 import Loading from '../../components/loading/loading.component';
 
-
-const LogoutCallback: React.FC = () => {
+/**
+ * Stránka - přesměrování zpět z Identity serveru po odhlášení.
+ */
+const LogoutCallback: FC = () => {
     const router = useRouter();
     let callbackUrl = router.asPath;
 
@@ -15,8 +17,9 @@ const LogoutCallback: React.FC = () => {
     }, []);
 
     return (
-        <Loading detail="Odhlašuji"/>
+        <Loading detail="Odhlašuji" />
     );
 }
 
+LogoutCallback.displayName = "LogoutCallbackPage";
 export default LogoutCallback;

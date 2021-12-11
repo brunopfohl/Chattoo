@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
-import React, { useContext, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { ApplicationPaths } from '../components/api-authorization/ApiAuthorizationConstants';
 import { AppStateContext } from '../components/app-state-provider.component';
 import Loading from '../components/loading/loading.component';
 
-const ComponentWrapper: React.FC<any> = ({ Component, pageProps}) => {
+const ComponentWrapper: FC<any> = ({ Component, pageProps }) => {
+  console.log("rerender");
   const router = useRouter();
   const { appState } = useContext(AppStateContext);
   const { loggedIn, processingAuth } = appState;
@@ -17,10 +18,10 @@ const ComponentWrapper: React.FC<any> = ({ Component, pageProps}) => {
   };
 
   useEffect(() => {
-    if(loggedIn || isProcessingAuth()) {
+    if (loggedIn || isProcessingAuth()) {
       setIsReady(true);
     }
-    else if(loggedIn === false && !processingAuth) {
+    else if (loggedIn === false && !processingAuth) {
       setIsReady(false);
       router.push("connect-account").then(() => {
         setIsReady(true);
@@ -30,7 +31,7 @@ const ComponentWrapper: React.FC<any> = ({ Component, pageProps}) => {
 
   return (
     <>
-      { isReady
+      {isReady
         ? <Component {...pageProps} />
         : <Loading detail="Načítání" />
       }

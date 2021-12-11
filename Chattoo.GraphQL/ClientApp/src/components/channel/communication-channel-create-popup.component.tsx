@@ -1,113 +1,128 @@
-import { Button } from '@mui/material';
+import { useDebounce } from '@hooks/useDebounceHook';
+import { useValidation } from '@hooks/useValidation';
+import { Button, Dialog, DialogContent, DialogTitle, TextField } from '@mui/material';
 import { useCreateCommunicationChannelMutation } from 'graphql/graphql-types';
 import React, { useRef, useState } from 'react'
 import { useEffect } from 'react';
 import { createCommunicationChannelFormValidationSchema } from '../../common/validations/createCommunicationChannelFormValidationSchema';
-import { MemoizedInput } from '../input/input.component';
-import Popup from '../popup/popup.component';
 
 interface CommunicationChannelCreatePopupProps {
     onClose: () => void;
+    open: boolean;
 };
 
 const CommunicationChannelCreate: React.FC<CommunicationChannelCreatePopupProps> = (props: CommunicationChannelCreatePopupProps) => {
     const { onClose } = props;
 
-    const isInitialized = useRef(false);
+    // const isInitialized = useRef(false);
 
-    const [name, setName] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
+    // const [name, setName] = useState<string>("");
 
-    const [validationErrors, setValidationErrors] = useState({});
+    // const handleNameInputChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setName(event.target.value);
+    // };
 
-    const [createCommunicationChannel, createCommunicationChannelRes] = useCreateCommunicationChannelMutation();
+    // const [description, setDescription] = useState<string>("");
 
-    const isValid = async () => {
-        let isValid = true;
-        setValidationErrors({});
+    // const handleDescriptionInputChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setDescription(event.target.value);
+    // };
 
-        await createCommunicationChannelFormValidationSchema.validate({
-            name: name,
-            description: description
-        },
-        {
-            abortEarly: false
-        })
-        .catch((err) => {
-            let errors = {};
+    // const [createCommunicationChannel] = useCreateCommunicationChannelMutation();
 
-            err.inner.forEach(e => {
-                errors[e.path] = e.errors;
-            });
+    // const [isValid, validationErrors] = useValidation({
+    //     schema: createCommunicationChannelFormValidationSchema,
+    //     object: {
+    //         name: name,
+    //         description: description
+    //     }
+    // });
 
-            isValid = false;
+    // const isValid = async () => {
+    //     let isValid = true;
+    //     setValidationErrors({});
 
-            setValidationErrors(errors);
-        });
+    //     await createCommunicationChannelFormValidationSchema.validate({
+    //         name: name,
+    //         description: description
+    //     },
+    //     {
+    //         abortEarly: false
+    //     })
+    //     .catch((err) => {
+    //         let errors = {};
 
-        return isValid;
-    };
+    //         err.inner.forEach(e => {
+    //             errors[e.path] = e.errors;
+    //         });
 
-    const onSubmit = () => {
-        isValid().then((success) => {
-            if(success) {
-                createCommunicationChannel({
-                    variables: {
-                        name: name,
-                        desc: description
-                    }
-                })
+    //         isValid = false;
 
-                onClose();
-            }
-        });
-    };
+    //         setValidationErrors(errors);
+    //     });
 
-    let typingTimeout: NodeJS.Timeout = null;
-    useEffect(() => {
-        if(isInitialized.current) {
-            typingTimeout && clearTimeout(typingTimeout);
+    //     return isValid;
+    // };
 
-            typingTimeout = setTimeout(() => {
-                isValid();
-            }, 200);
-        }
-    }, [name, description]);
+    // const onSubmit = () => {
+    //     isValid().then((success) => {
+    //         if(success) {
+    //             createCommunicationChannel({
+    //                 variables: {
+    //                     name: name,
+    //                     desc: description
+    //                 }
+    //             })
 
-    useEffect(() => {
-        isInitialized.current = true;
-    }, []);
+    //             onClose();
+    //         }
+    //     });
+    // };
+
+    // const debouncedName = useDebounce(name, 200);
+    // const debouncedDescription = useDebounce(description, 200);
+    // useEffect(() => {
+    //     isInitialized.current && isValid();
+    // }, [debouncedName, debouncedDescription]);
+
+    // useEffect(() => {
+    //     isInitialized.current = true;
+    // }, []);
 
     return (
         <div>
-            <div>
-                <MemoizedInput type="text" onValueChange={setName} placeholder="Zadejte název skupiny" label="Název"/>
+            {/* <div>
+                <TextField value={name} onChange={handleNameInputChanged} placeholder="Zadejte název skupiny"/>
                 {validationErrors["name"] && validationErrors["name"].map((e, i) => (
                     <span key={i}>{e}</span>
                 ))}
             </div>
             <div>
-                <MemoizedInput type="text" onValueChange={setDescription} placeholder="Zadejte popis skupiny" label="Popis"/>
+                <TextField value={description} onChange={handleDescriptionInputChanged} placeholder="Zadejte popis skupiny"/>
                 {validationErrors["description"] && validationErrors["description"].map((e, i) => (
                     <span key={i}>{e}</span>
                 ))}
             </div>
             <Button onClick={onSubmit} variant="outlined">
                 Vytvořit
-            </Button>
+            </Button> */}
         </div>
     );
 };
 
-export const MemoizedCommunicationChannelCreate = React.memo(CommunicationChannelCreate);
-
 const CommunicationChannelCreatePopup: React.FC<CommunicationChannelCreatePopupProps> = (props: CommunicationChannelCreatePopupProps) => {
-    const { onClose } = props;
+    const { onClose, open } = props;
 
     return (
-        <Popup title="Vytvořit skupinu" onClose={onClose}>
+        <Dialog open={open} onClose={onClose}>
+            <DialogTitle>
+                Vytvoření kanálu
+            </DialogTitle>
+            <DialogContent>
+
+            </DialogContent>
             <CommunicationChannelCreate {...props} />
-        </Popup>
+        </Dialog>
     );
 };
 

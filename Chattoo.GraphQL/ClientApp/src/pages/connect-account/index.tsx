@@ -1,20 +1,20 @@
-import Loading from '@components/loading/loading.component';
 import Head from 'next/head'
-import React from 'react';
+import React, { FC } from 'react';
 import ConnectAccount from '../../components/connect-account/connect-account.component';
 
-const ConnectAccountPage = () => {
-    return (
+/**
+ * Stránka - úvodní stránka bez přihlášeného uživatele.
+*/
+const ConnectAccountPage: FC = () => (
+    <div>
+        <Head>
+            <title>Propojit účet - Chattoo</title>
+        </Head>
         <div>
-            <Head>
-                <title>Propojit účet - Chattoo</title>
-            </Head>
-            {/* background */}
-            <div>
-                <ConnectAccount/>
-            </div>
+            <ConnectAccount />
         </div>
-    )
-};
+    </div>
+);
 
+ConnectAccountPage.displayName = "ConnectAccountPage";
 export default ConnectAccountPage;

@@ -1,12 +1,14 @@
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import authService, { AuthenticationResult, AuthenticationResultStatus } from '../../components/api-authorization/AuthorizeService';
 import Loading from '../../components/loading/loading.component';
 
-
-const LoginCallback: React.FC = () => {
+/**
+ * Stránka - navrácení zpět z Identity serveru.
+ */
+const LoginCallback: FC = () => {
     const router = useRouter();
-    let callbackUrl = router.asPath;
+    const callbackUrl = router.asPath;
 
     useEffect(() => {
         authService.completeSignIn(callbackUrl).then((result: AuthenticationResult) => {
@@ -14,10 +16,10 @@ const LoginCallback: React.FC = () => {
         });
     }, []);
 
-
     return (
-        <Loading detail="Přihlašuji"/>
+        <Loading detail="Přihlašuji" />
     );
 }
 
+LoginCallback.displayName = "LoginCallbackPage";
 export default LoginCallback;

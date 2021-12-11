@@ -1,4 +1,4 @@
-import React from 'react'
+import { FC } from 'react';
 import authService from '../../components/api-authorization/AuthorizeService';
 import Loading from '../../components/loading/loading.component';
 
@@ -6,11 +6,15 @@ interface LogoutRedirectProps {
     origin: string
 }
 
-const Logout: React.FC<LogoutRedirectProps> = (props: LogoutRedirectProps) => {
+/**
+ * Stránka - přesměrování na Identity server pro ohdlášení.
+ */
+const Logout: FC<LogoutRedirectProps> = (props) => {
     authService.signOut(props.origin);
     return (
-        <Loading detail="Odhlašování"/>
+        <Loading detail="Odhlašování" />
     );
 }
 
+Logout.displayName = "LogoutPage";
 export default Logout;

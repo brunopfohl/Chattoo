@@ -1,19 +1,30 @@
+/**
+ * Název aplikace
+ */
 export const ApplicationName = 'ClientApp';
 
+/**
+ * URL vedoucí na API endpoint (bez části určující protokol).
+ */
 export const API_URL_WITHOUT_PROCOTOL = 'localhost:5001';
+
+/**
+ * URL vedoucí na API endpoint.
+ */
 export const API_URL = 'https://' + API_URL_WITHOUT_PROCOTOL;
 
-export const QueryParameterNames = {
-  ReturnUrl: 'returnUrl',
-  Message: 'message'
-};
-
+/**
+ * Akce pro odhlášení.
+ */
 export const LogoutActions = {
   LogoutCallback: 'logout-callback',
   Logout: 'logout',
   LoggedOut: 'logged-out'
 };
 
+/**
+ * Akce pro přihlášení.
+ */
 export const LoginActions = {
   Login: 'login',
   LoginCallback: 'login-callback',
@@ -24,6 +35,9 @@ export const LoginActions = {
 
 const prefix = '/authentication';
 
+/**
+ * Routing.
+ */
 export const ApplicationPaths = {
   DefaultLoginRedirectPath: '/',
   ApiAuthorizationClientConfigurationUrl: `${API_URL}/_configuration/${ApplicationName}`,

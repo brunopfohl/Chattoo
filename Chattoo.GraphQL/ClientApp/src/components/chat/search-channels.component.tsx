@@ -1,6 +1,6 @@
-import React from 'react'
+import { FC } from "react";
 
-const SearchChannels: React.FC<any> = () => {
+const SearchChannels: FC = () => {
     return (
         <div>
             <input placeholder="Hledejte mezi kontakty"></input>
@@ -8,4 +8,5 @@ const SearchChannels: React.FC<any> = () => {
     );
 }
 
+SearchChannels.displayName = "SearchChannelsComponent";
 export default SearchChannels;

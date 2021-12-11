@@ -1,18 +1,21 @@
 import { useRouter } from 'next/router';
-import React from 'react'
+import { FC } from 'react';
 import authService from '../../components/api-authorization/AuthorizeService';
 import Loading from '../../components/loading/loading.component';
 
-
-const Register: React.FC = () => {
+/**
+ * Stránka - přesměrování na Identity server registraci.
+ */
+const Register: FC = () => {
     const router = useRouter();
     const { origin } = router.query;
 
     authService.signIn(origin);
 
     return (
-        <Loading detail="Přihlašování"/>
+        <Loading detail="Přihlašování" />
     );
 }
 
+Register.displayName = "RegisterPage";
 export default Register;

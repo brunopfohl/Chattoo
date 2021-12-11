@@ -31,7 +31,7 @@ const initial: AppStateContext = {
 
 export const AppStateContext = createContext(initial);
 
-const AppStateProvider = ({children}: {children: ReactNode}) => {
+const AppStateProvider = ({ children }: { children: ReactNode }) => {
     // Aplikační stav
     const [appState, setAppState] = useState<AppState>(initial.appState)
     // Poslední GraphQL error.
@@ -64,7 +64,7 @@ const AppStateProvider = ({children}: {children: ReactNode}) => {
     // Při změně přihlášení.
     const handleAuth = () => {
         authService.getUser().then((user: User) => {
-            if(user) {
+            if (user) {
                 appSetLogin(user);
             }
             else {
@@ -102,7 +102,7 @@ const AppStateProvider = ({children}: {children: ReactNode}) => {
     }) : null;
 
     const splitLink = wsLink ? split(
-        ({query}) => {
+        ({ query }) => {
             const definition = getMainDefinition(query);
             return (
                 definition.kind === "OperationDefinition" &&
@@ -124,16 +124,16 @@ const AppStateProvider = ({children}: {children: ReactNode}) => {
             }
         }
     });
-    
+
     // Render komponenty (children obalené ApolloClientem a ContextProviderem).
     return (
         <AppStateContext.Provider value={{
             appState,
             gqlError
-            }}>
-                <ApolloProvider client={client}>
-                    {children}
-                </ApolloProvider>
+        }}>
+            <ApolloProvider client={client}>
+                {children}
+            </ApolloProvider>
         </AppStateContext.Provider>
     );
 };

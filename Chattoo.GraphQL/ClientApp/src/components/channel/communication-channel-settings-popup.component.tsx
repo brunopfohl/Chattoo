@@ -1,22 +1,23 @@
-import { Button } from '@mui/material';
+import { Button, Dialog } from '@mui/material';
 import { useAddUserToCommunicationChannelMutation, useGetUsersForChannelQuery, useRemoveUserFromCommunicationChannelMutation } from 'graphql/graphql-types';
 import React, { useContext, useState } from 'react'
 import { AppUser } from '../../common/interfaces/app-user.interface';
 import { ChatStateContext } from '../chat/chat-state-provider.component';
-import Popup from '../popup/popup.component';
 import UserSearchPopup from '../user-search/user-search-popup.component';
+import { FC } from "react";
 
 interface CommunicationChannelSettingsProps {
-    onClose: () => void
+    onClose: () => void;
+    open: boolean;
 }
 
-const CommunicationChannelSettings: React.FC<CommunicationChannelSettingsProps> = (props: CommunicationChannelSettingsProps) => {
+const CommunicationChannelSettings: FC = () => {
     const [showUserSearchPopup, setShowUserSearchPopup] = useState<boolean>(false);
 
     const { currentChannel } = useContext(ChatStateContext);
 
     const getUsersForChannelQuery = useGetUsersForChannelQuery({
-        variables: { 
+        variables: {
             channelId: currentChannel?.id
         }
     });
@@ -32,15 +33,7 @@ const CommunicationChannelSettings: React.FC<CommunicationChannelSettingsProps> 
     // Metoda, kterou zavolá okno pro vyhledání uživatelů po jeho potvrzení.
     const onUserSearchSubmit = (selectedUsers: AppUser[]) => {
         selectedUsers.forEach(onUserAdd);
-    };
-
-    let userEditTimeout: NodeJS.Timeout = null;
-    const refreshUsersWithTimeOut = () => {
-        userEditTimeout && clearTimeout(userEditTimeout);
-
-        userEditTimeout = setTimeout(() => {
-            getUsersForChannelQuery.refetch();
-        }, 200);
+        getUsersForChannelQuery.refetch();
     };
 
     // Metoda, která přidá uživatele.
@@ -50,7 +43,7 @@ const CommunicationChannelSettings: React.FC<CommunicationChannelSettingsProps> 
                 userId: user.id,
                 channelId: currentChannel.id
             }
-        }).then(refreshUsersWithTimeOut);
+        });
     };
 
     // Metoda, která odebere uživatele.
@@ -66,30 +59,28 @@ const CommunicationChannelSettings: React.FC<CommunicationChannelSettingsProps> 
     };
 
     // Metoda pro render všech účastníků konverzace.
-    const renderParticipants = () => {
-        return (
-            users && users.map(user => (
-                <div key={user.id}>
+    const renderParticipants = () => (
+        users && users.map(user => (
+            <div key={user.id}>
+                <div>
+                    <span>profilka</span>
+                </div>
+                <div>
+                    <span>{user.userName}</span>
                     <div>
-                        <span>profilka</span>
-                    </div>
-                    <div>
-                        <span>{user.userName}</span>
-                        <div>
-                            <Button onClick={() => onUserRemove(user)}>
-                                Remove
-                            </Button>
-                        </div>
+                        <Button onClick={() => onUserRemove(user)}>
+                            Remove
+                        </Button>
                     </div>
                 </div>
-            ))
-        );
-    };
+            </div>
+        ))
+    );
 
     return (
         <>
             {showUserSearchPopup &&
-                <UserSearchPopup channelId={currentChannel?.id} onClose={() => setShowUserSearchPopup(false) } onSubmit={onUserSearchSubmit}/>
+                <UserSearchPopup channelId={currentChannel?.id} onClose={() => setShowUserSearchPopup(false)} onSubmit={onUserSearchSubmit} />
             }
             <div>
                 <span>Seznam účastníků</span>
@@ -97,7 +88,7 @@ const CommunicationChannelSettings: React.FC<CommunicationChannelSettingsProps> 
                     {renderParticipants()}
                 </div>
                 <div>
-                    <Button onClick={() => setShowUserSearchPopup(true) }/>
+                    <Button onClick={() => setShowUserSearchPopup(true)} />
                     <span>Přidat lidi</span>
                 </div>
             </div>
@@ -105,14 +96,11 @@ const CommunicationChannelSettings: React.FC<CommunicationChannelSettingsProps> 
     );
 }
 
-const CommunicationChannelSettingsPopup: React.FC<CommunicationChannelSettingsProps> = (props: CommunicationChannelSettingsProps) => {
-    const { onClose } = props;
+const CommunicationChannelSettingsPopup: React.FC<CommunicationChannelSettingsProps> = ({ onClose, open }) => (
+    <Dialog open={open} onClose={onClose}>
+        <CommunicationChannelSettings />
+    </Dialog>
+)
 
-    return (
-        <Popup title="Nastavení komunikačního kanálu" onClose={onClose}>
-            <CommunicationChannelSettings {...props} />
-        </Popup>
-    );
-}
-
+CommunicationChannelSettingsPopup.displayName = "CommunicationChannelSettingsPopup";
 export default CommunicationChannelSettingsPopup;
