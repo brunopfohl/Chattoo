@@ -5,7 +5,6 @@ import { AppStateContext } from '../components/app-state-provider.component';
 import Loading from '../components/loading/loading.component';
 
 const ComponentWrapper: FC<any> = ({ Component, pageProps }) => {
-  console.log("rerender");
   const router = useRouter();
   const { appState } = useContext(AppStateContext);
   const { loggedIn, processingAuth } = appState;

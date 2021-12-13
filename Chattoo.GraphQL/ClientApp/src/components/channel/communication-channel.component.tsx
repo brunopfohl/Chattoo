@@ -14,7 +14,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 const MESSAGES_PAGE_SIZE = 20;
 
 /** Číslo 1. stránky */
-const MESSAGES_FIRST_PAGE = 1;
+let MESSAGES_FIRST_PAGE = 1;
 
 /**
  * Komponenta komunikačního kanálu.
@@ -42,7 +42,7 @@ const CommunicationChannel: FC = () => {
     const messages = getForChannelRes?.data;
 
     // Metoda, po jejíž zavolání se načtou další zprávy (pokud jsou nějaké dostupné).
-    const tryLoadMoreMessages = useCallback(() => {
+    const tryLoadMoreMessages = () => {
         if (data?.communicationChannelMessages?.getForChannel?.hasNextPage) {
             fetchMore({
                 variables: { ...messagesQueryVariables, pageNumber: getForChannelRes.pageIndex + 1 },
@@ -75,7 +75,7 @@ const CommunicationChannel: FC = () => {
                 }
             });
         }
-    }, []);
+    };
 
     // UseEffect pro nastavení callbacku po přijetí nové zprávy z websocketu.
     useEffect(() => {
@@ -116,7 +116,7 @@ const CommunicationChannel: FC = () => {
     }, [currentChannel]);
 
     // Proměnná určující, jestli je zobrazený panel s nastavením komunikačního kanálu.
-    const [showSettings, setShowSettings] = useState<boolean>();
+    const [showSettings, setShowSettings] = useState<boolean>(false);
 
     // Metoda pro přidání nové zprávy.
     const [createMessage] = useCreateMessageMutation();
@@ -177,13 +177,12 @@ const CommunicationChannel: FC = () => {
             // Odeberu scroll eventu onScroll callback.
             messagesRef.current?.removeEventListener('scroll', onScroll);
         };
-    }, [messagesRef]);
+    }, [onScroll]);
 
     /** Pole zpráv pro zobrazení (memoized pro zamezení zbytečného výpočítávání) */
-    const messagesFiltered = useMemo(() => (messages &&
+    const messagesFiltered = useMemo(() => messages &&
         [...messages].reverse().map((msg, i, arr) =>
-            renderMessage(msg, arr[i - 1], arr[i + 1]))
-    ), [messages]);
+            renderMessage(msg, arr[i - 1], arr[i + 1])), [messages]);
 
     /** Callback volaný po zavření dialogu s nastavením komunikačního kanálu */
     const onSettingsClose = useCallback(() => { setShowSettings(false) }, [setShowSettings]);
@@ -194,9 +193,7 @@ const CommunicationChannel: FC = () => {
     return (
         <Stack sx={{ p: 1, height: "100%" }}>
             {/* Dialog pro nastavení komunikačního kanálu */}
-            {showSettings &&
-                <CommunicationChannelSettingsPopup onClose={onSettingsClose} />
-            }
+            <CommunicationChannelSettingsPopup onClose={onSettingsClose} open={showSettings} />
 
             {/* Záhlaví komponenty komunikačního kanálu */}
             <Stack direction="row" justifyContent="space-between">

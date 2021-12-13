@@ -31,7 +31,7 @@ const CommunicationChannelPreview: FC<CommunicationChannelPreviewProps> = (props
                 <PeopleAltIcon />
             </ListItemIcon>
             {/* Popis kanálu */}
-            <ListItemText primary={channel.name} secondary={channel.description} />
+            <ListItemText primary={channel.name} secondary={channel.description} sx={{ wordBreak: "break-word" }} />
         </ListItemButton>
     );
 }

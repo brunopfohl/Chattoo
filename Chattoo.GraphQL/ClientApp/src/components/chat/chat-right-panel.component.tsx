@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import { FC, useContext } from 'react'
 import CommunicationChannelMemo from '../channel/communication-channel.component';
 import { ChatStateContext } from './chat-state-provider.component';
@@ -14,7 +14,7 @@ const ChatRightPanel: FC = () => {
         <Paper sx={{ p: 1, height: "100%" }}>
             {currentChannel
                 ? <CommunicationChannelMemo />
-                : <h4>Nebyl zvolen komunikační kanál.</h4>
+                : <Typography variant="h3">Nebyl zvolen komunikační kanál.</Typography>
             }
         </Paper>
     );

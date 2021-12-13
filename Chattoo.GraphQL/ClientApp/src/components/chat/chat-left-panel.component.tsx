@@ -21,19 +21,21 @@ const ChatLeftPanel: FC = () => {
     }, [setShowCreateCommunicationChannelPopup]);
 
     return (
-        <Paper sx={{ p: 1, height: "100%" }}>
+        <Paper sx={{ p: 1, height: "80vh", display: "flex" }}>
             {/* Dialog pro vytvoření kanálu */}
             <CommunicationChannelCreatePopup onClose={handleCreateCommunicationChannelDialogClose} open={showCreateCommunicationChannelPopup} />
-            <Stack direction="row" justifyContent="space-between">
-                {/* Nadpis */}
-                <Typography variant="h5">Chaty</Typography>
-                {/* Ikona pro otevření dialogu na vytvoření kanálu */}
-                <IconButton color="primary" onClick={handleCreateCommunicationChannelDialogOpen}>
-                    <AddCircleIcon />
-                </IconButton>
+            <Stack sx={{ flexGrow: 1 }}>
+                <Stack direction="row" justifyContent="space-between">
+                    {/* Nadpis */}
+                    <Typography variant="h5">Chaty</Typography>
+                    {/* Ikona pro otevření dialogu na vytvoření kanálu */}
+                    <IconButton color="primary" onClick={handleCreateCommunicationChannelDialogOpen}>
+                        <AddCircleIcon />
+                    </IconButton>
+                </Stack>
+                {/* Seznam kanálů */}
+                <CommunicationChannelList />
             </Stack>
-            {/* Seznam kanálů */}
-            <CommunicationChannelList />
         </Paper>
     );
 }

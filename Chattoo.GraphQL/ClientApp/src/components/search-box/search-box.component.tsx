@@ -37,7 +37,7 @@ const SearchBox: FC<SearchBoxProps> = (props) => {
     }, [debouncedSearchTerm]);
 
     return (
-        <TextField value={searchTerm} onChange={handleOnChange} placeholder={placeholder} />
+        <TextField size="small" fullWidth value={searchTerm} onChange={handleOnChange} placeholder={placeholder} />
     );
 }
 

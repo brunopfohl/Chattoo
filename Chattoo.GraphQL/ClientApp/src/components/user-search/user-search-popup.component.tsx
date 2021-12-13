@@ -1,4 +1,5 @@
-import { Button, Dialog } from '@mui/material';
+import CustomDialog from '@components/dialog/dialog.component';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, List, ListItem, Typography } from '@mui/material';
 import { useGetUsersQuery } from 'graphql/graphql-types';
 import { FC, useCallback, useMemo, useState } from 'react'
 import { AppUser } from '../../common/interfaces/app-user.interface';
@@ -14,8 +15,8 @@ interface UserSearchProps {
 }
 
 /** Komponenta - vyhledávání mezi uživateli */
-const UserSearch: FC<UserSearchProps> = (props) => {
-    const { onClose, onSubmit, channelId } = props;
+const UserSearchPopup: FC<UserSearchProps> = (props) => {
+    const { onClose, onSubmit, channelId, open } = props;
 
     const [searchTerm, setSearchTerm] = useState<string>();
 
@@ -71,47 +72,34 @@ const UserSearch: FC<UserSearchProps> = (props) => {
         onClose();
     }, [selectedUsers, onSubmit, onClose])
 
-    return (
-        <div>
-            {MemoSearchBox}
-            <div>
-                {selectedUsers.length > 0 && (
-                    <div>
-                        <span>
-                            {selectedUsers.map((user: AppUser) => user.userName).join(', ')}
-                        </span>
-                    </div>
-                )}
-            </div>
-            <div>
-                {
-                    users && users.length > 0 &&
-                    <span>
-                        Návrhy
-                    </span>
-                }
-                {users && users.length > 0
-                    ? users.map((u) => (
+    const MemoUsers = useMemo(() => {
+        if (users && users.length > 0) {
+            return (
+                <List>
+                    {users.map((u) =>
                         <UserSearchItem user={u} isSelected={isUserSelected(u)} key={u.id} addUser={addUser} removeUser={removeUser} />
-                    ))
-                    : <span>Nebyly nalezeny žádné výsledky</span>
-                }
-            </div>
+                    )}
+                </List>
+            );
+        }
 
-            <Button onClick={onSubmitHandler}>
-                Hotovo
-            </Button>
-        </div>
-    );
-}
-
-const UserSearchPopup: FC<UserSearchProps> = (props) => {
-    const { onClose, open } = props;
+        return (
+            <Typography sx={{ pt: 2, pb: 2 }} variant="subtitle2">Nebyly nalezeny žádné výsledky.</Typography>
+        );
+    }, [users]);
 
     return (
-        <Dialog open={open} onClose={onClose}>
-            <UserSearch {...props} />
-        </Dialog>
+        <CustomDialog
+            title="Hledej uživatele"
+            open={open}
+            onClose={onClose}
+            closeButtonPosition="top"
+            maxWidth="sm"
+            actions={[{ text: "Hotovo", onClick: onSubmitHandler, fullWidth: true }]}
+        >
+            {MemoSearchBox}
+            {MemoUsers}
+        </CustomDialog >
     );
 }
 

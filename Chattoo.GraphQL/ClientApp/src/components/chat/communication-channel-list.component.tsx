@@ -48,7 +48,7 @@ const CommunicationChannelList: FC = () => {
     }, [channels]);
 
     return (
-        <List>
+        <List sx={{ overflowY: "auto", flexGrow: 1, flexBasis: 100 }}>
             {channels && channels.map((ch, i) => (
                 <>
                     <CommunicationChannelPreview channel={ch} />

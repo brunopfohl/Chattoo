@@ -1,3 +1,4 @@
+import "../../scripts/wdyr";
 import AppStateProvider from '../components/app-state-provider.component';
 import ComponentWrapper from './_component-wrapper';
 import '../../styles/globals.css'

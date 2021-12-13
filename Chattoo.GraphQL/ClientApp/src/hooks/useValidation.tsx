@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ObjectSchema } from "yup";
 
 interface ValidationHookProps {
@@ -10,13 +10,17 @@ export const useValidation = (props: ValidationHookProps) => {
     const { schema, object } = props;
 
     const [isValid, setIsValid] = useState(true);
-    const [validationErrors, setValidationErrors] = useState<string[]>([]);
+    const [validationErrors, setValidationErrors] = useState<any>({});
 
-    useEffect(() => {
-        const validate = async () => {
-            await schema.validate(object, {
+    const validate = async () => {
+        await schema
+            .validate(object, {
                 abortEarly: false
-            }).catch((error) => {
+            })
+            .then(() => {
+                setIsValid(true);
+            })
+            .catch((error) => {
                 let errors = {};
 
                 error.inner.forEach(e => {
@@ -26,8 +30,9 @@ export const useValidation = (props: ValidationHookProps) => {
                 setValidationErrors(errors);
                 setIsValid(false);
             });
-        };
+    };
 
+    useEffect(() => {
         validate();
     }, [object]);
 
