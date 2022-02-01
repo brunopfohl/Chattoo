@@ -23,20 +23,19 @@ namespace Chattoo.Application.CommunicationChannelMessages.Queries.GetById
     public class GetCommunicationChannelMessageByIdQueryHandler : IRequestHandler<GetCommunicationChannelMessageByIdQuery, CommunicationChannelMessageDto>
     {
         private readonly IMapper _mapper;
-        private readonly ICommunicationChannelMessageRepository _communicationChannelMessageRepository;
 
-        public GetCommunicationChannelMessageByIdQueryHandler(IMapper mapper, ICommunicationChannelMessageRepository communicationChannelMessageRepository)
+        public GetCommunicationChannelMessageByIdQueryHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _communicationChannelMessageRepository = communicationChannelMessageRepository;
         }
 
         public async Task<CommunicationChannelMessageDto> Handle(GetCommunicationChannelMessageByIdQuery request, CancellationToken cancellationToken)
         {
-            // Načtu zprávu z datového zdroje (vyhodím výjimku, pokud se mi ji nepodaří dohledat).
-            var message = await _communicationChannelMessageRepository.GetByIdAsync<CommunicationChannelMessageDto>(request.Id, true);
-
-            return message;
+            // // Načtu zprávu z datového zdroje (vyhodím výjimku, pokud se mi ji nepodaří dohledat).
+            // var message = await _communicationChannelMessageRepository.GetByIdAsync<CommunicationChannelMessageDto>(request.Id, true);
+            //
+            // return message;
+            return null;
         }
     }
 }

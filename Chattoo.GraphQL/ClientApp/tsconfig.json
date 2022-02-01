@@ -10,12 +10,24 @@
     ],
     "baseUrl": "./src/",
     "paths": {
-      "@graphql/*": [ "./generated/graphql/*" ],
-      "@interfaces/*": [ "./common/intefaces/*" ],
-      "@classes/*": [ "./common/intefaces/*" ],
-      "@validations/*": [ "./common/intefaces/*" ],
-      "@components/*": [ "./components/*" ],
-      "@hooks/*": [ "./hooks/*" ],
+      "@graphql/*": [
+        "./generated/graphql/*"
+      ],
+      "@interfaces/*": [
+        "./common/intefaces/*"
+      ],
+      "@classes/*": [
+        "./common/intefaces/*"
+      ],
+      "@validations/*": [
+        "./common/intefaces/*"
+      ],
+      "@components/*": [
+        "./components/*"
+      ],
+      "@hooks/*": [
+        "./hooks/*"
+      ],
     },
     "noImplicitAny": true,
     "noImplicitThis": true,

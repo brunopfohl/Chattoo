@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Chattoo.Application.Common.Exceptions;
 using Chattoo.Domain.Entities;
+using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Repositories;
 using MediatR;
 

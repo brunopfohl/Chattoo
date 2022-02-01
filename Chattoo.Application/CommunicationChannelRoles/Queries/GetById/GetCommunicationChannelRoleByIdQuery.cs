@@ -21,19 +21,18 @@ namespace Chattoo.Application.CommunicationChannelRoles.Queries.GetById
     public class GetCommunicationChannelRoleByIdQueryHandler : IRequestHandler<GetCommunicationChannelRoleByIdQuery, CommunicationChannelRoleDto>
     {
         private readonly IMapper _mapper;
-        private readonly ICommunicationChannelRoleRepository _communicationChannelRoleRepository;
 
-        public GetCommunicationChannelRoleByIdQueryHandler(IMapper mapper, ICommunicationChannelRoleRepository communicationChannelRoleRepository)
+        public GetCommunicationChannelRoleByIdQueryHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _communicationChannelRoleRepository = communicationChannelRoleRepository;
         }
 
         public async Task<CommunicationChannelRoleDto> Handle(GetCommunicationChannelRoleByIdQuery request, CancellationToken cancellationToken)
         {
-            // Načtu uživatelskou roli z datového zdroje (vyhodím výjimku, pokud se mi to nepodaří).
-            var role = await _communicationChannelRoleRepository.GetByIdAsync<CommunicationChannelRoleDto>(request.Id, true);
-            return role;
+            // // Načtu uživatelskou roli z datového zdroje (vyhodím výjimku, pokud se mi to nepodaří).
+            // var role = await _communicationChannelRoleRepository.GetByIdAsync<CommunicationChannelRoleDto>(request.Id, true);
+            // return role;
+            return null;
         }
     }
 }

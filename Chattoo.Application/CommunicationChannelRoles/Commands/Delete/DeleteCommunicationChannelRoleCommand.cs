@@ -21,22 +21,20 @@ namespace Chattoo.Application.CommunicationChannelRoles.Commands.Delete
     public class DeleteCommunicationChannelRoleCommandHandler : IRequestHandler<DeleteCommunicationChannelRoleCommand, Unit>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICommunicationChannelRoleRepository _communicationChannelRoleRepository;
 
-        public DeleteCommunicationChannelRoleCommandHandler(IUnitOfWork unitOfWork, ICommunicationChannelRoleRepository communicationChannelRoleRepository)
+        public DeleteCommunicationChannelRoleCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _communicationChannelRoleRepository = communicationChannelRoleRepository;
         }
 
         public async Task<Unit> Handle(DeleteCommunicationChannelRoleCommand request, CancellationToken cancellationToken)
         {
-            // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi to nepodaří).
-            var entity = await _communicationChannelRoleRepository.GetByIdAsync(request.Id, true);
-            
-            // Záznam se podařilo nalézt -> smažu ho a uložím změny.
-            _communicationChannelRoleRepository.Remove(entity);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            // // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi to nepodaří).
+            // var entity = await _communicationChannelRoleRepository.GetByIdAsync(request.Id, true);
+            //
+            // // Záznam se podařilo nalézt -> smažu ho a uložím změny.
+            // _communicationChannelRoleRepository.Remove(entity);
+            // await _unitOfWork.SaveChangesAsync(cancellationToken);
             
             return Unit.Value;
         }

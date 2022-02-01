@@ -1,7 +1,6 @@
+using Chattoo.Application.CalendarEvents.DTOs;
+using Chattoo.Application.CalendarEvents.Queries;
 using Chattoo.Application.Common.Models;
-using Chattoo.Application.CommunicationChannelCalendarEvents.DTOs;
-using Chattoo.Application.CommunicationChannelCalendarEvents.Queries.GetById;
-using Chattoo.Application.CommunicationChannelCalendarEvents.Queries.GetForCommunicationChannel;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;
@@ -15,7 +14,7 @@ namespace Chattoo.GraphQL.Query
         {
             
             Name = "CommunicationChannelCalendarEventQuery";
-            this.FieldAsyncWithScope<CommunicationChannelCalendarEventGraphType, CommunicationChannelCalendarEventDto>(
+            this.FieldAsyncWithScope<CommunicationChannelCalendarEventGraphType, CalendarEventDto>(
                 "get",
                 arguments: 
                 new QueryArguments
@@ -24,7 +23,7 @@ namespace Chattoo.GraphQL.Query
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var query = new GetCommunicationChannelCalendarEventByIdQuery()
+                    var query = new GetCalendarEventByIdQuery()
                     {
                         Id = ctx.GetString("id")
                     };
@@ -33,7 +32,7 @@ namespace Chattoo.GraphQL.Query
                 }
             );
             
-            this.FieldAsyncWithScope<PageInfoGraphType<CommunicationChannelCalendarEventGraphType, CommunicationChannelCalendarEventDto>, PaginatedList<CommunicationChannelCalendarEventDto>>(
+            this.FieldAsyncWithScope<PageInfoGraphType<CommunicationChannelCalendarEventGraphType, CalendarEventDto>, PaginatedList<CalendarEventDto>>(
                 "getForCommunicationChannel",
                 arguments: 
                 new QueryArgumentsWithPagination
@@ -42,7 +41,7 @@ namespace Chattoo.GraphQL.Query
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var query = new GetCommunicationChannelCalendarEventsForCommunicationChannelQuery()
+                    var query = new GetCalendarEventsForCommunicationChannelQuery()
                     {
                         CommunicationChannelId = ctx.GetString("channelId"),
                         PageNumber = ctx.GetInt("pageNumber"),

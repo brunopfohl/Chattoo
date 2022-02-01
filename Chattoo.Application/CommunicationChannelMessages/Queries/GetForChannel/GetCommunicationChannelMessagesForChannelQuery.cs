@@ -30,28 +30,27 @@ namespace Chattoo.Application.CommunicationChannelMessages.Queries.GetForChannel
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly ICommunicationChannelRepository _communicationChannelRepository;
-        private readonly ICommunicationChannelMessageRepository _communicationChannelMessageRepository;
 
-        public GetCommunicationChannelMessagesForUserInChannelQueryHandler(IMapper mapper, IUserRepository userRepository, ICommunicationChannelRepository communicationChannelRepository, ICommunicationChannelMessageRepository communicationChannelMessageRepository)
+        public GetCommunicationChannelMessagesForUserInChannelQueryHandler(IMapper mapper, IUserRepository userRepository, ICommunicationChannelRepository communicationChannelRepository)
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _communicationChannelRepository = communicationChannelRepository;
-            _communicationChannelMessageRepository = communicationChannelMessageRepository;
         }
 
         public override async Task<PaginatedList<CommunicationChannelMessageDto>> Handle(GetCommunicationChannelMessagesForChannelQuery request, CancellationToken cancellationToken)
         {
-            // Zjistím, zda-li komunikační kanál skutečně existuje.
-            _communicationChannelRepository.ThrowIfNotExists(request.ChannelId);
-
-            // Načtu kolekci rolí uživatele v komunikačním kanálu a zpracuju na stránkovanou kolekci.
-            var result = await _communicationChannelMessageRepository.GetByChannelId(request.ChannelId)
-                .OrderByDescending(m => m.CreatedAt)
-                .ProjectTo<CommunicationChannelMessageDto>(_mapper.ConfigurationProvider)
-                .PaginatedListOrderedAsync(request.PageNumber, request.PageSize, m => m.CreatedAt);
-
-            return result;
+            // // Zjistím, zda-li komunikační kanál skutečně existuje.
+            // _communicationChannelRepository.ThrowIfNotExists(request.ChannelId);
+            //
+            // // Načtu kolekci rolí uživatele v komunikačním kanálu a zpracuju na stránkovanou kolekci.
+            // var result = await _communicationChannelMessageRepository.GetByChannelId(request.ChannelId)
+            //     .OrderByDescending(m => m.CreatedAt)
+            //     .ProjectTo<CommunicationChannelMessageDto>(_mapper.ConfigurationProvider)
+            //     .PaginatedListOrderedAsync(request.PageNumber, request.PageSize, m => m.CreatedAt);
+            //
+            // return result;
+            return null;
         }
     }
 }

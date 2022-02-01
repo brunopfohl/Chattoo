@@ -43,7 +43,7 @@ namespace Chattoo.Application.Users.Queries.GetForCommunicationChannel
         public override async Task<PaginatedList<UserDto>> Handle(GetUsersForCommunicationChannelQuery request, CancellationToken cancellationToken)
         {
             // Ověřím si, že komunikační kanál existuje.
-            _communicationChannelRepository.ThrowIfNotExists(request.ChannelId);
+            //_communicationChannelRepository.ThrowIfNotExists(request.ChannelId);
 
             // Načtu kolekci uživatelů v dané skupině a zpracuju na stránkovanou kolekci.
             var result = await _userRepository.GetByChannelId(request.ChannelId)

@@ -36,15 +36,15 @@ namespace Chattoo.Application.Groups.Commands.Update
 
         public async Task<Unit> Handle(UpdateGroupCommand request, CancellationToken cancellationToken)
         {
-            // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
-            var entity = await _groupRepository.GetByIdAsync(request.Id, true);
-
-            // Naplním entitu daty z příkazu.
-            entity.Name = request.Name;
-
-            // Přidám záznam do datového zdroje a uložím.`
-            await _groupRepository.AddOrUpdateAsync(entity, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            // // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
+            // var entity = await _groupRepository.GetByIdAsync(request.Id, true);
+            //
+            // // Naplním entitu daty z příkazu.
+            // entity.Name = request.Name;
+            //
+            // // Přidám záznam do datového zdroje a uložím.`
+            // await _groupRepository.AddOrUpdateAsync(entity, cancellationToken);
+            // await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

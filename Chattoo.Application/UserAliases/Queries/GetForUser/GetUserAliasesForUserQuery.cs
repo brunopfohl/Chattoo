@@ -24,26 +24,25 @@ namespace Chattoo.Application.UserAliases.Queries.GetForUser
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
-        private readonly IUserAliasRepository _userAliasRepository;
 
-        public GetUserAliasesForUserQueryHandler(IUserRepository userRepository, IMapper mapper, IUserAliasRepository userAliasRepository)
+        public GetUserAliasesForUserQueryHandler(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
             _mapper = mapper;
-            _userAliasRepository = userAliasRepository;
         }
 
         public override async Task<PaginatedList<UserAliasDto>> Handle(GetUserAliasesForUserQuery request, CancellationToken cancellationToken)
         {
-            // Ověřím, zda-li uživatel existuje.
-            _userRepository.ThrowIfNotExists(request.UserId);
-
-            // Načtu přezdívek uživatele a zpracuju na stránkovanou kolekci.
-            var result = await _userAliasRepository.GetByUserId(request.UserId)
-                .ProjectTo<UserAliasDto>(_mapper.ConfigurationProvider)
-                .PaginatedListAsync(request.PageNumber, request.PageSize);
-
-            return result;
+            // // Ověřím, zda-li uživatel existuje.
+            // _userRepository.ThrowIfNotExists(request.UserId);
+            //
+            // // Načtu přezdívek uživatele a zpracuju na stránkovanou kolekci.
+            // var result = await _userAliasRepository.GetByUserId(request.UserId)
+            //     .ProjectTo<UserAliasDto>(_mapper.ConfigurationProvider)
+            //     .PaginatedListAsync(request.PageNumber, request.PageSize);
+            //
+            // return result;
+            return null;
         }
     }
 }

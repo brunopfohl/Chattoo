@@ -34,29 +34,28 @@ namespace Chattoo.Application.GroupRoles.Queries.GetForUserInGroup
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IGroupRepository _groupRepository;
-        private readonly IGroupRoleRepository _groupRoleRepository;
 
-        public GetGroupRolesForUserInGroupQueryHandler(IMapper mapper, IUserRepository userRepository, IGroupRepository groupRepository, IGroupRoleRepository groupRoleRepository)
+        public GetGroupRolesForUserInGroupQueryHandler(IMapper mapper, IUserRepository userRepository, IGroupRepository groupRepository)
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _groupRepository = groupRepository;
-            _groupRoleRepository = groupRoleRepository;
         }
 
         public override async Task<PaginatedList<GroupRoleDto>> Handle(GetGroupRolesForUserInGroupQuery request, CancellationToken cancellationToken)
         {
-            // Zkontoluji, zda-li uživatel existuje.
-            _userRepository.ThrowIfNotExists(request.UserId);
-            // Zkontroluji, zda-li skupina uživatelů existuje.
-            _groupRepository.ThrowIfNotExists(request.GroupId);
-
-            // Načtu kolekci uživatelských rolí uživatele v dané skupině a zpracuju na stránkovanou kolekci.
-            var result = await _groupRoleRepository.GetForUserInGroup(request.UserId, request.GroupId)
-                .ProjectTo<GroupRoleDto>(_mapper.ConfigurationProvider)
-                .PaginatedListAsync(request.PageNumber, request.PageSize);
-
-            return result;
+            // // Zkontoluji, zda-li uživatel existuje.
+            // _userRepository.ThrowIfNotExists(request.UserId);
+            // // Zkontroluji, zda-li skupina uživatelů existuje.
+            // _groupRepository.ThrowIfNotExists(request.GroupId);
+            //
+            // // Načtu kolekci uživatelských rolí uživatele v dané skupině a zpracuju na stránkovanou kolekci.
+            // var result = await _groupRoleRepository.GetForUserInGroup(request.UserId, request.GroupId)
+            //     .ProjectTo<GroupRoleDto>(_mapper.ConfigurationProvider)
+            //     .PaginatedListAsync(request.PageNumber, request.PageSize);
+            //
+            // return result;
+            return null;
         }
     }
 }

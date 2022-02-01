@@ -23,19 +23,18 @@ namespace Chattoo.Application.GroupRoles.Queries.GetById
     public class GetGroupRoleByIdQueryHandler : IRequestHandler<GetGroupRoleByIdQuery, GroupRoleDto>
     {
         private readonly IMapper _mapper;
-        private readonly IGroupRoleRepository _groupRoleRepository;
 
-        public GetGroupRoleByIdQueryHandler(IMapper mapper, IGroupRoleRepository groupRoleRepository)
+        public GetGroupRoleByIdQueryHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _groupRoleRepository = groupRoleRepository;
         }
 
         public async Task<GroupRoleDto> Handle(GetGroupRoleByIdQuery request, CancellationToken cancellationToken)
         {
-            // Načtu uživatelskou roli z datového zdroje (vyhodím výjimku, pokud se mi ji nepodaří dohledat).
-            var groupRole = await _groupRoleRepository.GetByIdAsync<GroupRoleDto>(request.Id, true);
-            return groupRole;
+            // // Načtu uživatelskou roli z datového zdroje (vyhodím výjimku, pokud se mi ji nepodaří dohledat).
+            // var groupRole = await _groupRoleRepository.GetByIdAsync<GroupRoleDto>(request.Id, true);
+            // return groupRole;
+            return null;
         }
     }
 }

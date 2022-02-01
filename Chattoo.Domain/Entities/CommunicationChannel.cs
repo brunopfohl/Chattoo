@@ -7,13 +7,13 @@ namespace Chattoo.Domain.Entities
     /// <summary>
     /// Entita komunikačního kanálu sloužícího pro sdílení obsahu (zpráv) mezi uživateli.
     /// </summary>
-    public class CommunicationChannel : AuditableEntity, IAuditableEntity
+    public class CommunicationChannel : AuditableEntity, IAuditableEntity, IAggregateRoot
     {
-        public CommunicationChannel()
+        protected CommunicationChannel()
         {
             Messages = new List<CommunicationChannelMessage>();
-            Users = new List<User>();
             Roles = new List<CommunicationChannelRole>();
+            Users = new List<UserToCommunicationChannel>();
         }
         
         /// <summary>
@@ -27,11 +27,6 @@ namespace Chattoo.Domain.Entities
         public string Description { get; set; }
 
         /// <summary>
-        /// Vrací nebo nastavuje kolekci uživatelů, kteří jsou zařazeni do tohoto komunikačního kanálu.
-        /// </summary>
-        public virtual ICollection<User> Users { get; set; }
-
-        /// <summary>
         /// Vrací nebo nastavuje kolekci zpráv, které byly mezi uživateli sdíleny pomocí tohoto komunikačního kanálu.
         /// </summary>
         public virtual ICollection<CommunicationChannelMessage> Messages { get; set; }
@@ -40,5 +35,7 @@ namespace Chattoo.Domain.Entities
         /// Vrací nebo nastavuje kolekci dostupných rolí pro uživatele v tomto kanálu (např. admin, moderátor, quest,...).
         /// </summary>
         public virtual ICollection<CommunicationChannelRole> Roles { get; set; }
+        
+        public virtual ICollection<UserToCommunicationChannel> Users { get; set; }
     }
 }

@@ -21,22 +21,20 @@ namespace Chattoo.Application.UserAliases.Commands.Delete
     public class DeleteUserAliasCommandHandler : IRequestHandler<DeleteUserAliasCommand, Unit>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IUserAliasRepository _userAliasRepository;
 
-        public DeleteUserAliasCommandHandler(IUnitOfWork unitOfWork, IUserAliasRepository userAliasRepository)
+        public DeleteUserAliasCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _userAliasRepository = userAliasRepository;
         }
 
         public async Task<Unit> Handle(DeleteUserAliasCommand request, CancellationToken cancellationToken)
         {
-            // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
-            var entity = await _userAliasRepository.GetByIdAsync(request.Id, true);
-            
-            // Záznam se podařilo nalézt -> smažu ho a uložím změny.
-            _userAliasRepository.Remove(entity);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            // // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
+            // var entity = await _userAliasRepository.GetByIdAsync(request.Id, true);
+            //
+            // // Záznam se podařilo nalézt -> smažu ho a uložím změny.
+            // _userAliasRepository.Remove(entity);
+            // await _unitOfWork.SaveChangesAsync(cancellationToken);
             
             return Unit.Value;
         }

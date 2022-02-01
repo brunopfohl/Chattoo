@@ -4,6 +4,7 @@ using AutoMapper;
 using Chattoo.Application.Common.Exceptions;
 using Chattoo.Application.CommunicationChannels.DTOs;
 using Chattoo.Domain.Entities;
+using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Repositories;
 using MediatR;
 
@@ -42,32 +43,33 @@ namespace Chattoo.Application.CommunicationChannels.Commands.RemoveUser
 
         public async Task<CommunicationChannelDto> Handle(RemoveUserFromCommunicationChannelCommand request, CancellationToken cancellationToken)
         {
-            // Získám uživatele pomocí jeho Id.
-            // Vyhodím výjimku, pokud uživatel s předaným Id neexistuje.
-            var user = await _userRepository.GetByIdAsync(request.UserId)
-                         ?? throw new NotFoundException(nameof(User), request.UserId);
-            // Získám komunikační kanál pomocí jeho Id.
-            // Vyhodím výjimku, pokud uživatel s předaným Id neexistuje.
-            var channel = await _communicationChannelRepository.GetByIdAsync(request.ChannelId)
-                         ?? throw new NotFoundException(nameof(CommunicationChannel), request.ChannelId);
-            
-            // TODO: kontrola, že má uživatel právo na tuto akci.
-            
-            // Pokud uživatel není součástí komunikačního kanálu, nelze ho z něj odebrat.
-            if (!channel.Users.Contains(user))
-            {
-                throw new NotFoundException(
-                    $"User with Id {request.UserId} is not part of communication channel with Id {request.ChannelId}."
-                );
-            }
-            
-            // Odeberu uživatele z komunikačního kanálu.
-            channel.Users.Remove(user);
-            
-            // Promítnu změny do datového zdroje.
-            _unitOfWork.SaveChanges();
-
-            return _mapper.Map<CommunicationChannelDto>(channel);
+            // // Získám uživatele pomocí jeho Id.
+            // // Vyhodím výjimku, pokud uživatel s předaným Id neexistuje.
+            // var user = await _userRepository.GetByIdAsync(request.UserId)
+            //              ?? throw new NotFoundException(nameof(User), request.UserId);
+            // // Získám komunikační kanál pomocí jeho Id.
+            // // Vyhodím výjimku, pokud uživatel s předaným Id neexistuje.
+            // var channel = await _communicationChannelRepository.GetByIdAsync(request.ChannelId)
+            //              ?? throw new NotFoundException(nameof(CommunicationChannel), request.ChannelId);
+            //
+            // // TODO: kontrola, že má uživatel právo na tuto akci.
+            //
+            // // Pokud uživatel není součástí komunikačního kanálu, nelze ho z něj odebrat.
+            // if (!channel.Users.Contains(user))
+            // {
+            //     throw new NotFoundException(
+            //         $"User with Id {request.UserId} is not part of communication channel with Id {request.ChannelId}."
+            //     );
+            // }
+            //
+            // // Odeberu uživatele z komunikačního kanálu.
+            // channel.Users.Remove(user);
+            //
+            // // Promítnu změny do datového zdroje.
+            // _unitOfWork.SaveChanges();
+            //
+            // return _mapper.Map<CommunicationChannelDto>(channel);
+            return _mapper.Map<CommunicationChannelDto>(null);
         }
     }
 }

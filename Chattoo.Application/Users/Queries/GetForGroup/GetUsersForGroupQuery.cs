@@ -5,7 +5,6 @@ using AutoMapper.QueryableExtensions;
 using Chattoo.Application.Common.Mappings;
 using Chattoo.Application.Common.Models;
 using Chattoo.Application.Common.Queries;
-using Chattoo.Application.UserAliases.DTOs;
 using Chattoo.Application.Users.DTOs;
 using Chattoo.Domain.Repositories;
 
@@ -38,7 +37,7 @@ namespace Chattoo.Application.Users.Queries.GetForGroup
         public override async Task<PaginatedList<UserDto>> Handle(GetUsersForGroupQuery request, CancellationToken cancellationToken)
         {
             // Ověřím, zda-li skupina uživatelů skutečně existuje.
-            _groupRepository.ThrowIfNotExists(request.GroupId);
+            //_groupRepository.ThrowIfNotExists(request.GroupId);
 
             // Načtu seznam uživatelů ze skupiny.
             var result = await _userRepository.GetByGroupId(request.GroupId)

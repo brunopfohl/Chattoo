@@ -7,12 +7,12 @@ namespace Chattoo.Domain.Entities
     /// <summary>
     /// Entita skupiny uživatelů.
     /// </summary>
-    public class Group : AuditableEntity, IAuditableEntity
+    public class Group : AuditableEntity, IAuditableEntity, IAggregateRoot
     {
-        public Group()
+        protected Group()
         {
-            Users = new List<User>();
             Roles = new List<GroupRole>();
+            Participants = new List<UserToGroup>();
         }
         
         /// <summary>
@@ -21,13 +21,10 @@ namespace Chattoo.Domain.Entities
         public string Name { get; set; }
         
         /// <summary>
-        /// Vrací nebo nastavuje kolekci uživatelů, kteří jsou součástí této skupiny.
-        /// </summary>
-        public virtual ICollection<User> Users { get; set; }
-        
-        /// <summary>
         /// Vrací nebo nastavuje kolekci uživatelských rolí, které jsou dostupné v této skupině.
         /// </summary>
         public virtual ICollection<GroupRole> Roles { get; set; }
+        
+        public virtual ICollection<UserToGroup> Participants { get; set; }
     }
 }

@@ -31,12 +31,12 @@ namespace Chattoo.Application.CommunicationChannels.Commands.Delete
 
         public async Task<Unit> Handle(DeleteCommunicationChannelCommand request, CancellationToken cancellationToken)
         {
-            // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi to nepodaří).
-            var entity = await _communicationChannelRepository.GetByIdAsync(request.Id, true);
-            
-            // Záznam se podařilo nalézt -> smažu ho a uložím změny.
-            _communicationChannelRepository.Remove(entity);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            // // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi to nepodaří).
+            // var entity = await _communicationChannelRepository.GetByIdAsync(request.Id, true);
+            //
+            // // Záznam se podařilo nalézt -> smažu ho a uložím změny.
+            // _communicationChannelRepository.Remove(entity);
+            // await _unitOfWork.SaveChangesAsync(cancellationToken);
             
             return Unit.Value;
         }

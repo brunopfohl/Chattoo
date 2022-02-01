@@ -32,26 +32,24 @@ namespace Chattoo.Application.CommunicationChannelRoles.Commands.Update
     public class UpdateCommunicationChannelRoleCommandHandler : IRequestHandler<UpdateCommunicationChannelRoleCommand, Unit>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICommunicationChannelRoleRepository _communicationChannelRoleRepository;
 
-        public UpdateCommunicationChannelRoleCommandHandler(IUnitOfWork unitOfWork, ICommunicationChannelRoleRepository communicationChannelRoleRepository)
+        public UpdateCommunicationChannelRoleCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _communicationChannelRoleRepository = communicationChannelRoleRepository;
         }
 
         public async Task<Unit> Handle(UpdateCommunicationChannelRoleCommand request, CancellationToken cancellationToken)
         {
-            // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi to nepodaří).
-            var entity = await _communicationChannelRoleRepository.GetByIdAsync(request.Id, true);
-
-            // Naplním entitu daty z příkazu.
-            entity.Name = request.Name;
-            entity.Permission = request.Permission;
-
-            // Upravím záznam a uložím.
-            await _communicationChannelRoleRepository.AddOrUpdateAsync(entity, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            // // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi to nepodaří).
+            // var entity = await _communicationChannelRoleRepository.GetByIdAsync(request.Id, true);
+            //
+            // // Naplním entitu daty z příkazu.
+            // entity.Name = request.Name;
+            // entity.Permission = request.Permission;
+            //
+            // // Upravím záznam a uložím.
+            // await _communicationChannelRoleRepository.AddOrUpdateAsync(entity, cancellationToken);
+            // await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Chattoo.Application\Chattoo.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Persistence\Migrations" />
+  </ItemGroup>
+
 </Project>

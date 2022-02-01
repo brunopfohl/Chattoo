@@ -26,25 +26,23 @@ namespace Chattoo.Application.CommunicationChannelMessages.Commands.Update
     public class UpdateCommunicationChannelMessageCommandHandler : IRequestHandler<UpdateCommunicationChannelMessageCommand, Unit>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICommunicationChannelMessageRepository _communicationChannelMessageRepository;
 
-        public UpdateCommunicationChannelMessageCommandHandler(IUnitOfWork unitOfWork, ICommunicationChannelMessageRepository communicationChannelMessageRepository)
+        public UpdateCommunicationChannelMessageCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _communicationChannelMessageRepository = communicationChannelMessageRepository;
         }
 
         public async Task<Unit> Handle(UpdateCommunicationChannelMessageCommand request, CancellationToken cancellationToken)
         {
-            // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se ho nepodařín dohledat).
-            var entity = await _communicationChannelMessageRepository.GetByIdAsync(request.Id, true);
-
-            // Naplním entitu daty z příkazu.
-            entity.Content = request.Content;
-
-            // Upravím záznam a uložím.
-            await _communicationChannelMessageRepository.AddOrUpdateAsync(entity, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            // // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se ho nepodařín dohledat).
+            // var entity = await _communicationChannelMessageRepository.GetByIdAsync(request.Id, true);
+            //
+            // // Naplním entitu daty z příkazu.
+            // entity.Content = request.Content;
+            //
+            // // Upravím záznam a uložím.
+            // await _communicationChannelMessageRepository.AddOrUpdateAsync(entity, cancellationToken);
+            // await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

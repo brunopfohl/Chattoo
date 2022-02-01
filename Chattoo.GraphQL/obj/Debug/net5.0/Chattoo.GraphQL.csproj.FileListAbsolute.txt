@@ -96,6 +96,7 @@
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/bin/Debug/net5.0/Chattoo.Infrastructure.pdb
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/bin/Debug/net5.0/Chattoo.Domain.pdb
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/bin/Debug/net5.0/System.Reactive.xml
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/obj/Debug/net5.0/Chattoo.GraphQL.csproj.AssemblyReference.cache
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/obj/Debug/net5.0/Chattoo.GraphQL.GeneratedMSBuildEditorConfig.editorconfig
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/obj/Debug/net5.0/Chattoo.GraphQL.AssemblyInfoInputs.cache
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/obj/Debug/net5.0/Chattoo.GraphQL.AssemblyInfo.cs
@@ -121,4 +122,3 @@
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/obj/Debug/net5.0/ref/Chattoo.GraphQL.dll
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/obj/Debug/net5.0/Chattoo.GraphQL.pdb
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/obj/Debug/net5.0/Chattoo.GraphQL.genruntimeconfig.cache
-/home/brunopfohl/RiderProjects/Chattoo/Chattoo.GraphQL/obj/Debug/net5.0/Chattoo.GraphQL.csproj.AssemblyReference.cache

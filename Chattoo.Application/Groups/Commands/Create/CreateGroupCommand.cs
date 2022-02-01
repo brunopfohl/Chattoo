@@ -35,18 +35,20 @@ namespace Chattoo.Application.Groups.Commands.Create
 
         public async Task<string> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
         {
-            // Vytvořím entitu naplněnou daty z příkazu.
-            var entity = new Group()
-            {
-                Name = request.Name
-            };
+            // // Vytvořím entitu naplněnou daty z příkazu.
+            // var entity = new Group()
+            // {
+            //     Name = request.Name
+            // };
+            //
+            // // Přidám záznam do datového zdroje a uložím.`
+            // await _groupRepository.AddOrUpdateAsync(entity, cancellationToken);
+            // await _unitOfWork.SaveChangesAsync(cancellationToken);
+            //
+            // // Vrátím Id vytvořeného záznamu.
+            // return entity.Id;
 
-            // Přidám záznam do datového zdroje a uložím.`
-            await _groupRepository.AddOrUpdateAsync(entity, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-            // Vrátím Id vytvořeného záznamu.
-            return entity.Id;
+            return null;
         }
     }
 }

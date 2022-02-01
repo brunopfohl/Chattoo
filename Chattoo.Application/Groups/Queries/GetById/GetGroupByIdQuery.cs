@@ -33,9 +33,10 @@ namespace Chattoo.Application.Groups.Queries.GetById
 
         public async Task<GroupDto> Handle(GetGroupByIdQuery request, CancellationToken cancellationToken)
         {
-            // Načtu skupinu z datového zdroje (vyhodím výjimku, pokud se mi skupinu nepodaří dohledat).
-            var group = await _groupRepository.GetByIdAsync<GroupDto>(request.Id, true);
-            return group;
+            // // Načtu skupinu z datového zdroje (vyhodím výjimku, pokud se mi skupinu nepodaří dohledat).
+            // var group = await _groupRepository.GetByIdAsync<GroupDto>(request.Id, true);
+            // return group;
+            return null;
         }
     }
 }

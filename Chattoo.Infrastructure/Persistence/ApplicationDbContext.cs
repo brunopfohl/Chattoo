@@ -50,11 +50,7 @@ namespace Chattoo.Infrastructure.Persistence
 
                 if (appUser == null)
                 {
-                    var newAppUser = new User()
-                    {
-                        Id = entry.Entity.Id,
-                        UserName = entry.Entity.UserName
-                    };
+                    var newAppUser = User.Create(entry.Entity.Id, entry.Entity.UserName);
 
                     await users.AddAsync(newAppUser, cancellationToken);
                 }

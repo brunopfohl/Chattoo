@@ -19,11 +19,11 @@ namespace Chattoo.Domain.Repositories
 
         IQueryable<T> GetAll<T>();
 
-        TEntity GetById(TKey id, bool throwNotFound = false);
+        TEntity GetById(TKey id);
         
-        Task<TEntity> GetByIdAsync(TKey id, bool throwNotFound = false);
+        Task<TEntity> GetByIdAsync(TKey id);
 
-        Task<T> GetByIdAsync<T>(TKey id, bool throwNotFound = false);
+        Task<T> GetByIdAsync<T>(TKey id);
 
         void Edit(TEntity entity);
         public void RemoveRange(IEnumerable<TEntity> entities);
@@ -39,8 +39,6 @@ namespace Chattoo.Domain.Repositories
         Task<List<T>> ToListAsync<T>(IQueryable<T> query);
         
         bool Exists(TKey id);
-        
-        void ThrowIfNotExists(TKey id);
     }
 
     /// <summary>

@@ -21,19 +21,18 @@ namespace Chattoo.Application.UserAliases.Queries.GetById
     public class GetUserAliasByIdQueryHandler : IRequestHandler<GetUserAliasByIdQuery, UserAliasDto>
     {
         private readonly IMapper _mapper;
-        private readonly IUserAliasRepository _userAliasRepository;
 
-        public GetUserAliasByIdQueryHandler(IMapper mapper, IUserAliasRepository userAliasRepository)
+        public GetUserAliasByIdQueryHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _userAliasRepository = userAliasRepository;
         }
 
         public async Task<UserAliasDto> Handle(GetUserAliasByIdQuery request, CancellationToken cancellationToken)
         {
-            // Načtu uživatelskou přezdívku z datového zdroje.
-            var userAlias = await _userAliasRepository.GetByIdAsync<UserAliasDto>(request.Id, true);
-            return userAlias;
+            // // Načtu uživatelskou přezdívku z datového zdroje.
+            // var userAlias = await _userAliasRepository.GetByIdAsync<UserAliasDto>(request.Id, true);
+            // return userAlias;
+            return null;
         }
     }
 }

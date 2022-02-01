@@ -38,15 +38,16 @@ namespace Chattoo.Application.CommunicationChannels.Queries.GetForUser
 
         public override async Task<PaginatedList<CommunicationChannelDto>> Handle(GetCommunicationChannelsForUserQuery request, CancellationToken cancellationToken)
         {
-            // Ověřím, zda-li uživatel skutečně existuje.
-            _userRepository.ThrowIfNotExists(request.UserId);
-
-            // Načtu kolekci komunikačních kanálů uživatele a zpracuju na stránkovanou kolekci.
-            var result = await _communicationChannelRepository.GetByUserId(request.UserId)
-                .ProjectTo<CommunicationChannelDto>(_mapper.ConfigurationProvider)
-                .PaginatedListAsync(request.PageNumber, request.PageSize);
-
-            return result;
+            // // Ověřím, zda-li uživatel skutečně existuje.
+            // _userRepository.ThrowIfNotExists(request.UserId);
+            //
+            // // Načtu kolekci komunikačních kanálů uživatele a zpracuju na stránkovanou kolekci.
+            // var result = await _communicationChannelRepository.GetByUserId(request.UserId)
+            //     .ProjectTo<CommunicationChannelDto>(_mapper.ConfigurationProvider)
+            //     .PaginatedListAsync(request.PageNumber, request.PageSize);
+            //
+            // return result;
+            return null;
         }
     }
 }

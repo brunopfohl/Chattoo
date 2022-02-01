@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Chattoo.Application.Common.Exceptions;
 using Chattoo.Domain.Entities;
+using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Repositories;
 using MediatR;
 
@@ -38,20 +39,20 @@ namespace Chattoo.Application.Groups.Commands.AddUser
 
         public async Task<Unit> Handle(AddUserToGroupCommand request, CancellationToken cancellationToken)
         {
-            // Vyhodím výjimku, pokud uživatel s předaným Id neexistuje.
-            var user = await _userRepository.GetByIdAsync(request.UserId)
-                         ?? throw new NotFoundException(nameof(User), request.UserId);
-            // Vyhodím výjimku, pokud skupina s předaným Id neexistuje.
-            var group = await _groupRepository.GetByIdAsync(request.GroupId)
-                         ?? throw new NotFoundException(nameof(Group), request.GroupId);
-            
-            // TODO: kontrola, že má uživatel právo na tuto akci.
-            
-            // Přidám uživatele do skupiny.
-            group.Users.Add(user);
-            
-            // Promítnu změny do datového zdroje.
-            _unitOfWork.SaveChanges();
+            // // Vyhodím výjimku, pokud uživatel s předaným Id neexistuje.
+            // var user = await _userRepository.GetByIdAsync(request.UserId)
+            //              ?? throw new NotFoundException(nameof(User), request.UserId);
+            // // Vyhodím výjimku, pokud skupina s předaným Id neexistuje.
+            // var group = await _groupRepository.GetByIdAsync(request.GroupId)
+            //              ?? throw new NotFoundException(nameof(Group), request.GroupId);
+            //
+            // // TODO: kontrola, že má uživatel právo na tuto akci.
+            //
+            // // Přidám uživatele do skupiny.
+            // group.Users.Add(user);
+            //
+            // // Promítnu změny do datového zdroje.
+            // _unitOfWork.SaveChanges();
             
             return Unit.Value;
         }

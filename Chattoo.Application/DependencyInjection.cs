@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Chattoo.Application.Common.Services;
 
 namespace Chattoo.Application
 {
@@ -17,6 +18,8 @@ namespace Chattoo.Application
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
+            services.AddScoped<GetByIdUserSafeService>();
+            services.AddScoped<DateIntervalService>();
 
             return services;
         }

@@ -32,26 +32,24 @@ namespace Chattoo.Application.GroupRoles.Commands.Update
     public class UpdateGroupRoleCommandHandler : IRequestHandler<UpdateGroupRoleCommand, Unit>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGroupRoleRepository _groupRoleRepository;
 
-        public UpdateGroupRoleCommandHandler(IUnitOfWork unitOfWork, IGroupRoleRepository groupRoleRepository)
+        public UpdateGroupRoleCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _groupRoleRepository = groupRoleRepository;
         }
 
         public async Task<Unit> Handle(UpdateGroupRoleCommand request, CancellationToken cancellationToken)
         {
-            // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
-            var entity = await _groupRoleRepository.GetByIdAsync(request.Id, true);
-
-            // Naplním entitu daty z příkazu.
-            entity.Name = request.Name;
-            entity.Permission = request.Permission;
-
-            // Přidám záznam do datového zdroje a uložím.
-            await _groupRoleRepository.AddOrUpdateAsync(entity, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            // // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
+            // var entity = await _groupRoleRepository.GetByIdAsync(request.Id, true);
+            //
+            // // Naplním entitu daty z příkazu.
+            // entity.Name = request.Name;
+            // entity.Permission = request.Permission;
+            //
+            // // Přidám záznam do datového zdroje a uložím.
+            // await _groupRoleRepository.AddOrUpdateAsync(entity, cancellationToken);
+            // await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

@@ -10,7 +10,7 @@ namespace Chattoo.Domain.Entities
     /// </summary>
     public class CommunicationChannelMessage : AuditableEntity, IAuditableEntity
     {
-        public CommunicationChannelMessage()
+        protected CommunicationChannelMessage()
         {
             Attachments = new List<CommunicationChannelMessageAttachment>();
         }
@@ -18,36 +18,31 @@ namespace Chattoo.Domain.Entities
         /// <summary>
         /// Vrací nebo nastavuje Id komunikačního kanálu, které ho je tato zpráva součástí.
         /// </summary>
-        public string ChannelId { get; set; }
+        public string ChannelId { get; private set; }
 
         /// <summary>
         /// Vrací nebo nastavuje Id uživatele, který je autorem této zprávy.
         /// </summary>
-        public string UserId { get; set; }
+        public string UserId { get; private set; }
 
         /// <summary>
         /// Vrací nebo nastavuje typ zprávy (bežná zpráva, oznámení, ...).
         /// </summary>
-        public CommunicationChannelMessageType Type { get; set; }
+        public CommunicationChannelMessageType Type { get; private set; }
         
         /// <summary>
         /// Vrací nebo nastavuje obsah zprávy.
         /// </summary>
-        public string Content { get; set; }
+        public string Content { get; private set; }
 
-        /// <summary>
-        /// Vrací nebo nastavuje komunikační kanál, kterého je tato zpráva součástí.
-        /// </summary>
-        public virtual CommunicationChannel Channel { get; set; }
-        
         /// <summary>
         /// Vrací nebo nastavuje uživatele, který je autorem této zprávy.
         /// </summary>
-        public virtual User User { get; set; }
+        public virtual User User { get; private set; }
         
         /// <summary>
         /// Vrací nebo nastavuje kolekci příloh, které jsou připnuty k této zprávě.
         /// </summary>
-        public virtual ICollection<CommunicationChannelMessageAttachment> Attachments { get; set; }
+        public virtual ICollection<CommunicationChannelMessageAttachment> Attachments { get; private set; }
     }
 }

@@ -29,12 +29,12 @@ namespace Chattoo.Application.Users.Commands.Delete
 
         public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
-            var entity = await _userRepository.GetByIdAsync(request.Id, true);
-            
-            // Záznam se podařilo nalézt -> smažu ho a uložím změny.
-            _userRepository.Remove(entity);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            // // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
+            // var entity = await _userRepository.GetByIdAsync(request.Id, true);
+            //
+            // // Záznam se podařilo nalézt -> smažu ho a uložím změny.
+            // _userRepository.Remove(entity);
+            // await _unitOfWork.SaveChangesAsync(cancellationToken);
             
             return Unit.Value;
         }

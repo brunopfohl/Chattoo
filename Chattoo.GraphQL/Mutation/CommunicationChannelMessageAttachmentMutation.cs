@@ -1,8 +1,8 @@
-﻿using Chattoo.Application.Common.Extensions;
-using Chattoo.Application.CommunicationChannelMessageAttachments.Commands.Create;
+﻿using Chattoo.Application.CommunicationChannelMessageAttachments.Commands.Create;
 using Chattoo.Application.CommunicationChannelMessageAttachments.Commands.Delete;
 using Chattoo.Application.CommunicationChannelMessageAttachments.Commands.Update;
 using Chattoo.Domain.Enums;
+using Chattoo.Domain.Extensions;
 using Chattoo.GraphQL.Extensions;
 using GraphQL.Types;
 

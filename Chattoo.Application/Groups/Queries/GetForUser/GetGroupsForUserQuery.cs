@@ -35,15 +35,16 @@ namespace Chattoo.Application.GroupRoles.Queries.GetForUser
 
         public override async Task<PaginatedList<GroupDto>> Handle(GetGroupsForUserQuery request, CancellationToken cancellationToken)
         {
-            // Ověřím, zda-li uživatel existuje.
-            _userRepository.ThrowIfNotExists(request.UserId);
-
-            // Načtu kolekci skupin, do kterých spadá uživatel a zpracuju na stránkovanou kolekci.
-            var result = await _groupRepository.GetByUserId(request.UserId)
-                .ProjectTo<GroupDto>(_mapper.ConfigurationProvider)
-                .PaginatedListAsync(request.PageNumber, request.PageSize);
-
-            return result;
+            // // Ověřím, zda-li uživatel existuje.
+            // _userRepository.ThrowIfNotExists(request.UserId);
+            //
+            // // Načtu kolekci skupin, do kterých spadá uživatel a zpracuju na stránkovanou kolekci.
+            // var result = await _groupRepository.GetByUserId(request.UserId)
+            //     .ProjectTo<GroupDto>(_mapper.ConfigurationProvider)
+            //     .PaginatedListAsync(request.PageNumber, request.PageSize);
+            //
+            // return result;
+            return null;
         }
     }
 }

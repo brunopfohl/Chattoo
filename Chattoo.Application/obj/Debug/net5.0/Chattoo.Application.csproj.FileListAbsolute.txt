@@ -4,6 +4,7 @@
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/bin/Debug/net5.0/Chattoo.Application.pdb
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/bin/Debug/net5.0/Chattoo.Domain.dll
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/bin/Debug/net5.0/Chattoo.Domain.pdb
+/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/obj/Debug/net5.0/Chattoo.Application.csproj.AssemblyReference.cache
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/obj/Debug/net5.0/Chattoo.Application.GeneratedMSBuildEditorConfig.editorconfig
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/obj/Debug/net5.0/Chattoo.Application.AssemblyInfoInputs.cache
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/obj/Debug/net5.0/Chattoo.Application.AssemblyInfo.cs
@@ -12,4 +13,3 @@
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/obj/Debug/net5.0/Chattoo.Application.dll
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/obj/Debug/net5.0/ref/Chattoo.Application.dll
 /home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/obj/Debug/net5.0/Chattoo.Application.pdb
-/home/brunopfohl/RiderProjects/Chattoo/Chattoo.Application/obj/Debug/net5.0/Chattoo.Application.csproj.AssemblyReference.cache

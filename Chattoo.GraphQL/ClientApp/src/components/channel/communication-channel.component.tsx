@@ -188,7 +188,7 @@ const CommunicationChannel: FC = () => {
     const onSettingsClose = useCallback(() => { setShowSettings(false) }, [setShowSettings]);
 
     /** Callback volaný po otevření dialogu s nastavením komunikačního kanálu */
-    const onSettingsOpen = useCallback(() => { setShowSettings(true) }, [setShowSettings])
+    const onSettingsOpen = useCallback(() => { setShowSettings(true) }, [setShowSettings]);
 
     return (
         <Stack sx={{ p: 1, height: "100%" }}>

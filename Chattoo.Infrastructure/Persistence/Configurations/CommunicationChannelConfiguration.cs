@@ -8,6 +8,8 @@ namespace Chattoo.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<CommunicationChannel> builder)
         {
+            builder.HasKey(e => e.Id);
+            
             builder.Property(e => e.Id)
                 .ValueGeneratedOnAdd();
             
@@ -17,6 +19,16 @@ namespace Chattoo.Infrastructure.Persistence.Configurations
 
             builder.Property(e => e.Description)
                 .HasMaxLength(255);
+
+            builder
+                .HasMany(e => e.Messages)
+                .WithOne()
+                .HasForeignKey(e => e.ChannelId);
+            
+            builder
+                .HasMany(e => e.Roles)
+                .WithOne()
+                .HasForeignKey(e => e.ChannelId);
         }
     }
 }

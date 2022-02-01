@@ -26,32 +26,31 @@ namespace Chattoo.Application.UserAliases.Commands.Create
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserRepository _userRepository;
-        private readonly IUserAliasRepository _userAliasRepository;
 
-        public CreateUserAliasCommandHandler(IUnitOfWork unitOfWork, IUserAliasRepository userAliasRepository, IUserRepository userRepository)
+        public CreateUserAliasCommandHandler(IUnitOfWork unitOfWork, IUserRepository userRepository)
         {
             _unitOfWork = unitOfWork;
-            _userAliasRepository = userAliasRepository;
             _userRepository = userRepository;
         }
 
         public async Task<string> Handle(CreateUserAliasCommand request, CancellationToken cancellationToken)
         {
-            // Ověřím, zda-li uživatel existuje.
-            _userRepository.ThrowIfNotExists(request.UserId);
-            
-            // Vytvořím entitu naplněnou daty z příkazu.
-            var entity = new UserAlias()
-            {
-                Alias = request.Alias
-            };
-
-            // Přidám záznam do datového zdroje a uložím.`
-            await _userAliasRepository.AddOrUpdateAsync(entity, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-            // Vrátím Id vytvořeného záznamu.
-            return entity.Id;
+            // // Ověřím, zda-li uživatel existuje.
+            // _userRepository.ThrowIfNotExists(request.UserId);
+            //
+            // // Vytvořím entitu naplněnou daty z příkazu.
+            // var entity = new UserAlias()
+            // {
+            //     Alias = request.Alias
+            // };
+            //
+            // // Přidám záznam do datového zdroje a uložím.`
+            // await _userAliasRepository.AddOrUpdateAsync(entity, cancellationToken);
+            // await _unitOfWork.SaveChangesAsync(cancellationToken);
+            //
+            // // Vrátím Id vytvořeného záznamu.
+            // return entity.Id;
+            return null;
         }
     }
 }

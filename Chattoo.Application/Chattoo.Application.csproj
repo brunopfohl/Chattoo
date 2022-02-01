@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="CalendarEventWishes\Commands\Delete" />
+    <Folder Include="CalendarEventWishes\Commands\Update" />
+    <Folder Include="CalendarEventWishes\Queries" />
+    <Folder Include="Common\Extensions" />
     <Folder Include="Common\Services\" />
     <Folder Include="CommunicationChannelMessageAttachments\EventHandlers" />
     <Folder Include="CommunicationChannelMessageAttachments\Queries" />

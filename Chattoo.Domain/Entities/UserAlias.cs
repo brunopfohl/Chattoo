@@ -8,19 +8,19 @@ namespace Chattoo.Domain.Entities
     /// </summary>
     public class UserAlias : AuditableEntity, IAuditableEntity
     {
+        protected UserAlias()
+        {
+            
+        }
+        
         /// <summary>
         /// Vrací nebo nastavuje Id uživatele s touto přezdívkou.
         /// </summary>
-        public string UserId { get; set; }
-        
-        /// <summary>
-        /// Vrací nebo nastavuje uživatele s touto přezdívkou.
-        /// </summary>
-        public virtual User User { get; set; }
+        public string UserId { get; private set; }
         
         /// <summary>
         /// Vrací nebo nastavuje alias (přezdívku) uživatele.1
         /// </summary>
-        public string Alias { get; set; }
+        public string Alias { get; private set; }
     }
 }

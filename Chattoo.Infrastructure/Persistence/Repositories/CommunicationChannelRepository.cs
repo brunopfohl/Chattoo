@@ -16,9 +16,8 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
 
         public IQueryable<CommunicationChannel> GetByUserId(string userId)
         {
-            // TODO: Tohle je hovadina. Měl bych jít přes uživatele rovnou.
             var result = GetAll()
-                .Where(c => c.Users.Any(u => u.Id == userId));
+                .Where(c => c.Users.Any(u => u.UserId == userId));
 
             return result;
         }

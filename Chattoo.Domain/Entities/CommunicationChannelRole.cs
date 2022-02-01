@@ -10,29 +10,26 @@ namespace Chattoo.Domain.Entities
     /// </summary>
     public class CommunicationChannelRole : AuditableEntity, IAuditableEntity
     {
+        protected CommunicationChannelRole()
+        {
+            
+        }
+        
         /// <summary>
         /// Vrací nebo nastavuje název role.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Vrací nebo nastavuje Id komunikačního kanálu, pod který spadá tato role.
         /// </summary>
-        public string ChannelId { get; set; }
+        public string ChannelId { get; private set; }
         
         /// <summary>
         /// Vrací nebo nastavuje práva uživatele, který disponuje touto rolí.
         /// </summary>
-        public CommunicationChannelPermission Permission { get; set; }
-
-        /// <summary>
-        /// Vrací nebo nastavuje komunikační kanál, pod který spadá tato role.
-        /// </summary>
-        public virtual CommunicationChannel Channel { get; set; }
+        public CommunicationChannelPermission Permission { get; private set; }
         
-        /// <summary>
-        /// Vrací nebo nastavuje kolekci uživatelů, kteří disponují touto rolí.
-        /// </summary>
         public virtual ICollection<User> Users { get; set; }
     }
 }

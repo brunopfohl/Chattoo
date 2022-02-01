@@ -33,33 +33,33 @@ namespace Chattoo.Application.CommunicationChannelRoles.Commands.Create
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICommunicationChannelRepository _communicationChannelRepository;
-        private readonly ICommunicationChannelRoleRepository _communicationChannelRoleRepository;
 
-        public CreateCommunicationChannelRoleCommandHandler(IUnitOfWork unitOfWork, ICommunicationChannelRepository communicationChannelRepository, ICommunicationChannelRoleRepository communicationChannelRoleRepository)
+        public CreateCommunicationChannelRoleCommandHandler(IUnitOfWork unitOfWork, ICommunicationChannelRepository communicationChannelRepository)
         {
             _unitOfWork = unitOfWork;
             _communicationChannelRepository = communicationChannelRepository;
-            _communicationChannelRoleRepository = communicationChannelRoleRepository;
         }
 
         public async Task<string> Handle(CreateCommunicationChannelRoleCommand request, CancellationToken cancellationToken)
         {
-            // Zjistím, zda-li komunikační kanál skutečně existuje.
-            _communicationChannelRepository.ThrowIfNotExists(request.ChannelId);
-            
-            // Vytvořím entitu naplněnou daty z příkazu.
-            var entity = new CommunicationChannelRole()
-            {
-                ChannelId = request.ChannelId,
-                Name = request.Name
-            };
+            // // Zjistím, zda-li komunikační kanál skutečně existuje.
+            // _communicationChannelRepository.ThrowIfNotExists(request.ChannelId);
+            //
+            // // Vytvořím entitu naplněnou daty z příkazu.
+            // var entity = new CommunicationChannelRole()
+            // {
+            //     ChannelId = request.ChannelId,
+            //     Name = request.Name
+            // };
+            //
+            // // Přidám záznam do datového zdroje a uložím.
+            // await _communicationChannelRoleRepository.AddOrUpdateAsync(entity, cancellationToken);
+            // await _unitOfWork.SaveChangesAsync(cancellationToken);
+            //
+            // // Vrátím Id vytvořeného záznamu.
+            // return entity.Id;
 
-            // Přidám záznam do datového zdroje a uložím.
-            await _communicationChannelRoleRepository.AddOrUpdateAsync(entity, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-            // Vrátím Id vytvořeného záznamu.
-            return entity.Id;
+            return string.Empty;
         }
     }
 }

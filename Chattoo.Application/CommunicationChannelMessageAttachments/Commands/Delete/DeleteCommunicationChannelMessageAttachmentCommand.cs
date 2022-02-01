@@ -21,23 +21,21 @@ namespace Chattoo.Application.CommunicationChannelMessageAttachments.Commands.De
     public class DeleteCommunicationChannelMessageAttachmentCommandHandler : IRequestHandler<DeleteCommunicationChannelMessageAttachmentCommand, Unit>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICommunicationChannelMessageAttachmentRepository _communicationChannelMessageAttachmentRepository;
 
-        public DeleteCommunicationChannelMessageAttachmentCommandHandler(IUnitOfWork unitOfWork, ICommunicationChannelMessageAttachmentRepository communicationChannelMessageAttachmentRepository)
+        public DeleteCommunicationChannelMessageAttachmentCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _communicationChannelMessageAttachmentRepository = communicationChannelMessageAttachmentRepository;
         }
 
         public async Task<Unit> Handle(DeleteCommunicationChannelMessageAttachmentCommand request, CancellationToken cancellationToken)
         {
-            // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se ho nepodaří dohledat).
-            var entity = await _communicationChannelMessageAttachmentRepository.GetByIdAsync(request.Id, true);
-            
-            // Záznam se podařilo nalézt -> smažu ho a uložím změny.
-            _communicationChannelMessageAttachmentRepository.Remove(entity);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-            
+            // // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se ho nepodaří dohledat).
+            // var entity = await _communicationChannelMessageAttachmentRepository.GetByIdAsync(request.Id, true);
+            //
+            // // Záznam se podařilo nalézt -> smažu ho a uložím změny.
+            // _communicationChannelMessageAttachmentRepository.Remove(entity);
+            // await _unitOfWork.SaveChangesAsync(cancellationToken);
+            //
             return Unit.Value;
         }
     }

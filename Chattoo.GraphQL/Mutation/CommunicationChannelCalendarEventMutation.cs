@@ -1,7 +1,5 @@
-using Chattoo.Application.CommunicationChannelCalendarEvents.Commands.Create;
-using Chattoo.Application.CommunicationChannelCalendarEvents.Commands.Delete;
-using Chattoo.Application.CommunicationChannelCalendarEvents.Commands.Update;
-using Chattoo.Application.CommunicationChannelCalendarEvents.DTOs;
+using Chattoo.Application.CalendarEvents.Commands;
+using Chattoo.Application.CalendarEvents.DTOs;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;
 using GraphQL.Types;
@@ -14,7 +12,7 @@ namespace Chattoo.GraphQL.Mutation
         {
             Name = "CommunicationChannelCalendarEventMutation";
             
-            this.FieldAsyncWithScope<CommunicationChannelCalendarEventGraphType, CommunicationChannelCalendarEventDto>(
+            this.FieldAsyncWithScope<CommunicationChannelCalendarEventGraphType, CalendarEventDto>(
                 "create",
                 arguments: 
                 new QueryArguments
@@ -27,7 +25,7 @@ namespace Chattoo.GraphQL.Mutation
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var command = new CreateCommunicationChannelCalendarEventCommand()
+                    var command = new CreateCalendarEventCommand()
                     {
                         Name = ctx.GetString("name"),
                         Description = ctx.GetString("desc"),
@@ -51,7 +49,7 @@ namespace Chattoo.GraphQL.Mutation
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var command = new DeleteCommunicationChannelCalendarEventCommand()
+                    var command = new DeleteCalendarEventCommand()
                     {
                         Id = ctx.GetString("id")
                     };
@@ -75,7 +73,7 @@ namespace Chattoo.GraphQL.Mutation
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var command = new UpdateCommunicationChannelCalendarEventCommand()
+                    var command = new UpdateCalendarEventCommand()
                     {
                         Id = ctx.GetString("id"),
                         Name = ctx.GetString("name"),

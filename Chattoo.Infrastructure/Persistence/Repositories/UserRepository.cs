@@ -19,25 +19,22 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
 
         public IQueryable<User> GetByChannelId(string channelId)
         {
-            // TODO: Nesmysl, musím jít přes channel.
             var result = GetAll()
-                .Where(u => u.Channels.Any(c => c.Id == channelId));
+                .Where(u => u.Channels.Any(ch => ch.ChannelId == channelId));
 
             return result;
         }
 
         public IQueryable<User> GetByGroupId(string groupId)
         {
-            // TODO: Nesmysl, musím jít přes group.
             var result = GetAll()
-                .Where(u => u.Groups.Any(g => g.Id == groupId));
+                .Where(u => u.Groups.Any(g => g.GroupId == groupId));
 
             return result;
         }
         
         public IQueryable<User> GetBySearchTerm(string searchTerm, string excludeUsersFromCommunicationChannelWithId)
         {
-            // TODO: Nesmysl, musím jít přes group.
             var result = GetAll()
                 .Where(u =>
                     searchTerm.IsNullOrEmpty() || u.UserName.ToLower().Contains(searchTerm.ToLower())
@@ -46,7 +43,7 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
             // Pokud bylo specifikováno Id komunikačního kanálu, jehož uživatelé se mají vynechat, omezím query.
             if (!excludeUsersFromCommunicationChannelWithId.IsNullOrEmpty())
             {
-                result = result.Where(u => u.Channels.All(c => c.Id != excludeUsersFromCommunicationChannelWithId));
+                result = result.Where(u => u.Channels.All(ch => ch.ChannelId != excludeUsersFromCommunicationChannelWithId));
             }
 
             return result;

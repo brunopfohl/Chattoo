@@ -8,7 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Chattoo.Application.Common.Exceptions;
+using Chattoo.Application.Common.Interfaces;
+using Chattoo.Domain.Exceptions;
 
 namespace Chattoo.Infrastructure.Persistence.Repositories
 {
@@ -56,38 +57,23 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
         }
 
         public IQueryable<T> GetAll<T>()
-        {
-            var result = GetAll().ProjectTo<T>(_mapper.ConfigurationProvider);
-            return result;
+        { 
+            return GetAll().ProjectTo<T>(_mapper.ConfigurationProvider);
         }
 
-        public TEntity GetById(TKey id, bool throwNotFound = false)
+        public TEntity GetById(TKey id)
         {
-            var result = _dbContext.Find<TEntity>(id);
-
-            if (throwNotFound && result is null)
-            {
-                throw new NotFoundException(nameof(TKey), id);
-            }
-            
-            return result;
+            return _dbContext.Find<TEntity>(id);
         }
         
-        public async Task<TEntity> GetByIdAsync(TKey id, bool throwNotFound = false)
+        public async Task<TEntity> GetByIdAsync(TKey id)
         {
-            var result = await _dbContext.FindAsync<TEntity>(id);
-
-            if (throwNotFound && result is null)
-            {
-                throw new NotFoundException(nameof(TKey), id);
-            }
-            
-            return result;
+            return await _dbContext.FindAsync<TEntity>(id);
         }
 
-        public async Task<T> GetByIdAsync<T>(TKey id, bool throwNotFound = false)
+        public async Task<T> GetByIdAsync<T>(TKey id)
         {
-            var entity = await GetByIdAsync(id, throwNotFound);
+            var entity = await GetByIdAsync(id);
             var result = _mapper.Map<T>(entity);
             return result;
         }
@@ -118,16 +104,6 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
 
             return result;
         }
-
-        public void ThrowIfNotExists(TKey id)
-        {
-            var exists = Exists(id);
-
-            if (!exists)
-            {
-                throw new NotFoundException(nameof(TKey), id);
-            }
-        }
     }
 
     /// <summary>
@@ -135,7 +111,8 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
     /// </summary>
     public class Repository<TEntity> : Repository<TEntity, string> where TEntity : Entity<string>
     {
-        public Repository(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
+        public Repository(ApplicationDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
     }

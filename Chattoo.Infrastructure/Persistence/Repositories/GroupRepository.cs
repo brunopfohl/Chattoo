@@ -16,9 +16,8 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
 
         public IQueryable<Group> GetByUserId(string userId)
         {
-            // TODO: Měl bych jít rovnou přes usera nebo to chce entitu reprezentující vazební tabulku.
             var result = GetAll()
-                .Where(g => g.Users.Any(u => u.Id == userId));
+                .Where(g => g.Participants.Any(u => u.UserId == userId));
 
             return result;
         }

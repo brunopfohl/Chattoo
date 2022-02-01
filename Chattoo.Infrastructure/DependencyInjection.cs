@@ -34,15 +34,11 @@ namespace Chattoo.Infrastructure
 
             // Přidání repozitářů.
             services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
-            services.AddScoped(typeof(ICommunicationChannelMessageAttachmentRepository), typeof(CommunicationChannelMessageAttachmentRepository));
-            services.AddScoped(typeof(ICommunicationChannelMessageRepository), typeof(CommunicationChannelMessageRepository));
             services.AddScoped(typeof(ICommunicationChannelRepository), typeof(CommunicationChannelRepository));
-            services.AddScoped(typeof(ICommunicationChannelRoleRepository), typeof(CommunicationChannelRoleRepository));
             services.AddScoped(typeof(IGroupRepository), typeof(GroupRepository));
-            services.AddScoped(typeof(IGroupRoleRepository), typeof(GroupRoleRepository));
-            services.AddScoped(typeof(IUserAliasRepository), typeof(UserAliasRepository));
             services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
-            services.AddScoped(typeof(ICommunicationChannelCalendarEventRepository), typeof(CommunicationChannelCalendarEventRepository));
+            services.AddScoped(typeof(ICalendarEventRepository), typeof(CalendarEventRepository));
+            services.AddScoped(typeof(ICalendarEventWishRepository), typeof(CalendarEventWishRepository));
 
             // Jednotka pro správu/manipulaci datového zdroje.
             services.AddScoped<IUnitOfWork>(provider => provider.GetService<ApplicationDbContext>());

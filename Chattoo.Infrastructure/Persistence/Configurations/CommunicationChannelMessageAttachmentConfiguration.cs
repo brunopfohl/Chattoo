@@ -8,6 +8,8 @@ namespace Chattoo.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<CommunicationChannelMessageAttachment> builder)
         {
+            builder.HasKey(e => e.Id);
+            
             builder.Property(e => e.Id)
                 .ValueGeneratedOnAdd();
             

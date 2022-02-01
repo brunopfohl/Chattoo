@@ -9,29 +9,29 @@ namespace Chattoo.Domain.Entities
     /// </summary>
     public class CommunicationChannelMessageAttachment : AuditableEntity, IAuditableEntity
     {
+        protected CommunicationChannelMessageAttachment()
+        {
+            
+        }
+        
         /// <summary>
         /// Vrací nebo nastavuje název této přílohy.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Vrací nebo nastavuje obsah této přílohy.
         /// </summary>
-        public byte[] Content { get; set; }
+        public byte[] Content { get; private set; }
 
         /// <summary>
         /// Vrací nebo nastavuje Id zprávy, ke které je tato příloha připnuta.
         /// </summary>
-        public string MessageId { get; set; }
-
-        /// <summary>
-        /// Vrací nebo nastavuje zprávu, ke které je tato příloha připnuta.
-        /// </summary>
-        public virtual CommunicationChannelMessage Message { get; set; }
+        public string MessageId { get; private set; }
 
         /// <summary>
         /// Vrací nebo nastavuje typ přílohy (soubor, odkaz, ...).
         /// </summary>
-        public CommunicationChannelMessageAttachmentType Type { get; set; }
+        public CommunicationChannelMessageAttachmentType Type { get; private set; }
     }
 }

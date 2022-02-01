@@ -26,25 +26,23 @@ namespace Chattoo.Application.UserAliases.Commands.Update
     public class UpdateUserAliasCommandHandler : IRequestHandler<UpdateUserAliasCommand, Unit>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IUserAliasRepository _userAliasRepository;
 
-        public UpdateUserAliasCommandHandler(IUnitOfWork unitOfWork, IUserAliasRepository userAliasRepository)
+        public UpdateUserAliasCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _userAliasRepository = userAliasRepository;
         }
 
         public async Task<Unit> Handle(UpdateUserAliasCommand request, CancellationToken cancellationToken)
         {
-            // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
-            var entity = await _userAliasRepository.GetByIdAsync(request.Id, true);
-
-            // Naplním entitu daty z příkazu.
-            entity.Alias = request.Alias;
-
-            // Přidám záznam do datového zdroje a uložím.`
-            await _userAliasRepository.AddOrUpdateAsync(entity, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            // // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
+            // var entity = await _userAliasRepository.GetByIdAsync(request.Id, true);
+            //
+            // // Naplním entitu daty z příkazu.
+            // entity.Alias = request.Alias;
+            //
+            // // Přidám záznam do datového zdroje a uložím.`
+            // await _userAliasRepository.AddOrUpdateAsync(entity, cancellationToken);
+            // await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }
