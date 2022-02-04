@@ -1,6 +1,7 @@
 using Chattoo.Application.CalendarEvents.DTOs;
 using Chattoo.Application.CalendarEvents.Queries;
 using Chattoo.Application.Common.Models;
+using Chattoo.Application.CommunicationChannels.Queries.GetEvents;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;

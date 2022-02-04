@@ -19,5 +19,16 @@ namespace Chattoo.Domain.Entities
             yield return UserId;
             yield return ChannelId;
         }
+
+        public static UserToCommunicationChannel Create(string userId, string channelId)
+        {
+            var entity = new UserToCommunicationChannel()
+            {
+                UserId = userId,
+                ChannelId = channelId
+            };
+
+            return entity;
+        }
     }
 }

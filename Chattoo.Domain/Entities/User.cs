@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chattoo.Domain.Common;
+using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Interfaces;
 
 namespace Chattoo.Domain.Entities
@@ -43,13 +45,54 @@ namespace Chattoo.Domain.Entities
         
         public virtual ICollection<UserToCalendarEvent> JoinedEvents { get; private set; }
 
+        public UserAlias AddAlias(string aliasText)
+        {
+            var alias = UserAlias.Create(Id, aliasText);
+            
+            Aliases.Add(alias);
+            
+            return alias;
+        }
+
+        public UserAlias DeleteAlias(string id)
+        {
+            var alias = GetAlias(id);
+
+            Aliases.Remove(alias);
+
+            return alias;
+        }
+
+        public UserAlias UpdateAlias(string id, string aliasText)
+        {
+            var alias = GetAlias(id);
+
+            alias.SetAlias(aliasText);
+
+            return alias;
+        }
+        
         public static User Create(string id, string userName)
         {
-            var entity = new User();
-            entity.Id = id;
-            entity.UserName = userName;
-            
+            var entity = new User
+            {
+                Id = id,
+                UserName = userName
+            };
+
             return entity;
+        }
+
+        private UserAlias GetAlias(string id)
+        {
+            var alias = Aliases.FirstOrDefault(a => a.Id == id);
+
+            if (alias == null)
+            {
+                throw new NotFoundException($"{nameof(User)}:{nameof(UserAlias)}", id);
+            }
+
+            return alias;
         }
     }
 }

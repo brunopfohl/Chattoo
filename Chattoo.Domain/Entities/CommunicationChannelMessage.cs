@@ -44,5 +44,24 @@ namespace Chattoo.Domain.Entities
         /// Vrací nebo nastavuje kolekci příloh, které jsou připnuty k této zprávě.
         /// </summary>
         public virtual ICollection<CommunicationChannelMessageAttachment> Attachments { get; private set; }
+
+        public void SetContent(string content)
+        {
+            Content = content;
+        }
+        
+        public static CommunicationChannelMessage Create(string userId, string channelId,
+            string content, CommunicationChannelMessageType type)
+        {
+            var entity = new CommunicationChannelMessage()
+            {
+                UserId = userId,
+                ChannelId = channelId,
+                Content = content,
+                Type = type
+            };
+
+            return entity;
+        }
     }
 }

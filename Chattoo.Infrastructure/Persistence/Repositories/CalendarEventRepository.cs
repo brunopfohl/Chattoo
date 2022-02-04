@@ -21,5 +21,13 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
 
             return result;
         }
+
+        public IQueryable<CalendarEvent> GetByGroupId(string groupId)
+        {
+            var result = GetAll()
+                .Where(ce => ce.GroupId == groupId);
+
+            return result;
+        }
     }
 }

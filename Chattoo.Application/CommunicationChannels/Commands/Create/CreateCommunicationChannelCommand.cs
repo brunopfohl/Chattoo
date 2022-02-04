@@ -45,23 +45,15 @@ namespace Chattoo.Application.CommunicationChannels.Commands.Create
 
         public async Task<CommunicationChannelDto> Handle(CreateCommunicationChannelCommand request, CancellationToken cancellationToken)
         {
-            // // Vytvořím entitu naplněnou daty z příkazu.
-            // var entity = new CommunicationChannel()
-            // {
-            //     Name = request.Name,
-            //     Description = request.Description
-            // };
-            //
-            // // Přidám aktuálně přihlášeného uživatele do seznamu uživatelů ve skupině.
-            // entity.Users.Add(_currentUserService.User);
-            //
-            // // Přidám záznam do datového zdroje a uložím.
-            // await _communicationChannelRepository.AddOrUpdateAsync(entity, cancellationToken);
-            // await _unitOfWork.SaveChangesAsync(cancellationToken);
-            //
-            // // Vrátím Id vytvořeného záznamu.
-            // return _mapper.Map<CommunicationChannelDto>(entity);
-            return _mapper.Map<CommunicationChannelDto>(null);
+            var channel = CommunicationChannel.Create(request.Name, request.Description);
+            
+            channel.AddParticipant(_currentUserService.User.Id);
+
+            await _communicationChannelRepository.AddOrUpdateAsync(channel, cancellationToken);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            
+            return _mapper.Map<CommunicationChannelDto>(channel);
         }
     }
 }

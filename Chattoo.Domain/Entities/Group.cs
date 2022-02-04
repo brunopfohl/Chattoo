@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chattoo.Domain.Common;
 using Chattoo.Domain.Interfaces;
 
@@ -7,7 +8,8 @@ namespace Chattoo.Domain.Entities
     /// <summary>
     /// Entita skupiny uživatelů.
     /// </summary>
-    public class Group : AuditableEntity, IAuditableEntity, IAggregateRoot
+    public class Group : AuditableEntity, IAuditableEntity, IAggregateRoot,
+        IWithRestrictedReadPermissions, IWithRestrictedWritePermissions
     {
         protected Group()
         {
@@ -26,5 +28,19 @@ namespace Chattoo.Domain.Entities
         public virtual ICollection<GroupRole> Roles { get; set; }
         
         public virtual ICollection<UserToGroup> Participants { get; set; }
+        
+        #region IWithRestrictedReadPermissions
+
+        ICollection<string> IWithRestrictedReadPermissions.UsersIds =>
+            Participants.Select(u => u.UserId).ToList();
+
+        #endregion
+        
+        #region IWithRestrictedWritePermissions
+
+        ICollection<string> IWithRestrictedWritePermissions.UsersIds =>
+            Participants.Select(u => u.UserId).ToList();
+
+        #endregion
     }
 }

@@ -1,6 +1,6 @@
-﻿using Chattoo.Application.UserAliases.Commands.Create;
-using Chattoo.Application.UserAliases.Commands.Delete;
-using Chattoo.Application.UserAliases.Commands.Update;
+﻿using Chattoo.Application.Users.Commands.AddAlias;
+using Chattoo.Application.Users.Commands.DeleteAlias;
+using Chattoo.Application.Users.Commands.UpdateAlias;
 using Chattoo.GraphQL.Extensions;
 using GraphQL.Types;
 
@@ -21,7 +21,7 @@ namespace Chattoo.GraphQL.Mutation
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var command = new CreateUserAliasCommand()
+                    var command = new AddUserAliasCommand()
                     {
                          Alias = ctx.GetString("alias")
                     };

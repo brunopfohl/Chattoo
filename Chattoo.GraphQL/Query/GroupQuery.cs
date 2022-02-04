@@ -1,7 +1,7 @@
 ﻿using Chattoo.Application.Common.Models;
-using Chattoo.Application.GroupRoles.Queries.GetForUser;
 using Chattoo.Application.Groups.DTOs;
 using Chattoo.Application.Groups.Queries.GetById;
+using Chattoo.Application.Users.Queries.GetGroups;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;

@@ -8,7 +8,7 @@ using Chattoo.Application.Common.Queries;
 using Chattoo.Application.Users.DTOs;
 using Chattoo.Domain.Repositories;
 
-namespace Chattoo.Application.Users.Queries.Get
+namespace Chattoo.Application.Users.Queries
 {
     /// <summary>
     /// Dotaz na uživatele (dle filtru).

@@ -14,5 +14,12 @@ namespace Chattoo.Domain.Repositories
         /// <param name="communicationChannelId">Id komunikačního kanálu, jehož kalendářní události se mají načíst..</param>
         /// <returns>Kolekci <see cref="CalendarEvent"/> kalendářních událostí z určitého komunikačního kanálu.</returns>
         public IQueryable<CalendarEvent> GetByCommunicationChannelId(string communicationChannelId);
+        
+        /// <summary>
+        /// Vrací kalendářní události u určité skupiny.
+        /// </summary>
+        /// <param name="groupId">Id skupiny, jehož kalendářní události se mají načíst.</param>
+        /// <returns>Kolekci <see cref="CalendarEvent"/> kalendářních událostí z určitého komunikačního kanálu.</returns>
+        public IQueryable<CalendarEvent> GetByGroupId(string groupId);
     }
 }

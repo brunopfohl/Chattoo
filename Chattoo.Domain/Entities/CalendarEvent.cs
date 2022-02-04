@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chattoo.Domain.Common;
 using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Interfaces.CalendarEvent;
@@ -10,7 +11,8 @@ namespace Chattoo.Domain.Entities
     /// <summary>
     /// Entita události.
     /// </summary>
-    public class CalendarEvent : AuditableEntity, IAuditableEntity, IAggregateRoot, IWithRestrictedReadPermissions
+    public class CalendarEvent: AuditableEntity, IAuditableEntity, IAggregateRoot,
+        IWithRestrictedReadPermissions, IWithRestrictedWritePermissions
     {
         protected CalendarEvent()
         {
@@ -73,6 +75,19 @@ namespace Chattoo.Domain.Entities
         public virtual CalendarEventType CalendarEventType { get; private set; }
         
         public virtual ICollection<UserToCalendarEvent> Participants { get; private set; }
+
+        #region IWithRestrictedReadPermissions
+
+        ICollection<string> IWithRestrictedReadPermissions.UsersIds =>
+            Participants.Select(p => p.UserId).ToList();
+        
+        #endregion
+        
+        #region IWithRestrictedWritePermissions
+
+        string IWithRestrictedWritePermissions.UserId => AuthorId;
+        
+        #endregion
         
         public static CalendarEvent Create(ICalendarEventCreateContract createContract, User author, CommunicationChannel channel,
             Group group, Address address, CalendarEventType type)

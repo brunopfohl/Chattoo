@@ -1,7 +1,6 @@
 ﻿using Chattoo.Application.Common.Models;
 using Chattoo.Application.CommunicationChannels.DTOs;
 using Chattoo.Application.CommunicationChannels.Queries.GetById;
-using Chattoo.Application.CommunicationChannels.Queries.GetForUser;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;

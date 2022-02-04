@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Chattoo.Application.Common.Exceptions;
 using Chattoo.Application.Common.Interfaces;
 using Chattoo.Domain.Common;
 using Chattoo.Domain.Exceptions;
@@ -61,17 +60,15 @@ namespace Chattoo.Application.Common.Services
         
         private void ThrowIfNotAccessible(IWithRestrictedReadPermissions restrictedEntity)
         {
-            bool hasAccess = !(restrictedEntity.Users != null && !restrictedEntity.Users.Contains(_currentUserService.User));
-
-            if (restrictedEntity.User != null && restrictedEntity.User != _currentUserService.User)
-            {
-                hasAccess = false;
-            }
-
-            if (!hasAccess)
-            {
-                throw new ForbiddenAccessException();
-            }
+            var loggedUserId = _currentUserService.User?.Id;
+            
+            if (restrictedEntity.UserId == null || restrictedEntity.UserId == loggedUserId)
+                return;
+            
+            if (restrictedEntity.UsersIds == null || restrictedEntity.UsersIds.Contains(loggedUserId))
+                return;
+            
+            throw new ForbiddenAccessException();
         }
     }
 }

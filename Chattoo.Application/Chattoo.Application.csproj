@@ -24,15 +24,14 @@
     <Folder Include="Common\Services\" />
     <Folder Include="CommunicationChannelMessageAttachments\EventHandlers" />
     <Folder Include="CommunicationChannelMessageAttachments\Queries" />
-    <Folder Include="CommunicationChannelMessages\Commands" />
     <Folder Include="CommunicationChannelMessages\EventHandlers" />
     <Folder Include="CommunicationChannelRoles\EventHandlers" />
+    <Folder Include="CommunicationChannels\AddMessageAttachment" />
     <Folder Include="CommunicationChannels\EventHandlers" />
     <Folder Include="GroupRoles\Commands" />
     <Folder Include="GroupRoles\EventHandlers" />
-    <Folder Include="GroupRoles\Queries" />
     <Folder Include="Groups\EventHandlers" />
-    <Folder Include="UserAliases\EventHandlers" />
+    <Folder Include="Groups\Queries\GetRoles" />
     <Folder Include="Users\EventHandlers" />
   </ItemGroup>
 

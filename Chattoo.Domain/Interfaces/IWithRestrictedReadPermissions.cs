@@ -12,11 +12,11 @@ namespace Chattoo.Domain.Interfaces
         /// <summary>
         /// Uživatel, který má přístup k objektu.
         /// </summary>
-        User User => null;
+        string UserId => null;
         
         /// <summary>
         /// Uživatelé, kteří mají přístup k objektu.
         /// </summary>
-       ICollection<User> Users => null;
+       ICollection<string> UsersIds => null;
     }
 }

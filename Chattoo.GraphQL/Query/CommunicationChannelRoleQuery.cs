@@ -1,8 +1,8 @@
 ﻿using Chattoo.Application.Common.Models;
 using Chattoo.Application.CommunicationChannelMessages.Queries.GetById;
 using Chattoo.Application.CommunicationChannelRoles.DTOs;
-using Chattoo.Application.CommunicationChannelRoles.Queries.GetById;
-using Chattoo.Application.CommunicationChannels.Queries.GetForUserInChannel;
+using Chattoo.Application.CommunicationChannels.Queries.GetRole;
+using Chattoo.Application.Users.Queries.GetChannelRoles;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;

@@ -1,7 +1,6 @@
-﻿using Chattoo.Application.CommunicationChannelMessages.Commands.Create;
-using Chattoo.Application.CommunicationChannelMessages.Commands.Delete;
-using Chattoo.Application.CommunicationChannelMessages.Commands.Update;
-using Chattoo.Application.CommunicationChannelMessages.DTOs;
+﻿using Chattoo.Application.CommunicationChannelMessages.DTOs;
+using Chattoo.Application.CommunicationChannels.Commands.UpdateMessage;
+using Chattoo.Application.Users.Commands.AddMessage;
 using Chattoo.Domain.Enums;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Subscription.CommunicationChannelMessage;
@@ -76,7 +75,7 @@ namespace Chattoo.GraphQL.Mutation
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var command = new UpdateCommunicationChannelMessageCommand()
+                    var command = new UpdateChannelMessageCommand()
                     {
                         Id = ctx.GetString("id"),
                         Content = ctx.GetString("content")
