@@ -1,4 +1,4 @@
-﻿using Chattoo.Application.CommunicationChannelRoles.DTOs;
+﻿using Chattoo.Application.Common.DTOs;
 using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Types

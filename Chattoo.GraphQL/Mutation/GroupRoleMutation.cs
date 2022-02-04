@@ -1,6 +1,6 @@
-﻿using Chattoo.Application.GroupRoles.Commands.Create;
-using Chattoo.Application.GroupRoles.Commands.Delete;
-using Chattoo.Application.GroupRoles.Commands.Update;
+﻿using Chattoo.Application.Groups.Commands.AddRole;
+using Chattoo.Application.Groups.Commands.DeleteRole;
+using Chattoo.Application.Groups.Commands.UpdateGroupRole;
 using Chattoo.Domain.Enums;
 using Chattoo.GraphQL.Extensions;
 using GraphQL.Types;
@@ -24,7 +24,7 @@ namespace Chattoo.GraphQL.Mutation
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var command = new CreateGroupRoleCommand()
+                    var command = new AddGroupRoleCommand()
                     {
                         Name = ctx.GetString("name"),
                         Permission = (UserGroupPermission)ctx.GetInt("permission"),

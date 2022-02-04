@@ -31,5 +31,28 @@ namespace Chattoo.Domain.Entities
         public UserGroupPermission Permission { get; private set; }
         
         public virtual ICollection<User> Users { get; set; }
+
+        public static GroupRole Create(string groupId, string name, UserGroupPermission permission)
+        {
+            var entity = new GroupRole()
+            {
+                GroupId = groupId
+            };
+            
+            entity.SetName(name);
+            entity.SetPermission(permission);
+
+            return entity;
+        }
+
+        public void SetName(string name)
+        {
+            Name = name;
+        }
+        
+        public void SetPermission(UserGroupPermission permission)
+        {
+            Permission = permission;
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chattoo.Domain.Common;
 using Chattoo.Domain.Enums;
+using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Interfaces;
 
 namespace Chattoo.Domain.Entities
@@ -62,6 +64,49 @@ namespace Chattoo.Domain.Entities
             };
 
             return entity;
+        }
+
+        public CommunicationChannelMessageAttachment AddAttachment(string name, byte[] content,
+            CommunicationChannelMessageAttachmentType type)
+        {
+            var attachment = CommunicationChannelMessageAttachment.Create(Id, name, content, type);
+
+            Attachments.Add(attachment);
+
+            return attachment;
+        }
+        
+        public CommunicationChannelMessageAttachment DeleteAttachment(string attachmentId)
+        {
+            var attachment = GetAttachment(attachmentId);
+
+            Attachments.Remove(attachment);
+
+            return attachment;
+        }
+        
+        public CommunicationChannelMessageAttachment UpdateAttachment(string attachmentId, string name)
+        {
+            var attachment = GetAttachment(attachmentId);
+            
+            attachment.SetName(name);
+
+            return attachment;
+        }
+
+        private CommunicationChannelMessageAttachment GetAttachment(string attachmentId)
+        {
+            var attachment = Attachments.FirstOrDefault(a => a.Id == attachmentId);
+
+            if (attachment == null)
+            {
+                throw new NotFoundException(
+                    $"{nameof(CommunicationChannelMessage)}:{nameof(CommunicationChannelMessageAttachment)}",
+                    attachmentId
+                );
+            }
+
+            return attachment;
         }
     }
 }

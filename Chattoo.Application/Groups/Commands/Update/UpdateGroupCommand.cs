@@ -1,7 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Chattoo.Application.Common.Exceptions;
-using Chattoo.Domain.Entities;
+using AutoMapper;
+using Chattoo.Application.Common.Services;
+using Chattoo.Application.Groups.DTOs;
 using Chattoo.Domain.Repositories;
 using MediatR;
 
@@ -10,7 +11,7 @@ namespace Chattoo.Application.Groups.Commands.Update
     /// <summary>
     /// Příkaz pro upravení již existující skupiny.
     /// </summary>
-    public class UpdateGroupCommand : IRequest
+    public class UpdateGroupCommand : IRequest<GroupDto>
     {
         /// <summary>
         /// Vrací nebo nastavuje Id skupiny uživatelů.
@@ -23,30 +24,30 @@ namespace Chattoo.Application.Groups.Commands.Update
         public string Name { get; set; }
     }
     
-    public class UpdateGroupCommandHandler : IRequestHandler<UpdateGroupCommand, Unit>
+    public class UpdateGroupCommandHandler : IRequestHandler<UpdateGroupCommand, GroupDto>
     {
+        private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IGroupRepository _groupRepository;
+        private readonly GetByIdUserSafeService _getByIdUserSafeService;
 
-        public UpdateGroupCommandHandler(IUnitOfWork unitOfWork, IGroupRepository groupRepository)
+        public UpdateGroupCommandHandler(IUnitOfWork unitOfWork, IGroupRepository groupRepository, GetByIdUserSafeService getByIdUserSafeService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _groupRepository = groupRepository;
+            _getByIdUserSafeService = getByIdUserSafeService;
+            _mapper = mapper;
         }
 
-        public async Task<Unit> Handle(UpdateGroupCommand request, CancellationToken cancellationToken)
+        public async Task<GroupDto> Handle(UpdateGroupCommand request, CancellationToken cancellationToken)
         {
-            // // Vytáhnu záznam z datového zdroje (vyhodím výjimku, pokud se mi ho nepodaří dohledat).
-            // var entity = await _groupRepository.GetByIdAsync(request.Id, true);
-            //
-            // // Naplním entitu daty z příkazu.
-            // entity.Name = request.Name;
-            //
-            // // Přidám záznam do datového zdroje a uložím.`
-            // await _groupRepository.AddOrUpdateAsync(entity, cancellationToken);
-            // await _unitOfWork.SaveChangesAsync(cancellationToken);
+            var group = await _getByIdUserSafeService.GetAsync(_groupRepository, request.Id);
+            
+            group.SetName(request.Name);
+            
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            return _mapper.Map<GroupDto>(group);
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Chattoo.Application.CommunicationChannelMessages.DTOs;
+using Chattoo.Application.Common.DTOs;
 
 namespace Chattoo.GraphQL.Subscription.CommunicationChannelMessage
 {

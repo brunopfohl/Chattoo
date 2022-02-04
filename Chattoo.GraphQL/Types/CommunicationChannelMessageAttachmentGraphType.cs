@@ -1,4 +1,4 @@
-﻿using Chattoo.Application.CommunicationChannelMessageAttachments.DTOs;
+﻿using Chattoo.Application.Common.DTOs;
 using Chattoo.GraphQL.Types.Enums;
 using GraphQL.Types;
 

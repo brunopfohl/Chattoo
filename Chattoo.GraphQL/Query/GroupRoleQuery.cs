@@ -1,5 +1,5 @@
-﻿using Chattoo.Application.Common.Models;
-using Chattoo.Application.GroupRoles.DTOs;
+﻿using Chattoo.Application.Common.DTOs;
+using Chattoo.Application.Common.Models;
 using Chattoo.Application.Groups.Queries.GetRole;
 using Chattoo.Application.Users.Queries.GetGroupRoles;
 using Chattoo.GraphQL.Arguments;

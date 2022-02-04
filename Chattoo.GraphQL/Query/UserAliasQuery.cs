@@ -1,5 +1,5 @@
-﻿using Chattoo.Application.Common.Models;
-using Chattoo.Application.UserAliases.DTOs;
+﻿using Chattoo.Application.Common.DTOs;
+using Chattoo.Application.Common.Models;
 using Chattoo.Application.UserAliases.Queries.GetById;
 using Chattoo.Application.Users.Queries.GetAliases;
 using Chattoo.GraphQL.Arguments;

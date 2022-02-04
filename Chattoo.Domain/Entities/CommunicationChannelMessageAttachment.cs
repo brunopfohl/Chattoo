@@ -33,5 +33,25 @@ namespace Chattoo.Domain.Entities
         /// Vrací nebo nastavuje typ přílohy (soubor, odkaz, ...).
         /// </summary>
         public CommunicationChannelMessageAttachmentType Type { get; private set; }
+
+        public static CommunicationChannelMessageAttachment Create(string messageId, string name,
+            byte[] content, CommunicationChannelMessageAttachmentType type)
+        {
+            var entity = new CommunicationChannelMessageAttachment()
+            {
+                MessageId = messageId,
+                Content = content,
+                Type = type
+            };
+
+            entity.SetName(name);
+
+            return entity;
+        }
+
+        public void SetName(string name)
+        {
+            Name = name;
+        }
     }
 }

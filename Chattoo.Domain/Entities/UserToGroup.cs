@@ -19,5 +19,16 @@ namespace Chattoo.Domain.Entities
             yield return UserId;
             yield return GroupId;
         }
+
+        public static UserToGroup Create(string userId, string groupId)
+        {
+            var entity = new UserToGroup()
+            {
+                UserId = userId,
+                GroupId = groupId
+            };
+
+            return entity;
+        }
     }
 }

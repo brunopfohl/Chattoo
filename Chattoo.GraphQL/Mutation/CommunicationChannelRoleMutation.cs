@@ -1,6 +1,6 @@
-﻿using Chattoo.Application.CommunicationChannelRoles.Commands.Create;
-using Chattoo.Application.CommunicationChannelRoles.Commands.Delete;
-using Chattoo.Application.CommunicationChannelRoles.Commands.Update;
+﻿using Chattoo.Application.CommunicationChannels.Commands.AddRole;
+using Chattoo.Application.CommunicationChannels.Commands.DeleteRole;
+using Chattoo.Application.CommunicationChannels.Commands.UpdateRole;
 using Chattoo.Domain.Enums;
 using Chattoo.GraphQL.Extensions;
 using GraphQL.Types;
@@ -67,7 +67,7 @@ namespace Chattoo.GraphQL.Mutation
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var command = new UpdateCommunicationChannelRoleCommand()
+                    var command = new UpdateChannelRoleCommand()
                     {
                         Id = ctx.GetString("id"),
                         Name = ctx.GetString("name"),

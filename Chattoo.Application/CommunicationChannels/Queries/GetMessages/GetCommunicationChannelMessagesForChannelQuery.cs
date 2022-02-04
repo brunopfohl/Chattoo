@@ -3,11 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.Common.Mappings;
 using Chattoo.Application.Common.Models;
 using Chattoo.Application.Common.Queries;
 using Chattoo.Application.Common.Services;
-using Chattoo.Application.CommunicationChannelMessages.DTOs;
 using Chattoo.Domain.Repositories;
 
 namespace Chattoo.Application.CommunicationChannels.Queries

@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.Common.Services;
-using Chattoo.Application.CommunicationChannelRoles.DTOs;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Repositories;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Chattoo.Application.CommunicationChannelMessages.DTOs;
+using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.CommunicationChannels.DTOs;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Subscription.CommunicationChannelMessage;

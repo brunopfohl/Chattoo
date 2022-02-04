@@ -22,14 +22,7 @@
     <Folder Include="CalendarEventWishes\Queries" />
     <Folder Include="Common\Extensions" />
     <Folder Include="Common\Services\" />
-    <Folder Include="CommunicationChannelMessageAttachments\EventHandlers" />
-    <Folder Include="CommunicationChannelMessageAttachments\Queries" />
-    <Folder Include="CommunicationChannelMessages\EventHandlers" />
-    <Folder Include="CommunicationChannelRoles\EventHandlers" />
-    <Folder Include="CommunicationChannels\AddMessageAttachment" />
     <Folder Include="CommunicationChannels\EventHandlers" />
-    <Folder Include="GroupRoles\Commands" />
-    <Folder Include="GroupRoles\EventHandlers" />
     <Folder Include="Groups\EventHandlers" />
     <Folder Include="Groups\Queries\GetRoles" />
     <Folder Include="Users\EventHandlers" />

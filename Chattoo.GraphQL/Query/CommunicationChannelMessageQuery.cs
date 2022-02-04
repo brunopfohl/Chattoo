@@ -1,5 +1,5 @@
-﻿using Chattoo.Application.Common.Models;
-using Chattoo.Application.CommunicationChannelMessages.DTOs;
+﻿using Chattoo.Application.Common.DTOs;
+using Chattoo.Application.Common.Models;
 using Chattoo.Application.CommunicationChannelMessages.Queries.GetById;
 using Chattoo.Application.CommunicationChannels.Queries.GetMessages;
 using Chattoo.GraphQL.Arguments;

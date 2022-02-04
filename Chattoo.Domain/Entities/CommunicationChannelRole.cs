@@ -31,5 +31,29 @@ namespace Chattoo.Domain.Entities
         public CommunicationChannelPermission Permission { get; private set; }
         
         public virtual ICollection<User> Users { get; set; }
+
+        public static CommunicationChannelRole Create(string name, string channelId,
+            CommunicationChannelPermission permission)
+        {
+            var entity = new CommunicationChannelRole()
+            {
+                ChannelId = channelId
+            };
+            
+            entity.SetName(name);
+            entity.SetPermission(permission);
+
+            return entity;
+        }
+
+        public void SetName(string name)
+        {
+            Name = name;
+        }
+
+        public void SetPermission(CommunicationChannelPermission permission)
+        {
+            Permission = permission;
+        }
     }
 }

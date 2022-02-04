@@ -1,4 +1,4 @@
-﻿using Chattoo.Application.UserAliases.DTOs;
+﻿using Chattoo.Application.Common.DTOs;
 using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Types

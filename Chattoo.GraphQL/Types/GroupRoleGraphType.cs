@@ -1,4 +1,4 @@
-﻿using Chattoo.Application.GroupRoles.DTOs;
+﻿using Chattoo.Application.Common.DTOs;
 using Chattoo.Domain.Entities;
 using GraphQL.Types;
 

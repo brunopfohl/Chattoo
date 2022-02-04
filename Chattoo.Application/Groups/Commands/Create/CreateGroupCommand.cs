@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Chattoo.Application.Common.Exceptions;
 using Chattoo.Application.Common.Interfaces;
-using Chattoo.Application.GroupRoles.Commands.Create;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Enums;
 using Chattoo.Domain.Repositories;
@@ -25,30 +24,23 @@ namespace Chattoo.Application.Groups.Commands.Create
     public class CreateGroupCommandHandler : IRequestHandler<CreateGroupCommand, string>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGroupRepository _groupRepository;
+        private readonly ICurrentUserService _currentUserService;
 
-        public CreateGroupCommandHandler(IUnitOfWork unitOfWork, IGroupRepository groupRepository)
+        public CreateGroupCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
         {
             _unitOfWork = unitOfWork;
-            _groupRepository = groupRepository;
+            _currentUserService = currentUserService;
         }
 
         public async Task<string> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
         {
-            // // Vytvořím entitu naplněnou daty z příkazu.
-            // var entity = new Group()
-            // {
-            //     Name = request.Name
-            // };
-            //
-            // // Přidám záznam do datového zdroje a uložím.`
-            // await _groupRepository.AddOrUpdateAsync(entity, cancellationToken);
-            // await _unitOfWork.SaveChangesAsync(cancellationToken);
-            //
-            // // Vrátím Id vytvořeného záznamu.
-            // return entity.Id;
-
-            return null;
+            var group = Group.Create(request.Name);
+            
+            group.AddParticipant(_currentUserService.User.Id);
+            
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            
+            return group.Id;
         }
     }
 }

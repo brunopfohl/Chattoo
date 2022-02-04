@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.Common.Interfaces;
 using Chattoo.Application.Common.Services;
-using Chattoo.Application.CommunicationChannelMessages.DTOs;
 using Chattoo.Domain.Enums;
 using Chattoo.Domain.Repositories;
 using MediatR;

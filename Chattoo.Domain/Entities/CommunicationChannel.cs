@@ -78,6 +78,67 @@ namespace Chattoo.Domain.Entities
             Description = description;
         }
 
+        public CommunicationChannelMessageAttachment AddAttachment(string messageId, string name,
+            byte[] content, CommunicationChannelMessageAttachmentType type)
+        {
+            var message = GetMessage(messageId);
+
+            var attachment = message.AddAttachment(name, content, type);
+
+            return attachment;
+        }
+
+        public CommunicationChannelMessageAttachment DeleteAttachment(string messageId, string attachmentId)
+        {
+            var message = GetMessage(messageId);
+            
+            var attachment = message.DeleteAttachment(attachmentId);
+
+            return attachment;
+        }
+        
+        public CommunicationChannelMessageAttachment UpdateAttachment(string messageId, string attachmentId, string name)
+        {
+            var message = GetMessage(messageId);
+
+            var attachment = message.UpdateAttachment(attachmentId, name);
+
+            return attachment;
+        }
+
+        public CommunicationChannelRole AddRole(string name, CommunicationChannelPermission permission)
+        {
+            if (Roles.Any(r => r.Name == name))
+            {
+                throw new Exception($"Couldn't add Role with name '{name}' to channel '{Id}, because it already exists'");
+            }
+            
+            var role = CommunicationChannelRole.Create(name, Id, permission);
+            
+            Roles.Add(role);
+
+            return role;
+        }
+        
+        public CommunicationChannelRole DeleteRole(string roleId)
+        {
+            var role = GetRole(roleId);
+            
+            Roles.Remove(role);
+
+            return role;
+        }
+
+        public CommunicationChannelRole UpdateRole(string roleId, string name, CommunicationChannelPermission permission)
+        {
+            var role = GetRole(roleId);
+            
+            role.SetName(name);
+            role.SetPermission(permission);
+            
+            return role;
+        }
+
         public void AddParticipant(string participantId)
         {
             if (Users.Any(u => u.UserId == participantId))
@@ -132,18 +193,32 @@ namespace Chattoo.Domain.Entities
             return message;
         }
 
-        private CommunicationChannelMessage GetMessage(string id)
+        private CommunicationChannelMessage GetMessage(string messageId)
         {
-            var message = Messages.FirstOrDefault(m => m.Id == id);
+            var message = Messages.FirstOrDefault(m => m.Id == messageId);
 
             if (message == null)
             {
                 throw new NotFoundException(
-                    $"{nameof(CommunicationChannel)}:{nameof(CommunicationChannelMessage)}", id
+                    $"{nameof(CommunicationChannel)}:{nameof(CommunicationChannelMessage)}", messageId
                 );
             }
 
             return message;
+        }
+
+        private CommunicationChannelRole GetRole(string roleId)
+        {
+            var role = Roles.FirstOrDefault(r => r.Id == roleId);
+            
+            if (role == null)
+            {
+                throw new NotFoundException(
+                    $"{nameof(CommunicationChannel)}:{nameof(CommunicationChannelRole)}", roleId
+                );
+            }
+
+            return role;
         }
     }
 }
