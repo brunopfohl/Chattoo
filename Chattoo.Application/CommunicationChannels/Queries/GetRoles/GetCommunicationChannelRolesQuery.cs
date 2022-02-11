@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Threading;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -8,9 +7,6 @@ using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.Common.Mappings;
 using Chattoo.Application.Common.Models;
 using Chattoo.Application.Common.Queries;
-using Chattoo.Application.Common.Services;
-using Chattoo.Application.CommunicationChannels.Queries.GetUsers;
-using Chattoo.Domain.Repositories;
 using Chattoo.Domain.Services;
 
 namespace Chattoo.Application.CommunicationChannels.Queries.GetRoles

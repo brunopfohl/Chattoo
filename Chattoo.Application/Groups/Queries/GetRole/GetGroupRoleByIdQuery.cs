@@ -6,6 +6,7 @@ using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.Common.Services;
 using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.Groups.Queries
@@ -29,25 +30,19 @@ namespace Chattoo.Application.Groups.Queries
     public class GetGroupRoleByIdQueryHandler : IRequestHandler<GetGroupRoleByIdQuery, GroupRoleDto>
     {
         private readonly IMapper _mapper;
-        private readonly GetByIdUserSafeService _getByIdUserSafeService;
-        private readonly IGroupRepository _groupRepository;
+        private readonly GroupManager _groupManager;
 
-        public GetGroupRoleByIdQueryHandler(IMapper mapper, GetByIdUserSafeService getByIdUserSafeService, IGroupRepository groupRepository)
+        public GetGroupRoleByIdQueryHandler(IMapper mapper, GroupManager groupManager)
         {
             _mapper = mapper;
-            _getByIdUserSafeService = getByIdUserSafeService;
-            _groupRepository = groupRepository;
+            _groupManager = groupManager;
         }
 
         public async Task<GroupRoleDto> Handle(GetGroupRoleByIdQuery request, CancellationToken cancellationToken)
         {
-            var group = await _getByIdUserSafeService.GetAsync(_groupRepository, request.GroupId);
-            var role = group.Roles.FirstOrDefault(r => r.Id == request.RoleId);
+            var group = await _groupManager.GetGroupOrThrow(request.GroupId);
 
-            if (role == null)
-            {
-                throw new NotFoundException();
-            }
+            var role = _groupManager.GetRoleOrThrow(group, request.RoleId);
 
             return _mapper.Map<GroupRoleDto>(role);
         }

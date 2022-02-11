@@ -9,6 +9,7 @@ using Chattoo.Application.Common.Models;
 using Chattoo.Application.Common.Queries;
 using Chattoo.Application.Common.Services;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 
 namespace Chattoo.Application.Users.Queries
 {
@@ -31,19 +32,18 @@ namespace Chattoo.Application.Users.Queries
     public class GetGroupRolesForUserInGroupQueryHandler : PaginatedQueryHandler<GetGroupRolesForUserInGroupQuery, GroupRoleDto>
     {
         private readonly IMapper _mapper;
-        private readonly IGroupRepository _groupRepository;
-        private readonly GetByIdUserSafeService _getByIdUserSafeService;
+        private readonly GroupManager _groupManager;
 
-        public GetGroupRolesForUserInGroupQueryHandler(IMapper mapper, IGroupRepository groupRepository, GetByIdUserSafeService getByIdUserSafeService)
+        public GetGroupRolesForUserInGroupQueryHandler(IMapper mapper, GroupManager groupManager)
         {
             _mapper = mapper;
-            _groupRepository = groupRepository;
-            _getByIdUserSafeService = getByIdUserSafeService;
+            _groupManager = groupManager;
         }
 
         public override async Task<PaginatedList<GroupRoleDto>> Handle(GetGroupRolesForUserInGroupQuery request, CancellationToken cancellationToken)
         {
-            var group = await _getByIdUserSafeService.GetAsync(_groupRepository, request.GroupId);
+            var group = await _groupManager.GetGroupOrThrow(request.GroupId);
+            
             var roles = group.Roles
                 .Where(r => r.Users.Any(u => u.Id == request.UserId))
                 .AsQueryable();

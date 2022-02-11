@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chattoo.Domain.Common;
 using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.ValueObjects;
@@ -11,9 +12,11 @@ namespace Chattoo.Domain.Entities
     /// </summary>
     public class CalendarEvent: AuditableEntity, IAuditableEntity, IAggregateRoot
     {
+        private List<UserToCalendarEvent> _participants;
+        
         protected CalendarEvent()
         {
-            Participants = new List<UserToCalendarEvent>();
+            _participants = new List<UserToCalendarEvent>();
         }
         
         /// <summary>
@@ -70,9 +73,14 @@ namespace Chattoo.Domain.Entities
         /// Vrací nebo nastavuje autora (null reprezentuje "jakýkoliv typ").
         /// </summary>
         public virtual CalendarEventType CalendarEventType { get; private set; }
-        
-        public virtual ICollection<UserToCalendarEvent> Participants { get; private set; }
 
+        public virtual IReadOnlyCollection<UserToCalendarEvent> Participants => _participants.AsReadOnly();
+
+        public bool HasParticipant(string userId)
+        {
+            return Participants.Any(u => u.UserId == userId);
+        }
+        
         public static CalendarEvent Create(ICalendarEventCreateContract createContract, User author, CommunicationChannel channel,
             Group group, Address address, CalendarEventType type)
         {

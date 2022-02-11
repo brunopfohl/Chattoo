@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Chattoo.Application.Common.Services;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.Groups.Commands
@@ -25,22 +26,19 @@ namespace Chattoo.Application.Groups.Commands
     public class AddUserToGroupCommandHandler : IRequestHandler<AddUserToGroupCommand, Unit>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGroupRepository _groupRepository;
-        private readonly GetByIdUserSafeService _getByIdUserSafeService;
+        private readonly GroupManager _groupManager;
 
-        public AddUserToGroupCommandHandler(IUnitOfWork unitOfWork, IGroupRepository groupRepository,
-            GetByIdUserSafeService getByIdUserSafeService)
+        public AddUserToGroupCommandHandler(IUnitOfWork unitOfWork, GroupManager groupManager)
         {
             _unitOfWork = unitOfWork;
-            _groupRepository = groupRepository;
-            _getByIdUserSafeService = getByIdUserSafeService;
+            _groupManager = groupManager;
         }
 
         public async Task<Unit> Handle(AddUserToGroupCommand request, CancellationToken cancellationToken)
         {
-            var group = await _getByIdUserSafeService.GetAsync(_groupRepository, request.GroupId);
-            
-            group.AddParticipant(request.UserId);
+            var group = await _groupManager.GetGroupOrThrow(request.GroupId);
+
+            await _groupManager.AddParticipantToGroup(group, request.UserId);
             
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             

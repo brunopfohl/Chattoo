@@ -30,7 +30,6 @@
     <Folder Include="Groups\Commands\Role" />
     <Folder Include="Groups\Commands\User" />
     <Folder Include="Groups\EventHandlers" />
-    <Folder Include="Groups\Queries\GetRoles" />
     <Folder Include="Users\Commands\Alias" />
     <Folder Include="Users\EventHandlers" />
   </ItemGroup>

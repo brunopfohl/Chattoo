@@ -7,6 +7,7 @@ using Chattoo.Domain.Entities;
 using Chattoo.Domain.Enums;
 using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.Groups.Commands
@@ -25,19 +26,21 @@ namespace Chattoo.Application.Groups.Commands
     public class CreateGroupCommandHandler : IRequestHandler<CreateGroupCommand, string>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly GroupManager _groupManager;
+        private readonly IGroupRepository _groupRepository;
 
-        public CreateGroupCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+        public CreateGroupCommandHandler(IUnitOfWork unitOfWork, GroupManager groupManager, IGroupRepository groupRepository)
         {
             _unitOfWork = unitOfWork;
-            _currentUserService = currentUserService;
+            _groupManager = groupManager;
+            _groupRepository = groupRepository;
         }
 
         public async Task<string> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
         {
-            var group = Group.Create(request.Name);
+            var group = _groupManager.Create(request.Name);
             
-            group.AddParticipant(_currentUserService.User.Id);
+            await _groupRepository.AddOrUpdateAsync(group, cancellationToken);
             
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             

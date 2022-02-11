@@ -9,7 +9,9 @@ using Chattoo.Application.Common.Mappings;
 using Chattoo.Application.Common.Models;
 using Chattoo.Application.Common.Queries;
 using Chattoo.Application.Common.Services;
+using Chattoo.Domain.Entities;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 
 namespace Chattoo.Application.Users.Queries
 {
@@ -32,20 +34,18 @@ namespace Chattoo.Application.Users.Queries
     public class GetCommunicationChannelRolesForUserInChannelQueryHandler : PaginatedQueryHandler<GetCommunicationChannelRolesForUserInChannelQuery, CommunicationChannelRoleDto>
     {
         private readonly IMapper _mapper;
-        private readonly ICommunicationChannelRepository _communicationChannelRepository;
-        private readonly GetByIdUserSafeService _getByIdUserSafeService;
+        private readonly ChannelManager _channelManager;
 
-        public GetCommunicationChannelRolesForUserInChannelQueryHandler(IMapper mapper, ICommunicationChannelRepository communicationChannelRepository, GetByIdUserSafeService getByIdUserSafeService)
+        public GetCommunicationChannelRolesForUserInChannelQueryHandler(IMapper mapper, ChannelManager channelManager)
         {
             _mapper = mapper;
-            _communicationChannelRepository = communicationChannelRepository;
-            _getByIdUserSafeService = getByIdUserSafeService;
+            _channelManager = channelManager;
         }
 
         public override async Task<PaginatedList<CommunicationChannelRoleDto>> Handle(GetCommunicationChannelRolesForUserInChannelQuery request, CancellationToken cancellationToken)
         {
-            var channel = await _getByIdUserSafeService.GetAsync(_communicationChannelRepository, request.ChannelId);
-            
+            var channel = await _channelManager.GetChannelOrThrow(request.ChannelId);
+
             var roles = channel.Roles
                 .Where(r => r.Users.Any(u => u.Id == request.UserId)).AsQueryable();
             

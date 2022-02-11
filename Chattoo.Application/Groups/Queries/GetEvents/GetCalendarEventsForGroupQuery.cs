@@ -8,6 +8,7 @@ using Chattoo.Application.Common.Models;
 using Chattoo.Application.Common.Queries;
 using Chattoo.Application.Common.Services;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 
 namespace Chattoo.Application.Groups.Queries
 {
@@ -25,24 +26,19 @@ namespace Chattoo.Application.Groups.Queries
     public class GetCalendarEventsForCommunicationChannelQueryHandler : PaginatedQueryHandler<GetCalendarEventsForGroupQuery, CalendarEventDto>
     {
         private readonly IMapper _mapper;
-        private readonly IGroupRepository _groupRepository;
-        private readonly ICalendarEventRepository _calendarEventRepository;
-        private readonly GetByIdUserSafeService _getByIdUserSafeService;
+        private readonly GroupManager _groupManager;
 
-        public GetCalendarEventsForCommunicationChannelQueryHandler(IMapper mapper, ICalendarEventRepository calendarEventRepository, GetByIdUserSafeService getByIdUserSafeService, IGroupRepository groupRepository)
+        public GetCalendarEventsForCommunicationChannelQueryHandler(IMapper mapper, GroupManager groupManager)
         {
             _mapper = mapper;
-            _calendarEventRepository = calendarEventRepository;
-            _getByIdUserSafeService = getByIdUserSafeService;
-            _groupRepository = groupRepository;
+            _groupManager = groupManager;
         }
 
         public override async Task<PaginatedList<CalendarEventDto>> Handle(GetCalendarEventsForGroupQuery request, CancellationToken cancellationToken)
         {
-            // Pokusím se načíst kanál.
-            var group = await _getByIdUserSafeService.GetAsync(_groupRepository, request.GroupId);
+            var group = await _groupManager.GetGroupOrThrow(request.GroupId);
 
-            var events = _calendarEventRepository.GetByGroupId(group.Id);
+            var events = await _groupManager.GetEvents(group);
             
             // Načtu kolekci kalendářních událostí komunikačního kanálu a zpracuju na stránkovanou kolekci.
             var result = await events

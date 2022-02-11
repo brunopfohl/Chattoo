@@ -35,21 +35,11 @@ namespace Chattoo.Application.CalendarEvents.Commands
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICurrentUserService _currentUserService;
-        private readonly ICalendarEventRepository _calendarEventRepository;
-        private readonly IGroupRepository _groupRepository;
-        private readonly ICommunicationChannelRepository _communicationChannelRepository;
 
-        public CreateCalendarEventCommandHandler(IUnitOfWork unitOfWork, ICalendarEventRepository calendarEventRepository,
-            ICurrentUserService currentUserService, IMapper mapper, ICommunicationChannelRepository communicationChannelRepository,
-            IGroupRepository groupRepository)
+        public CreateCalendarEventCommandHandler(IMapper mapper, IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
-            _calendarEventRepository = calendarEventRepository;
-            _currentUserService = currentUserService;
             _mapper = mapper;
-            _communicationChannelRepository = communicationChannelRepository;
-            _groupRepository = groupRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<CalendarEventDto> Handle(CreateCalendarEventCommand request, CancellationToken cancellationToken)

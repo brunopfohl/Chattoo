@@ -1,10 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Chattoo.Application.Common.Exceptions;
 using Chattoo.Application.Groups.DTOs;
-using Chattoo.Domain.Entities;
-using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.Groups.Queries.GetById
@@ -23,20 +21,19 @@ namespace Chattoo.Application.Groups.Queries.GetById
     public class GetGroupByIdQueryHandler : IRequestHandler<GetGroupByIdQuery, GroupDto>
     {
         private readonly IMapper _mapper;
-        private readonly IGroupRepository _groupRepository;
+        private readonly GroupManager _groupManager;
 
-        public GetGroupByIdQueryHandler(IGroupRepository groupRepository, IUserRepository userRepository, IMapper mapper)
+        public GetGroupByIdQueryHandler(IMapper mapper, GroupManager groupManager)
         {
-            _groupRepository = groupRepository;
             _mapper = mapper;
+            _groupManager = groupManager;
         }
 
         public async Task<GroupDto> Handle(GetGroupByIdQuery request, CancellationToken cancellationToken)
         {
-            // // Načtu skupinu z datového zdroje (vyhodím výjimku, pokud se mi skupinu nepodaří dohledat).
-            // var group = await _groupRepository.GetByIdAsync<GroupDto>(request.Id, true);
-            // return group;
-            return null;
+            var group = await _groupManager.GetGroupOrThrow(request.Id);
+
+            return _mapper.Map<GroupDto>(group);
         }
     }
 }

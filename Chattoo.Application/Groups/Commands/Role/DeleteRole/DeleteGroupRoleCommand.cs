@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.Groups.Commands
@@ -24,19 +25,21 @@ namespace Chattoo.Application.Groups.Commands
     public class DeleteGroupRoleCommandHandler : IRequestHandler<DeleteGroupRoleCommand, Unit>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGroupRepository _groupRepository;
+        private readonly GroupManager _groupManager;
 
-        public DeleteGroupRoleCommandHandler(IUnitOfWork unitOfWork, IGroupRepository groupRepository)
+        public DeleteGroupRoleCommandHandler(IUnitOfWork unitOfWork, GroupManager groupManager)
         {
             _unitOfWork = unitOfWork;
-            _groupRepository = groupRepository;
+            _groupManager = groupManager;
         }
 
         public async Task<Unit> Handle(DeleteGroupRoleCommand request, CancellationToken cancellationToken)
         {
-            var group = await _groupRepository.GetByIdAsync(request.GroupId);
+            var group = await _groupManager.GetGroupOrThrow(request.GroupId);
 
-            group.DeleteRole(request.Id);
+            var role = _groupManager.GetRoleOrThrow(group, request.Id);
+
+            group.DeleteRole(role);
             
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             

@@ -92,7 +92,7 @@ namespace Chattoo.Domain.Entities
             return role;
         }
 
-        public CommunicationChannelRole GetRole(string roleId)
+        internal CommunicationChannelRole GetRole(string roleId)
         {
             var role = Roles.FirstOrDefault(r => r.Id == roleId);
             
@@ -109,14 +109,6 @@ namespace Chattoo.Domain.Entities
             }
         }
 
-        public CommunicationChannelRole UpdateRole(CommunicationChannelRole role, string name, CommunicationChannelPermission permission)
-        {
-            role.SetName(name);
-            role.SetPermission(permission);
-            
-            return role;
-        }
-
         #endregion
 
         #region Participants
@@ -130,7 +122,7 @@ namespace Chattoo.Domain.Entities
         {
             if (HasParticipant(participantId))
             {
-                throw new Exception($"Couldn't add User:{participantId} to CommunicationChannel:{Id}");
+                throw new DuplicitUserInChannelException(participantId, Id);
             }
             
             var participant = UserToCommunicationChannel.Create(participantId, Id);

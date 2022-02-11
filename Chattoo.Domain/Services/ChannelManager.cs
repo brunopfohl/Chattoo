@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Exceptions;
@@ -11,12 +12,14 @@ namespace Chattoo.Domain.Services
         private readonly IUserRepository _userRepository;
         private readonly ICurrentUserService _currentUserService;
         private readonly ICommunicationChannelRepository _communicationChannelRepository;
+        private readonly ICalendarEventRepository _calendarEventRepository;
         
-        public ChannelManager(IUserRepository userRepository, ICommunicationChannelRepository communicationChannelRepository, ICurrentUserService currentUserService)
+        public ChannelManager(IUserRepository userRepository, ICommunicationChannelRepository communicationChannelRepository, ICurrentUserService currentUserService, ICalendarEventRepository calendarEventRepository)
         {
             _userRepository = userRepository;
             _communicationChannelRepository = communicationChannelRepository;
             _currentUserService = currentUserService;
+            _calendarEventRepository = calendarEventRepository;
         }
 
         public async Task<CommunicationChannel> GetChannelOrThrow(string channelId)
@@ -90,6 +93,11 @@ namespace Chattoo.Domain.Services
         }
 
         #endregion
+
+        public IQueryable<CalendarEvent> GetEvents(CommunicationChannel channel)
+        {
+            return _calendarEventRepository.GetByCommunicationChannelId(channel.Id);
+        }
 
         public async Task AddParticipantToChannel(CommunicationChannel channel, string userId)
         {

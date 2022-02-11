@@ -52,9 +52,10 @@ namespace Chattoo.Application.CommunicationChannels.Commands
         {
             var channel = await _channelManager.GetChannelOrThrow(request.ChannelId);
 
-            var role = channel.GetRole(request.Id);
+            var role = _channelManager.GetRoleOrThrow(channel, request.Id);
             
-            channel.DeleteRole(role);
+            role.SetName(request.Name);
+            role.SetPermission(request.Permission);
             
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -37,7 +37,12 @@ namespace Chattoo.GraphQL.Services
         
         public bool CanViewChannel(CommunicationChannel channel)
         {
-            return User.Channels.Any(ch => ch.ChannelId == channel.Id);
+            return CanViewChannel(channel.Id);
+        }
+        
+        public bool CanViewChannel(string channelId)
+        {
+            return User.Channels.Any(ch => ch.ChannelId == channelId);
         }
 
         public bool CanEditChannel(CommunicationChannel channel)
@@ -47,7 +52,12 @@ namespace Chattoo.GraphQL.Services
         
         public bool CanViewGroup(Group group)
         {
-            return User.Groups.Any(ch => ch.GroupId == group.Id);
+            return CanViewGroup(group.Id);
+        }
+
+        public bool CanViewGroup(string groupId)
+        {
+            return User.Groups.Any(ch => ch.GroupId == groupId);
         }
 
         public bool CanEditGroup(Group group)

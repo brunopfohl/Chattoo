@@ -13,10 +13,15 @@ namespace Chattoo.Domain.Interfaces
         public User User { get; }
 
         public bool CanViewChannel(CommunicationChannel channel);
+        
+        public bool CanViewChannel(string channelId);
+
 
         public bool CanEditChannel(CommunicationChannel channel);
 
         public bool CanViewGroup(Group group);
+        
+        public bool CanViewGroup(string groupId);
 
         public bool CanEditGroup(Group group);
 

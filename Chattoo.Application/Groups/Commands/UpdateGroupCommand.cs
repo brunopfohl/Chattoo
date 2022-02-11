@@ -4,6 +4,7 @@ using AutoMapper;
 using Chattoo.Application.Common.Services;
 using Chattoo.Application.Groups.DTOs;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.Groups.Commands
@@ -28,18 +29,18 @@ namespace Chattoo.Application.Groups.Commands
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGroupRepository _groupRepository;
+        private readonly GroupManager _groupManager;
 
-        public UpdateGroupCommandHandler(IUnitOfWork unitOfWork, IGroupRepository groupRepository, IMapper mapper)
+        public UpdateGroupCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, GroupManager groupManager)
         {
             _unitOfWork = unitOfWork;
-            _groupRepository = groupRepository;
             _mapper = mapper;
+            _groupManager = groupManager;
         }
 
         public async Task<GroupDto> Handle(UpdateGroupCommand request, CancellationToken cancellationToken)
         {
-            var group = await _groupRepository.GetByIdAsync(request.Id);
+            var group = await _groupManager.GetGroupOrThrow(request.Id);
             
             group.SetName(request.Name);
             

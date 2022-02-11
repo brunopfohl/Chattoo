@@ -12,11 +12,7 @@ namespace Chattoo.Application.Groups.Commands
         {
             RuleFor(v => v.Id)
                 .NotEmpty()
-                    .WithMessage("Je nutno určit Id skupiny.")
-                .Must(groupValidation.Found)
-                    .WithMessage("Skupina nebyla nalezena")
-                .Must(groupValidation.ReadPermissionGranted)
-                    .WithMessage("Uživatel nemá právo pro upravování této skupiny.");
+                    .WithMessage("Je nutno určit Id skupiny.");
             
             RuleFor(v => v.Name)
                 .MaximumLength(100).WithMessage("Název skupiny nesmí být delší než 100 znaků.")

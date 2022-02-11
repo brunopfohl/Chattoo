@@ -36,8 +36,8 @@ namespace Chattoo.Application.CommunicationChannels.Commands
         public async Task<Unit> Handle(DeleteChannelRoleCommand request, CancellationToken cancellationToken)
         {
             var channel = await _channelManager.GetChannelOrThrow(request.ChannelId);
-            
-            var role = channel.GetRole(request.Id);
+
+            var role = _channelManager.GetRoleOrThrow(channel, request.Id);
 
             channel.DeleteRole(role);
             

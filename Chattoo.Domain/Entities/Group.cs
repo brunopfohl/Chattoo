@@ -34,7 +34,7 @@ namespace Chattoo.Domain.Entities
 
         public virtual IReadOnlyCollection<UserToGroup> Participants => _participants.AsReadOnly();
 
-        public static Group Create(string name)
+        internal static Group Create(string name)
         {
             var entity = new Group();
             
@@ -52,7 +52,7 @@ namespace Chattoo.Domain.Entities
         {
             if (HasRole(name))
             {
-                throw new Exception($"Role {name} already exists in group with id {Id}");
+                throw new DuplicitGroupRoleNameException(Id, name);
             }
             
             var role = GroupRole.Create(Id, name, permission);
@@ -72,25 +72,31 @@ namespace Chattoo.Domain.Entities
             return role;
         }
 
-        public GroupRole DeleteRole(string roleId)
+        public void DeleteRole(GroupRole role)
         {
-            var role = GetRole(roleId);
+            bool wasRemoved = _roles.Remove(role);
 
-            _roles.Remove(role);
-
-            return role;
+            if (!wasRemoved)
+            {
+                throw new GroupRoleNotFoundException(Id, role.Id);
+            }
         }
 
         public bool HasRole(string name)
         {
             return Roles.Any(r => r.Name == name);
         }
-        
-        public void AddParticipant(string userId)
+
+        public bool HasParticipant(string userId)
         {
-            if (Participants.Any(p => p.UserId == userId))
+            return Participants.Any(p => p.UserId == userId);
+        }
+        
+        internal void AddParticipant(string userId)
+        {
+            if (HasParticipant(userId))
             {
-                throw new Exception($"Couldn't add. {nameof(User)}:{userId} is already in {nameof(Group)}:{Id}");
+                throw new DuplicitUserInGroupException(Id, userId);
             }
 
             var participant = UserToGroup.Create(userId, Id);
@@ -100,24 +106,15 @@ namespace Chattoo.Domain.Entities
 
         public void RemoveParticipant(string participantId)
         {
-            var participant = Participants.FirstOrDefault(p => p.UserId == participantId);
-
-            if (participant == null)
-            {
-                throw new NotFoundException($"{nameof(Group)}:{nameof(User)}", participantId);
-            }
+            var participant = Participants.FirstOrDefault(p => p.UserId == participantId)
+                ?? throw new UserNotFoundException(participantId);
 
             _participants.Remove(participant);
         }
         
-        private GroupRole GetRole(string roleId)
+        internal GroupRole GetRole(string roleId)
         {
             var role = Roles.FirstOrDefault(r => r.Id == roleId);
-
-            if (role == null)
-            {
-                throw new NotFoundException($"{nameof(Group)}:{nameof(GroupRole)}", roleId);
-            }
 
             return role;
         }

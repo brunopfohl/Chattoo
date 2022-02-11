@@ -5,6 +5,7 @@ using Chattoo.Application.Common.Services;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.Groups.Commands
@@ -24,16 +25,20 @@ namespace Chattoo.Application.Groups.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IGroupRepository _groupRepository;
+        private readonly GroupManager _groupManager;
 
-        public DeleteGroupCommandHandler(IUnitOfWork unitOfWork, IGroupRepository groupRepository)
+        public DeleteGroupCommandHandler(IUnitOfWork unitOfWork, IGroupRepository groupRepository, GroupManager groupManager)
         {
             _unitOfWork = unitOfWork;
             _groupRepository = groupRepository;
+            _groupManager = groupManager;
         }
 
         public async Task<Unit> Handle(DeleteGroupCommand request, CancellationToken cancellationToken)
         {
-            var group = await _groupRepository.GetByIdAsync(request.Id);
+            // TODO: Buď by mazání skupiny měl mít povolený nějaký owner nebo alespoň uživatel, co je součástí nějaké skupiny.
+            
+            var group = await _groupManager.GetGroupOrThrow(request.Id);
             
             _groupRepository.Remove(group);
             

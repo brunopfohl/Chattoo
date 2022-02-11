@@ -5,6 +5,7 @@ using Chattoo.Application.Common.Services;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.Groups.Commands
@@ -25,22 +26,17 @@ namespace Chattoo.Application.Groups.Commands
     public class RemoveUserFromGroupCommandHandler : IRequestHandler<RemoveUserFromGroupCommand, Unit>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGroupRepository _groupRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly GetByIdUserSafeService _getByIdUserSafeService;
+        private readonly GroupManager _groupManager;
 
-        public RemoveUserFromGroupCommandHandler(IUnitOfWork unitOfWork, IGroupRepository groupRepository,
-            IUserRepository userRepository, GetByIdUserSafeService getByIdUserSafeService)
+        public RemoveUserFromGroupCommandHandler(IUnitOfWork unitOfWork, GroupManager groupManager)
         {
             _unitOfWork = unitOfWork;
-            _groupRepository = groupRepository;
-            _userRepository = userRepository;
-            _getByIdUserSafeService = getByIdUserSafeService;
+            _groupManager = groupManager;
         }
 
         public async Task<Unit> Handle(RemoveUserFromGroupCommand request, CancellationToken cancellationToken)
         {
-            var group = await _getByIdUserSafeService.GetAsync(_groupRepository, request.GroupId);
+            var group = await _groupManager.GetGroupOrThrow(request.GroupId);
             
             group.RemoveParticipant(request.UserId);
             

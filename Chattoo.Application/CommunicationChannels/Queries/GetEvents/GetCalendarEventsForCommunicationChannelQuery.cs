@@ -26,13 +26,11 @@ namespace Chattoo.Application.CommunicationChannels.Queries
     public class GetCalendarEventsForCommunicationChannelQueryHandler : PaginatedQueryHandler<GetCalendarEventsForCommunicationChannelQuery, CalendarEventDto>
     {
         private readonly IMapper _mapper;
-        private readonly ICalendarEventRepository _calendarEventRepository;
         private readonly ChannelManager _channelManager;
 
-        public GetCalendarEventsForCommunicationChannelQueryHandler(IMapper mapper, ICalendarEventRepository calendarEventRepository, ChannelManager channelManager)
+        public GetCalendarEventsForCommunicationChannelQueryHandler(IMapper mapper, ChannelManager channelManager)
         {
             _mapper = mapper;
-            _calendarEventRepository = calendarEventRepository;
             _channelManager = channelManager;
         }
 
@@ -41,7 +39,7 @@ namespace Chattoo.Application.CommunicationChannels.Queries
             // Pokusím se načíst kanál.
             var channel = await _channelManager.GetChannelOrThrow(request.ChannelId);
 
-            var events = _calendarEventRepository.GetByCommunicationChannelId(channel.Id);
+            var events = _channelManager.GetEvents(channel);
             
             // Načtu kolekci kalendářních událostí komunikačního kanálu a zpracuju na stránkovanou kolekci.
             var result = await events

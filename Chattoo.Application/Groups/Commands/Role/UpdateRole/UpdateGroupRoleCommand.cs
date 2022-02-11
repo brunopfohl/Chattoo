@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Chattoo.Domain.Enums;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.Groups.Commands
@@ -35,17 +36,19 @@ namespace Chattoo.Application.Groups.Commands
     public class UpdateGroupRoleCommandHandler : IRequestHandler<UpdateGroupRoleCommand, Unit>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGroupRepository _groupRepository;
+        private readonly GroupManager _groupManager;
 
-        public UpdateGroupRoleCommandHandler(IUnitOfWork unitOfWork, IGroupRepository groupRepository)
+        public UpdateGroupRoleCommandHandler(IUnitOfWork unitOfWork, GroupManager groupManager)
         {
             _unitOfWork = unitOfWork;
-            _groupRepository = groupRepository;
+            _groupManager = groupManager;
         }
 
         public async Task<Unit> Handle(UpdateGroupRoleCommand request, CancellationToken cancellationToken)
         {
-            var group = await _groupRepository.GetByIdAsync(request.GroupId);
+            // TODO: Ok, opravdu to chce nějak navrhnout ty grouproles a vytvořit jejich hierrachchii.
+            
+            var group = await _groupManager.GetGroupOrThrow(request.GroupId);
 
             group.UpdateRole(request.Id, request.Name, request.Permission);
             

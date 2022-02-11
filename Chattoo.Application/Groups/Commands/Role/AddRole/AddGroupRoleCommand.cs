@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Chattoo.Domain.Enums;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.Groups.Commands
@@ -30,17 +31,17 @@ namespace Chattoo.Application.Groups.Commands
     public class AddGroupRoleCommandHandler : IRequestHandler<AddGroupRoleCommand, string>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGroupRepository _groupRepository;
+        private readonly GroupManager _groupManager;
 
-        public AddGroupRoleCommandHandler(IUnitOfWork unitOfWork, IGroupRepository groupRepository)
+        public AddGroupRoleCommandHandler(IUnitOfWork unitOfWork, GroupManager groupManager)
         {
             _unitOfWork = unitOfWork;
-            _groupRepository = groupRepository;
+            _groupManager = groupManager;
         }
 
         public async Task<string> Handle(AddGroupRoleCommand request, CancellationToken cancellationToken)
         {
-            var group = await _groupRepository.GetByIdAsync(request.GroupId);
+            var group = await _groupManager.GetGroupOrThrow(request.GroupId);
 
             var role = group.AddRole(request.Name, request.Permission);
             
