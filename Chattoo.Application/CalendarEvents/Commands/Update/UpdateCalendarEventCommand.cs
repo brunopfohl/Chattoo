@@ -6,6 +6,7 @@ using Chattoo.Application.Common.Interfaces;
 using Chattoo.Application.Common.Services;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Exceptions;
+using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Repositories;
 using MediatR;
 
@@ -46,16 +47,14 @@ namespace Chattoo.Application.CalendarEvents.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
-        private readonly GetByIdUserSafeService _getByIdUserSafeService;
         private readonly ICalendarEventRepository _calendarEventRepository;
 
         public UpdateCalendarEventCommandHandler(IUnitOfWork unitOfWork, ICalendarEventRepository calendarEventRepository,
-            ICurrentUserService currentUserService, GetByIdUserSafeService getByIdUserSafeService)
+            ICurrentUserService currentUserService)
         {
             _unitOfWork = unitOfWork;
             _calendarEventRepository = calendarEventRepository;
             _currentUserService = currentUserService;
-            _getByIdUserSafeService = getByIdUserSafeService;
         }
 
         public async Task<Unit> Handle(UpdateCalendarEventCommand request, CancellationToken cancellationToken)

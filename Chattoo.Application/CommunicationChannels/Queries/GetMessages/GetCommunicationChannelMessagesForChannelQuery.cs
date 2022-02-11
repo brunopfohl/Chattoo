@@ -9,6 +9,7 @@ using Chattoo.Application.Common.Models;
 using Chattoo.Application.Common.Queries;
 using Chattoo.Application.Common.Services;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 
 namespace Chattoo.Application.CommunicationChannels.Queries
 {
@@ -26,22 +27,18 @@ namespace Chattoo.Application.CommunicationChannels.Queries
     public class GetCommunicationChannelMessagesForUserInChannelQueryHandler : PaginatedQueryHandler<GetCommunicationChannelMessagesForChannelQuery, CommunicationChannelMessageDto>
     {
         private readonly IMapper _mapper;
-        private readonly IUserRepository _userRepository;
-        private readonly ICommunicationChannelRepository _communicationChannelRepository;
-        private readonly GetByIdUserSafeService _getByIdUserSafeService;
+        private readonly ChannelManager _channelManager;
 
-        public GetCommunicationChannelMessagesForUserInChannelQueryHandler(IMapper mapper, IUserRepository userRepository, ICommunicationChannelRepository communicationChannelRepository, GetByIdUserSafeService getByIdUserSafeService)
+        public GetCommunicationChannelMessagesForUserInChannelQueryHandler(IMapper mapper, ChannelManager channelManager)
         {
             _mapper = mapper;
-            _userRepository = userRepository;
-            _communicationChannelRepository = communicationChannelRepository;
-            _getByIdUserSafeService = getByIdUserSafeService;
+            _channelManager = channelManager;
         }
 
         public override async Task<PaginatedList<CommunicationChannelMessageDto>> Handle(GetCommunicationChannelMessagesForChannelQuery request, CancellationToken cancellationToken)
         {
             // Pokusím se načíst kanál.
-            var channel = await _getByIdUserSafeService.GetAsync(_communicationChannelRepository, request.ChannelId);
+            var channel = await _channelManager.GetChannelOrThrow(request.ChannelId);
 
             var messages = channel.Messages.AsQueryable();
             

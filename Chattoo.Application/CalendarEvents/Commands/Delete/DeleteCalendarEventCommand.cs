@@ -23,24 +23,21 @@ namespace Chattoo.Application.CalendarEvents.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICalendarEventRepository _calendarEventRepository;
-        private readonly GetByIdUserSafeService _getByIdUserSafeService;
 
-        public DeleteCalendarEventCommandHandler(IUnitOfWork unitOfWork, ICalendarEventRepository calendarEventRepository,
-            GetByIdUserSafeService getByIdUserSafeService)
+        public DeleteCalendarEventCommandHandler(IUnitOfWork unitOfWork, ICalendarEventRepository calendarEventRepository)
         {
             _unitOfWork = unitOfWork;
             _calendarEventRepository = calendarEventRepository;
-            _getByIdUserSafeService = getByIdUserSafeService;
         }
 
         public async Task<Unit> Handle(DeleteCalendarEventCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _getByIdUserSafeService.GetAsync(_calendarEventRepository, request.Id);
-            
-            // Záznam se podařilo nalézt -> smažu ho a uložím změny.
-            _calendarEventRepository.Remove(entity);
-            
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            // var entity = await _getByIdUserSafeService.GetAsync(_calendarEventRepository, request.Id);
+            //
+            // // Záznam se podařilo nalézt -> smažu ho a uložím změny.
+            // _calendarEventRepository.Remove(entity);
+            //
+            // await _unitOfWork.SaveChangesAsync(cancellationToken);
             
             return Unit.Value;
         }

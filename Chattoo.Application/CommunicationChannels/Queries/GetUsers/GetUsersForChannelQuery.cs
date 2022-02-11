@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -6,9 +5,9 @@ using AutoMapper.QueryableExtensions;
 using Chattoo.Application.Common.Mappings;
 using Chattoo.Application.Common.Models;
 using Chattoo.Application.Common.Queries;
-using Chattoo.Application.Common.Services;
 using Chattoo.Application.Users.DTOs;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 
 namespace Chattoo.Application.CommunicationChannels.Queries.GetUsers
 {
@@ -23,23 +22,21 @@ namespace Chattoo.Application.CommunicationChannels.Queries.GetUsers
     public class GetUsersForChannelQueryHandler : PaginatedQueryHandler<GetUsersForChannelQuery, UserDto>
     {
         private readonly IMapper _mapper;
-        private readonly ICommunicationChannelRepository _communicationChannelRepository;
         private readonly IUserRepository _userRepository;
-        private readonly GetByIdUserSafeService _getByIdUserSafeService;
+        private readonly ChannelManager _channelManager;
 
-        public GetUsersForChannelQueryHandler(IMapper mapper, ICommunicationChannelRepository communicationChannelRepository,
-            GetByIdUserSafeService getByIdUserSafeService, IUserRepository userRepository)
+        public GetUsersForChannelQueryHandler(IMapper mapper,
+            IUserRepository userRepository, ChannelManager channelManager)
         {
             _mapper = mapper;
-            _communicationChannelRepository = communicationChannelRepository;
-            _getByIdUserSafeService = getByIdUserSafeService;
             _userRepository = userRepository;
+            _channelManager = channelManager;
         }
 
         public override async Task<PaginatedList<UserDto>> Handle(GetUsersForChannelQuery request, CancellationToken cancellationToken)
         {
             // Pokusím se načíst kanál.
-            var channel = await _getByIdUserSafeService.GetAsync(_communicationChannelRepository, request.ChannelId);
+            var channel = await _channelManager.GetChannelOrThrow(request.ChannelId);
             
             // Načtu uživatele z komunikačního kanálu.
             var users = _userRepository.GetByChannelId(channel.Id);

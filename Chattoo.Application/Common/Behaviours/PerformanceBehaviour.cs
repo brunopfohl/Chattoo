@@ -4,6 +4,7 @@ using Chattoo.Application.Common.Interfaces;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Chattoo.Domain.Interfaces;
 
 namespace Chattoo.Application.Common.Behaviours
 {

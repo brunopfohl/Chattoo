@@ -1,10 +1,15 @@
+using System.Linq;
 using Chattoo.Application;
+using Chattoo.Application.Common.Exceptions;
 using Chattoo.Application.Common.Interfaces;
+using Chattoo.Domain.Exceptions;
+using Chattoo.Domain.Interfaces;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Services;
 using Chattoo.GraphQL.Subscription.CommunicationChannelMessage;
 using Chattoo.Infrastructure;
 using Chattoo.Infrastructure.Persistence;
+using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using Microsoft.AspNetCore.Builder;
@@ -70,7 +75,31 @@ namespace Chattoo.GraphQL
                 {
                     options.EnableMetrics = true;
                     var logger = provider.GetRequiredService<ILogger<Startup>>();
-                    options.UnhandledExceptionDelegate = ctx => logger.LogError("{Error} occurred", ctx.OriginalException.Message);
+                    options.UnhandledExceptionDelegate = ctx =>
+                    {
+                        if (ctx.Exception is ValidationException validationException)
+                        {
+                            foreach (var error in validationException.Errors)
+                            {
+                                var executionErrors =
+                                    error.Value.Select(e => new ExecutionError(e));
+                                
+                                ctx.Context.Errors.AddRange(executionErrors);
+                            }
+                        }
+                        else if (ctx.Exception is ChannelNotFoundException channelNotFoundException)
+                        {
+                            ctx.Context.Errors.Add( new ExecutionError("Komunikační kanál nebyl nalezen."));
+                        }
+                        else if (ctx.Exception is ChannelReadPermissionDeniedException
+                                 channelReadPermissionDeniedException)
+                        {
+                            ctx.Context.Errors.Add(
+                                new ExecutionError("Uživatel nemá právo na zobrazení komunikačního kanálu."));
+                        }
+                        
+                        logger.LogError("{Error} occurred", ctx.OriginalException.Message);
+                    };
                 })
                 // Add required services for GraphQL request/response de/serialization
                 .AddSystemTextJson() // For .NET Core 3+

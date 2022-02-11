@@ -2,8 +2,6 @@ using System;
 using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.Common.Mappings;
 using Chattoo.Domain.Entities;
-using Chattoo.Domain.Interfaces;
-using Chattoo.Domain.Interfaces.CalendarEvent;
 
 namespace Chattoo.Application.CalendarEvents.DTOs
 {

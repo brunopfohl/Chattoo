@@ -1,12 +1,12 @@
-﻿using Chattoo.Application.CommunicationChannels.Commands.AddUser;
+﻿using Chattoo.Application.CommunicationChannels.Commands;
+using Chattoo.Application.CommunicationChannels.Commands.AddUser;
 using Chattoo.Application.CommunicationChannels.Commands.Create;
-using Chattoo.Application.CommunicationChannels.Commands.Delete;
 using Chattoo.Application.CommunicationChannels.Commands.RemoveUser;
-using Chattoo.Application.CommunicationChannels.Commands.Update;
 using Chattoo.Application.CommunicationChannels.DTOs;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Subscription.CommunicationChannelMessage;
 using Chattoo.GraphQL.Types;
+using GraphQL;
 using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Mutation

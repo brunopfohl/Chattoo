@@ -8,6 +8,7 @@ using Chattoo.Application.Common.Models;
 using Chattoo.Application.Common.Queries;
 using Chattoo.Application.Common.Services;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 
 namespace Chattoo.Application.CommunicationChannels.Queries
 {
@@ -25,22 +26,20 @@ namespace Chattoo.Application.CommunicationChannels.Queries
     public class GetCalendarEventsForCommunicationChannelQueryHandler : PaginatedQueryHandler<GetCalendarEventsForCommunicationChannelQuery, CalendarEventDto>
     {
         private readonly IMapper _mapper;
-        private readonly ICommunicationChannelRepository _communicationChannelRepository;
         private readonly ICalendarEventRepository _calendarEventRepository;
-        private readonly GetByIdUserSafeService _getByIdUserSafeService;
+        private readonly ChannelManager _channelManager;
 
-        public GetCalendarEventsForCommunicationChannelQueryHandler(IMapper mapper, ICalendarEventRepository calendarEventRepository, ICommunicationChannelRepository communicationChannelRepository, GetByIdUserSafeService getByIdUserSafeService)
+        public GetCalendarEventsForCommunicationChannelQueryHandler(IMapper mapper, ICalendarEventRepository calendarEventRepository, ChannelManager channelManager)
         {
             _mapper = mapper;
             _calendarEventRepository = calendarEventRepository;
-            _communicationChannelRepository = communicationChannelRepository;
-            _getByIdUserSafeService = getByIdUserSafeService;
+            _channelManager = channelManager;
         }
 
         public override async Task<PaginatedList<CalendarEventDto>> Handle(GetCalendarEventsForCommunicationChannelQuery request, CancellationToken cancellationToken)
         {
             // Pokusím se načíst kanál.
-            var channel = await _getByIdUserSafeService.GetAsync(_communicationChannelRepository, request.ChannelId);
+            var channel = await _channelManager.GetChannelOrThrow(request.ChannelId);
 
             var events = _calendarEventRepository.GetByCommunicationChannelId(channel.Id);
             

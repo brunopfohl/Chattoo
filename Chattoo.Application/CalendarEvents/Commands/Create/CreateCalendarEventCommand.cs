@@ -3,13 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Chattoo.Application.CalendarEvents.DTOs;
-using Chattoo.Application.Common.Exceptions;
-using Chattoo.Application.Common.Interfaces;
 using Chattoo.Application.Common.Services;
-using Chattoo.Domain.Entities;
-using Chattoo.Domain.Exceptions;
-using Chattoo.Domain.Extensions;
-using Chattoo.Domain.Interfaces.CalendarEvent;
+using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Repositories;
 using MediatR;
 
@@ -18,7 +13,7 @@ namespace Chattoo.Application.CalendarEvents.Commands
     /// <summary>
     /// Příkaz pro vytvoření kalendářní události v komunikačním kanálu.
     /// </summary>
-    public class CreateCalendarEventCommand : IRequest<CalendarEventDto>, ICalendarEventCreateContract
+    public class CreateCalendarEventCommand : IRequest<CalendarEventDto>
     {
         public DateTime StartsAt { get; set; }
         
@@ -43,12 +38,11 @@ namespace Chattoo.Application.CalendarEvents.Commands
         private readonly ICurrentUserService _currentUserService;
         private readonly ICalendarEventRepository _calendarEventRepository;
         private readonly IGroupRepository _groupRepository;
-        private readonly GetByIdUserSafeService _getByIdUserSafeService;
         private readonly ICommunicationChannelRepository _communicationChannelRepository;
 
         public CreateCalendarEventCommandHandler(IUnitOfWork unitOfWork, ICalendarEventRepository calendarEventRepository,
             ICurrentUserService currentUserService, IMapper mapper, ICommunicationChannelRepository communicationChannelRepository,
-            IGroupRepository groupRepository, GetByIdUserSafeService getByIdUserSafeService)
+            IGroupRepository groupRepository)
         {
             _unitOfWork = unitOfWork;
             _calendarEventRepository = calendarEventRepository;
@@ -56,7 +50,6 @@ namespace Chattoo.Application.CalendarEvents.Commands
             _mapper = mapper;
             _communicationChannelRepository = communicationChannelRepository;
             _groupRepository = groupRepository;
-            _getByIdUserSafeService = getByIdUserSafeService;
         }
 
         public async Task<CalendarEventDto> Handle(CreateCalendarEventCommand request, CancellationToken cancellationToken)

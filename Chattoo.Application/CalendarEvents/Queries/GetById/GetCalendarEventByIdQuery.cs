@@ -7,6 +7,7 @@ using Chattoo.Application.Common.Exceptions;
 using Chattoo.Application.Common.Interfaces;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Exceptions;
+using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Repositories;
 using MediatR;
 

@@ -1,4 +1,5 @@
 ﻿using Chattoo.Application.Common.DTOs;
+using Chattoo.Application.CommunicationChannels.Commands.Message.UpdateMessage;
 using Chattoo.Application.CommunicationChannels.Commands.UpdateMessage;
 using Chattoo.Application.Users.Commands.AddMessage;
 using Chattoo.Domain.Enums;

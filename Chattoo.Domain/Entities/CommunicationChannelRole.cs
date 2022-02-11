@@ -10,9 +10,11 @@ namespace Chattoo.Domain.Entities
     /// </summary>
     public class CommunicationChannelRole : AuditableEntity, IAuditableEntity
     {
+        private List<User> _users;
+        
         protected CommunicationChannelRole()
         {
-            
+            _users = new List<User>();
         }
         
         /// <summary>
@@ -29,8 +31,8 @@ namespace Chattoo.Domain.Entities
         /// Vrací nebo nastavuje práva uživatele, který disponuje touto rolí.
         /// </summary>
         public CommunicationChannelPermission Permission { get; private set; }
-        
-        public virtual ICollection<User> Users { get; set; }
+
+        public virtual IReadOnlyCollection<User> Users => _users.AsReadOnly();
 
         public static CommunicationChannelRole Create(string name, string channelId,
             CommunicationChannelPermission permission)

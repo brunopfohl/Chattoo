@@ -1,5 +1,6 @@
-﻿using Chattoo.Application.Common.Interfaces;
+﻿using System.Linq;
 using Chattoo.Domain.Entities;
+using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Repositories;
 
 namespace Chattoo.GraphQL.Services
@@ -32,6 +33,51 @@ namespace Chattoo.GraphQL.Services
             }
 
             return _currentUser;
+        }
+        
+        public bool CanViewChannel(CommunicationChannel channel)
+        {
+            return User.Channels.Any(ch => ch.ChannelId == channel.Id);
+        }
+
+        public bool CanEditChannel(CommunicationChannel channel)
+        {
+            return CanViewChannel(channel);
+        }
+        
+        public bool CanViewGroup(Group group)
+        {
+            return User.Groups.Any(ch => ch.GroupId == group.Id);
+        }
+
+        public bool CanEditGroup(Group group)
+        {
+            return CanViewGroup(group);
+        }
+        
+        public bool CanViewEvent(CalendarEvent calendarEvent)
+        {
+            return User.JoinedEvents.Any(ch => ch.EventId == calendarEvent.Id);
+        }
+        
+        public bool CanEditEvent(CalendarEvent calendarEvent)
+        {
+            return calendarEvent.AuthorId == User.Id;
+        }
+
+        public bool CanViewWish(CalendarEventWish wish)
+        {
+            return true;
+        }
+        
+        public bool CanEditWish(CalendarEventWish wish)
+        {
+            return wish.AuthorId == User.Id;
+        }
+
+        public bool CanEditMessage(CommunicationChannelMessage message)
+        {
+            return message.UserId == User.Id;
         }
     }
 }

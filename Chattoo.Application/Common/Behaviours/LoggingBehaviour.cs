@@ -3,6 +3,7 @@ using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
+using Chattoo.Domain.Interfaces;
 
 namespace Chattoo.Application.Common.Behaviours
 {

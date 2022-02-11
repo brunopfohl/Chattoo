@@ -11,45 +11,54 @@ namespace Chattoo.Domain.Entities
     /// </summary>
     public class User : AuditableEntity, IAuditableEntity, IAggregateRoot
     {
+        private List<UserAlias> _aliases;
+        private List<GroupRole> _groupRoles;
+        private List<CommunicationChannelRole> _channelRoles;
+        private List<UserToGroup> _groups;
+        private List<UserToCommunicationChannel> _channels;
+        private List<UserToCalendarEvent> _joinedEvents;
+
         protected User()
         {
-            Aliases = new List<UserAlias>();
-            GroupRoles = new List<GroupRole>();
-            ChannelRoles = new List<CommunicationChannelRole>();
-            JoinedEvents = new List<UserToCalendarEvent>();
+            _aliases = new List<UserAlias>();
+            _groupRoles = new List<GroupRole>();
+            _channelRoles = new List<CommunicationChannelRole>();
+            _groups = new List<UserToGroup>();
+            _channels = new List<UserToCommunicationChannel>();
+            _joinedEvents = new List<UserToCalendarEvent>();
         }
         
         /// <summary>
         /// Vrací nebo nastavuje uživatelské jméno.
         /// </summary>
         public virtual string UserName { get; private set; }
-        
+
         /// <summary>
         /// Vrací nebo nastavuje kolekci aliasů (přezdívek), které má tento uživatel napříč aplikací.
         /// </summary>
-        public virtual ICollection<UserAlias> Aliases { get; private set; }
-        
+        public virtual IReadOnlyCollection<UserAlias> Aliases => _aliases.AsReadOnly();
+
         /// <summary>
         /// Vrací nebo nastavuje kolekci rolí, kterými uživatel disponuje napříč všemi skupinami.
         /// </summary>
-        public virtual ICollection<GroupRole> GroupRoles { get; private set; }
-        
+        public virtual IReadOnlyCollection<GroupRole> GroupRoles => _groupRoles.AsReadOnly();
+
         /// <summary>
         /// Vrací nebo nastavuje kolekci rolí, kterými uživatel disponuje napříč všemi komunikačními kanály.
         /// </summary>
-        public virtual ICollection<CommunicationChannelRole> ChannelRoles { get; private set; }
-        
-        public virtual ICollection<UserToGroup> Groups { get; private set; }
-        
-        public virtual ICollection<UserToCommunicationChannel> Channels { get; private set; }
-        
-        public virtual ICollection<UserToCalendarEvent> JoinedEvents { get; private set; }
+        public virtual IReadOnlyCollection<CommunicationChannelRole> ChannelRoles => _channelRoles.AsReadOnly();
+
+        public virtual IReadOnlyCollection<UserToGroup> Groups => _groups.AsReadOnly();
+
+        public virtual IReadOnlyCollection<UserToCommunicationChannel> Channels => _channels.AsReadOnly();
+
+        public virtual IReadOnlyCollection<UserToCalendarEvent> JoinedEvents => _joinedEvents.AsReadOnly();
 
         public UserAlias AddAlias(string aliasText)
         {
             var alias = UserAlias.Create(Id, aliasText);
             
-            Aliases.Add(alias);
+            _aliases.Add(alias);
             
             return alias;
         }
@@ -58,7 +67,7 @@ namespace Chattoo.Domain.Entities
         {
             var alias = GetAlias(id);
 
-            Aliases.Remove(alias);
+            _aliases.Remove(alias);
 
             return alias;
         }

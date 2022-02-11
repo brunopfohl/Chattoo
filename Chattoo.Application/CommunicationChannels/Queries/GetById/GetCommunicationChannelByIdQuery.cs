@@ -1,9 +1,13 @@
 ﻿using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using AutoMapper;
 using Chattoo.Application.Common.Services;
 using Chattoo.Application.CommunicationChannels.DTOs;
+using Chattoo.Domain.Entities;
+using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.CommunicationChannels.Queries.GetById
@@ -22,20 +26,19 @@ namespace Chattoo.Application.CommunicationChannels.Queries.GetById
     public class GetCommunicationChannelByIdQueryHandler : IRequestHandler<GetCommunicationChannelByIdQuery, CommunicationChannelDto>
     {
         private readonly IMapper _mapper;
-        private readonly ICommunicationChannelRepository _communicationChannelRepository;
-        private readonly GetByIdUserSafeService _getByIdUserSafeService;
+        private readonly ChannelManager _channelManager;
 
-        public GetCommunicationChannelByIdQueryHandler(IMapper mapper, ICommunicationChannelRepository communicationChannelRepository, GetByIdUserSafeService getByIdUserSafeService)
+        public GetCommunicationChannelByIdQueryHandler(IMapper mapper, ChannelManager channelManager)
         {
             _mapper = mapper;
-            _communicationChannelRepository = communicationChannelRepository;
-            _getByIdUserSafeService = getByIdUserSafeService;
+            _channelManager = channelManager;
         }
 
         public async Task<CommunicationChannelDto> Handle(GetCommunicationChannelByIdQuery request, CancellationToken cancellationToken)
         {
             // Načtu komunikační kanál.
-            var channel = await _getByIdUserSafeService.GetAsync(_communicationChannelRepository, request.Id);
+            var channel = await _channelManager.GetChannelOrThrow(request.Id);
+            
             return _mapper.Map<CommunicationChannelDto>(channel);
         }
     }

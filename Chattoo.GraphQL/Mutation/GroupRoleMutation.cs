@@ -1,5 +1,4 @@
-﻿using Chattoo.Application.Groups.Commands.AddRole;
-using Chattoo.Application.Groups.Commands.DeleteRole;
+﻿using Chattoo.Application.Groups.Commands.DeleteRole;
 using Chattoo.Application.Groups.Commands.UpdateGroupRole;
 using Chattoo.Domain.Enums;
 using Chattoo.GraphQL.Extensions;

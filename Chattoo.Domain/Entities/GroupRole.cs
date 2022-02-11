@@ -10,9 +10,11 @@ namespace Chattoo.Domain.Entities
     /// </summary>
     public class GroupRole : AuditableEntity, IAuditableEntity
     {
+        private List<User> _users;
+        
         protected GroupRole()
         {
-            
+            _users = new List<User>();
         }
         
         /// <summary>
@@ -29,8 +31,8 @@ namespace Chattoo.Domain.Entities
         /// Vrací nebo nastavuje oprávnění, které uživatelům poskytuje tato role.
         /// </summary>
         public UserGroupPermission Permission { get; private set; }
-        
-        public virtual ICollection<User> Users { get; set; }
+
+        public virtual IReadOnlyCollection<User> Users => _users.AsReadOnly();
 
         public static GroupRole Create(string groupId, string name, UserGroupPermission permission)
         {

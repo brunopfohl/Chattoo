@@ -11,14 +11,17 @@ namespace Chattoo.Domain.Entities
     /// <summary>
     /// Entita komunikačního kanálu sloužícího pro sdílení obsahu (zpráv) mezi uživateli.
     /// </summary>
-    public class CommunicationChannel : AuditableEntity, IAuditableEntity, IAggregateRoot,
-        IWithRestrictedReadPermissions, IWithRestrictedWritePermissions
+    public class CommunicationChannel : AuditableEntity, IAuditableEntity, IAggregateRoot
     {
+        protected List<CommunicationChannelMessage> _messages;
+        protected List<CommunicationChannelRole> _roles;
+        protected List<UserToCommunicationChannel> _users;
+
         protected CommunicationChannel()
         {
-            Messages = new List<CommunicationChannelMessage>();
-            Roles = new List<CommunicationChannelRole>();
-            Users = new List<UserToCommunicationChannel>();
+            _messages = new List<CommunicationChannelMessage>();
+            _roles = new List<CommunicationChannelRole>();
+            _users = new List<UserToCommunicationChannel>();
         }
         
         /// <summary>
@@ -34,30 +37,16 @@ namespace Chattoo.Domain.Entities
         /// <summary>
         /// Vrací nebo nastavuje kolekci zpráv, které byly mezi uživateli sdíleny pomocí tohoto komunikačního kanálu.
         /// </summary>
-        public virtual ICollection<CommunicationChannelMessage> Messages { get; private set; }
+        public virtual IReadOnlyCollection<CommunicationChannelMessage> Messages => _messages.AsReadOnly();
 
         /// <summary>
         /// Vrací nebo nastavuje kolekci dostupných rolí pro uživatele v tomto kanálu (např. admin, moderátor, quest,...).
         /// </summary>
-        public virtual ICollection<CommunicationChannelRole> Roles { get; private set; }
-        
-        public virtual ICollection<UserToCommunicationChannel> Users { get; private set; }
+        public virtual IReadOnlyCollection<CommunicationChannelRole> Roles => _roles.AsReadOnly();
 
-        #region IWithRestrictedReadPermissions
+        public virtual IReadOnlyCollection<UserToCommunicationChannel> Users => _users.AsReadOnly();
 
-        ICollection<string> IWithRestrictedReadPermissions.UsersIds =>
-            Users.Select(u => u.UserId).ToList();
-
-        #endregion
-        
-        #region IWithRestrictedWritePermissions
-
-        ICollection<string> IWithRestrictedWritePermissions.UsersIds =>
-            Users.Select(u => u.UserId).ToList();
-
-        #endregion
-
-        public static CommunicationChannel Create(string name, string description)
+        internal static CommunicationChannel Create(string name, string description)
         {
             var entity = new CommunicationChannel()
             {
@@ -67,6 +56,8 @@ namespace Chattoo.Domain.Entities
 
             return entity;
         }
+
+        #region Setters
 
         public void SetName(string name)
         {
@@ -78,147 +69,116 @@ namespace Chattoo.Domain.Entities
             Description = description;
         }
 
-        public CommunicationChannelMessageAttachment AddAttachment(string messageId, string name,
-            byte[] content, CommunicationChannelMessageAttachmentType type)
+        #endregion
+
+        #region Roles
+        
+        public bool HasRole(string roleName)
         {
-            var message = GetMessage(messageId);
-
-            var attachment = message.AddAttachment(name, content, type);
-
-            return attachment;
-        }
-
-        public CommunicationChannelMessageAttachment DeleteAttachment(string messageId, string attachmentId)
-        {
-            var message = GetMessage(messageId);
-            
-            var attachment = message.DeleteAttachment(attachmentId);
-
-            return attachment;
+            return Roles.Any(r => r.Name == Name);
         }
         
-        public CommunicationChannelMessageAttachment UpdateAttachment(string messageId, string attachmentId, string name)
-        {
-            var message = GetMessage(messageId);
-
-            var attachment = message.UpdateAttachment(attachmentId, name);
-
-            return attachment;
-        }
-
         public CommunicationChannelRole AddRole(string name, CommunicationChannelPermission permission)
         {
-            if (Roles.Any(r => r.Name == name))
+            if(HasRole(name))
             {
-                throw new Exception($"Couldn't add Role with name '{name}' to channel '{Id}, because it already exists'");
+                throw new DuplicitChannelRoleNameException(Id, name);
             }
             
             var role = CommunicationChannelRole.Create(name, Id, permission);
             
-            Roles.Add(role);
+            _roles.Add(role);
 
+            return role;
+        }
+
+        public CommunicationChannelRole GetRole(string roleId)
+        {
+            var role = Roles.FirstOrDefault(r => r.Id == roleId);
+            
             return role;
         }
         
-        public CommunicationChannelRole DeleteRole(string roleId)
+        public void DeleteRole(CommunicationChannelRole role)
         {
-            var role = GetRole(roleId);
-            
-            Roles.Remove(role);
+            bool wasRemoved = _roles.Remove(role);
 
-            return role;
+            if (!wasRemoved)
+            {
+                throw new ChannelRoleNotFound(Id, role.Id);
+            }
         }
 
-        public CommunicationChannelRole UpdateRole(string roleId, string name, CommunicationChannelPermission permission)
+        public CommunicationChannelRole UpdateRole(CommunicationChannelRole role, string name, CommunicationChannelPermission permission)
         {
-            var role = GetRole(roleId);
-            
             role.SetName(name);
             role.SetPermission(permission);
             
             return role;
         }
 
-        public void AddParticipant(string participantId)
+        #endregion
+
+        #region Participants
+
+        public bool HasParticipant(string participantId)
         {
-            if (Users.Any(u => u.UserId == participantId))
+            return Users.Any(u => u.UserId == participantId);
+        }
+        
+        internal void AddParticipant(string participantId)
+        {
+            if (HasParticipant(participantId))
             {
                 throw new Exception($"Couldn't add User:{participantId} to CommunicationChannel:{Id}");
             }
             
             var participant = UserToCommunicationChannel.Create(participantId, Id);
             
-            Users.Add(participant);
+            _users.Add(participant);
         }
 
         public void RemoveParticipant(string participantId)
         {
-            var participant = Users.FirstOrDefault(m => m.UserId == participantId);
+            var participant = Users.FirstOrDefault(m => m.UserId == participantId)
+                ?? throw new UserNotFoundException(participantId);
 
-            if (participant == null)
-            {
-                throw new NotFoundException(
-                    $"{nameof(CommunicationChannel)}:{nameof(User)}", participantId
-                );
-            }
-
-            Users.Remove(participant);
+            _users.Remove(participant);
         }
+
+        #endregion
+
+        #region Messages
+
+        
+        #endregion
 
         public CommunicationChannelMessage AddMessage(string authorId, string content,
             CommunicationChannelMessageType type)
         {
             var message = CommunicationChannelMessage.Create(authorId, Id, content, type);
             
-            Messages.Add(message);
+            _messages.Add(message);
 
             return message;
         }
         
-        public CommunicationChannelMessage DeleteMessage(string id)
-        {
-            var message = GetMessage(id);
-
-            Messages.Remove(message);
-
-            return message;
-        }
         
-        public CommunicationChannelMessage UpdateMessage(string id, string content)
+        internal void DeleteMessage(CommunicationChannelMessage message)
         {
-            var message = GetMessage(id);
-            
-            message.SetContent(content);
+            bool wasRemoved = _messages.Remove(message);
 
-            return message;
+            if (!wasRemoved)
+            {
+                throw new MessageNotFoundException(message.Id);
+            }
         }
 
-        private CommunicationChannelMessage GetMessage(string messageId)
+        public CommunicationChannelMessage GetMessage(string messageId)
         {
             var message = Messages.FirstOrDefault(m => m.Id == messageId);
 
-            if (message == null)
-            {
-                throw new NotFoundException(
-                    $"{nameof(CommunicationChannel)}:{nameof(CommunicationChannelMessage)}", messageId
-                );
-            }
-
             return message;
-        }
-
-        private CommunicationChannelRole GetRole(string roleId)
-        {
-            var role = Roles.FirstOrDefault(r => r.Id == roleId);
-            
-            if (role == null)
-            {
-                throw new NotFoundException(
-                    $"{nameof(CommunicationChannel)}:{nameof(CommunicationChannelRole)}", roleId
-                );
-            }
-
-            return role;
         }
     }
 }

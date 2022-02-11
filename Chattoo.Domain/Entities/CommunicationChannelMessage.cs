@@ -12,9 +12,11 @@ namespace Chattoo.Domain.Entities
     /// </summary>
     public class CommunicationChannelMessage : AuditableEntity, IAuditableEntity
     {
+        private List<CommunicationChannelMessageAttachment> _attachments;
+
         protected CommunicationChannelMessage()
         {
-            Attachments = new List<CommunicationChannelMessageAttachment>();
+            _attachments = new List<CommunicationChannelMessageAttachment>();
         }
         
         /// <summary>
@@ -41,11 +43,12 @@ namespace Chattoo.Domain.Entities
         /// Vrací nebo nastavuje uživatele, který je autorem této zprávy.
         /// </summary>
         public virtual User User { get; private set; }
-        
+
         /// <summary>
         /// Vrací nebo nastavuje kolekci příloh, které jsou připnuty k této zprávě.
         /// </summary>
-        public virtual ICollection<CommunicationChannelMessageAttachment> Attachments { get; private set; }
+        public virtual IReadOnlyCollection<CommunicationChannelMessageAttachment> Attachments =>
+            _attachments.AsReadOnly();
 
         public void SetContent(string content)
         {
@@ -66,45 +69,43 @@ namespace Chattoo.Domain.Entities
             return entity;
         }
 
-        public CommunicationChannelMessageAttachment AddAttachment(string name, byte[] content,
+        internal CommunicationChannelMessageAttachment AddAttachment(string name, byte[] content,
             CommunicationChannelMessageAttachmentType type)
         {
             var attachment = CommunicationChannelMessageAttachment.Create(Id, name, content, type);
 
-            Attachments.Add(attachment);
+            _attachments.Add(attachment);
 
             return attachment;
         }
         
-        public CommunicationChannelMessageAttachment DeleteAttachment(string attachmentId)
+        internal CommunicationChannelMessageAttachment DeleteAttachment(string attachmentId)
         {
             var attachment = GetAttachment(attachmentId);
 
-            Attachments.Remove(attachment);
+            bool wasRemoved = _attachments.Remove(attachment);
+
+            if (!wasRemoved)
+            {
+                throw new AttachmentNotFoundException(attachmentId);
+            }
 
             return attachment;
         }
         
         public CommunicationChannelMessageAttachment UpdateAttachment(string attachmentId, string name)
         {
-            var attachment = GetAttachment(attachmentId);
+            var attachment = GetAttachment(attachmentId)
+                ?? throw new AttachmentNotFoundException(attachmentId);
             
             attachment.SetName(name);
 
             return attachment;
         }
 
-        private CommunicationChannelMessageAttachment GetAttachment(string attachmentId)
+        public CommunicationChannelMessageAttachment GetAttachment(string attachmentId)
         {
             var attachment = Attachments.FirstOrDefault(a => a.Id == attachmentId);
-
-            if (attachment == null)
-            {
-                throw new NotFoundException(
-                    $"{nameof(CommunicationChannelMessage)}:{nameof(CommunicationChannelMessageAttachment)}",
-                    attachmentId
-                );
-            }
 
             return attachment;
         }

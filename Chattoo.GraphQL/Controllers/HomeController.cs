@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using Chattoo.Application.Common.Interfaces;
+using Chattoo.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chattoo.GraphQL.Controllers

@@ -11,26 +11,28 @@ namespace Chattoo.Domain.Entities
     /// <summary>
     /// Entita skupiny uživatelů.
     /// </summary>
-    public class Group : AuditableEntity, IAuditableEntity, IAggregateRoot,
-        IWithRestrictedReadPermissions, IWithRestrictedWritePermissions
+    public class Group : AuditableEntity, IAuditableEntity, IAggregateRoot
     {
+        private List<GroupRole> _roles;
+        private List<UserToGroup> _participants;
+
         protected Group()
         {
-            Roles = new List<GroupRole>();
-            Participants = new List<UserToGroup>();
+            _roles = new List<GroupRole>();
+            _participants = new List<UserToGroup>();
         }
         
         /// <summary>
         /// Vrací nebo nastavuje název skupiny uživatelů.
         /// </summary>
         public string Name { get; set; }
-        
+
         /// <summary>
         /// Vrací nebo nastavuje kolekci uživatelských rolí, které jsou dostupné v této skupině.
         /// </summary>
-        public virtual ICollection<GroupRole> Roles { get; set; }
-        
-        public virtual ICollection<UserToGroup> Participants { get; set; }
+        public virtual IReadOnlyCollection<GroupRole> Roles => _roles.AsReadOnly();
+
+        public virtual IReadOnlyCollection<UserToGroup> Participants => _participants.AsReadOnly();
 
         public static Group Create(string name)
         {
@@ -48,14 +50,14 @@ namespace Chattoo.Domain.Entities
 
         public GroupRole AddRole(string name, UserGroupPermission permission)
         {
-            if (Roles.Any(r => r.Name == name))
+            if (HasRole(name))
             {
                 throw new Exception($"Role {name} already exists in group with id {Id}");
             }
             
             var role = GroupRole.Create(Id, name, permission);
             
-            Roles.Add(role);
+            _roles.Add(role);
 
             return role;
         }
@@ -74,9 +76,14 @@ namespace Chattoo.Domain.Entities
         {
             var role = GetRole(roleId);
 
-            Roles.Remove(role);
+            _roles.Remove(role);
 
             return role;
+        }
+
+        public bool HasRole(string name)
+        {
+            return Roles.Any(r => r.Name == name);
         }
         
         public void AddParticipant(string userId)
@@ -88,7 +95,7 @@ namespace Chattoo.Domain.Entities
 
             var participant = UserToGroup.Create(userId, Id);
             
-            Participants.Add(participant);
+            _participants.Add(participant);
         }
 
         public void RemoveParticipant(string participantId)
@@ -100,23 +107,9 @@ namespace Chattoo.Domain.Entities
                 throw new NotFoundException($"{nameof(Group)}:{nameof(User)}", participantId);
             }
 
-            Participants.Remove(participant);
+            _participants.Remove(participant);
         }
         
-        #region IWithRestrictedReadPermissions
-
-        ICollection<string> IWithRestrictedReadPermissions.UsersIds =>
-            Participants.Select(u => u.UserId).ToList();
-
-        #endregion
-        
-        #region IWithRestrictedWritePermissions
-
-        ICollection<string> IWithRestrictedWritePermissions.UsersIds =>
-            Participants.Select(u => u.UserId).ToList();
-
-        #endregion
-
         private GroupRole GetRole(string roleId)
         {
             var role = Roles.FirstOrDefault(r => r.Id == roleId);

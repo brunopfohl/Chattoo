@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Chattoo.Application.Common.Interfaces;
+using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Repositories;
 using Microsoft.AspNetCore.Http;
 

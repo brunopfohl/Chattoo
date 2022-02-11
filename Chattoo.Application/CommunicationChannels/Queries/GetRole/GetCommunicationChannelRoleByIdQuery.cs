@@ -1,12 +1,9 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Chattoo.Application.Common.DTOs;
-using Chattoo.Application.Common.Services;
-using Chattoo.Domain.Entities;
-using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.CommunicationChannels.Queries
@@ -30,26 +27,18 @@ namespace Chattoo.Application.CommunicationChannels.Queries
     public class GetCommunicationChannelRoleByIdQueryHandler : IRequestHandler<GetCommunicationChannelRoleByIdQuery, CommunicationChannelRoleDto>
     {
         private readonly IMapper _mapper;
-        private readonly GetByIdUserSafeService _getByIdUserSafeService;
-        private readonly ICommunicationChannelRepository _communicationChannelRepository;
+        private readonly ChannelManager _channelManager;
 
-        public GetCommunicationChannelRoleByIdQueryHandler(IMapper mapper, GetByIdUserSafeService getByIdUserSafeService, ICommunicationChannelRepository communicationChannelRepository)
+        public GetCommunicationChannelRoleByIdQueryHandler(IMapper mapper, ChannelManager channelManager)
         {
             _mapper = mapper;
-            _getByIdUserSafeService = getByIdUserSafeService;
-            _communicationChannelRepository = communicationChannelRepository;
+            _channelManager = channelManager;
         }
 
         public async Task<CommunicationChannelRoleDto> Handle(GetCommunicationChannelRoleByIdQuery request, CancellationToken cancellationToken)
         {
-            var channel = await _getByIdUserSafeService.GetAsync(_communicationChannelRepository, request.ChannelId);
-
-            var role = channel.Roles.FirstOrDefault(role => role.Id == request.RoleId);
-
-            if (role == null)
-            {
-                throw new NotFoundException(nameof(CommunicationChannelRole), request.RoleId);
-            }
+            var channel = await _channelManager.GetChannelOrThrow(request.ChannelId);
+            var role = _channelManager.GetRoleOrThrow(channel, request.RoleId);
 
             return _mapper.Map<CommunicationChannelRoleDto>(role);
         }

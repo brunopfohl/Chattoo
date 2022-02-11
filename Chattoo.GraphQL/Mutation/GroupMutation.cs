@@ -1,8 +1,8 @@
-﻿using Chattoo.Application.Groups.Commands.AddUser;
+﻿using Chattoo.Application.Groups.Commands;
+using Chattoo.Application.Groups.Commands.AddUser;
 using Chattoo.Application.Groups.Commands.Create;
 using Chattoo.Application.Groups.Commands.Delete;
 using Chattoo.Application.Groups.Commands.RemoveUser;
-using Chattoo.Application.Groups.Commands.Update;
 using Chattoo.GraphQL.Extensions;
 using GraphQL.Types;
 

@@ -8,7 +8,7 @@ namespace Chattoo.Domain.Entities
     /// <summary>
     /// Entita přání o vytvoření události.
     /// </summary>
-    public class CalendarEventWish : AuditableEntity, IAuditableEntity, IAggregateRoot, IWithRestrictedWritePermissions
+    public class CalendarEventWish : AuditableEntity, IAuditableEntity, IAggregateRoot
     {
         protected CalendarEventWish()
         {
@@ -56,12 +56,6 @@ namespace Chattoo.Domain.Entities
         /// </summary>
         public virtual ICollection<DateInterval> DateIntervals { get; private set; }
 
-        #region IWithRestrictedWritePermissions
-
-        string IWithRestrictedWritePermissions.UserId => AuthorId;
-
-        #endregion
-        
         /// <summary>
         /// Vytvoří novou instanci entity <see cref="CalendarEventWish"/>.
         /// </summary>

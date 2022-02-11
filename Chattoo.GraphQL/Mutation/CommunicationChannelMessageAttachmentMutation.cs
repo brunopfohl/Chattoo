@@ -1,5 +1,4 @@
 ﻿using Chattoo.Application.CommunicationChannels.AddMessageAttachment;
-using Chattoo.Application.CommunicationChannels.Commands.DeleteMessageAttachment;
 using Chattoo.Application.CommunicationChannels.Commands.UpdateMessageAttachment;
 using Chattoo.Domain.Enums;
 using Chattoo.Domain.Extensions;

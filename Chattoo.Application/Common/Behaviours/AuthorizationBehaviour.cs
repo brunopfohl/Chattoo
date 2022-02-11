@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Chattoo.Domain.Exceptions;
+using Chattoo.Domain.Interfaces;
 
 namespace Chattoo.Application.Common.Behaviours
 {
