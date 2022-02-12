@@ -9,6 +9,7 @@ using Chattoo.Domain.Entities;
 using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.CalendarEvents.Queries
@@ -27,30 +28,19 @@ namespace Chattoo.Application.CalendarEvents.Queries
     public class GetCalendarEventByIdQueryHandler : IRequestHandler<GetCalendarEventByIdQuery, CalendarEventDto>
     {
         private readonly IMapper _mapper;
-        private readonly ICalendarEventRepository _calendarEventRepository;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly CalendarEventManager _eventManager;
 
-        public GetCalendarEventByIdQueryHandler(IMapper mapper, ICalendarEventRepository calendarEventRepository, ICurrentUserService currentUserService)
+        public GetCalendarEventByIdQueryHandler(IMapper mapper, CalendarEventManager eventManager)
         {
             _mapper = mapper;
-            _calendarEventRepository = calendarEventRepository;
-            _currentUserService = currentUserService;
+            _eventManager = eventManager;
         }
 
         public async Task<CalendarEventDto> Handle(GetCalendarEventByIdQuery request, CancellationToken cancellationToken)
         {
-            // // Načtu událost z komunikačního kanálu z datového zdroje.
-            // var calendarEvent = await _calendarEventRepository.GetByIdAsync(request.Id)
-            //                     ?? throw new NotFoundException(nameof(CalendarEvent), request.Id);
-            //
-            // // Pokud aktuálně přihlášený uživatel nemá právo na zobrazení události, vyhodím výjimku.
-            // if (!calendarEvent.CommunicationChannel.Users.Contains(_currentUserService.User))
-            // {
-            //     throw new FormatException();
-            // }
+            var calendarEvent = await _eventManager.GetEventOrThrow(request.Id);
 
-            //return _mapper.Map<CalendarEventDto>(calendarEvent);
-            return _mapper.Map<CalendarEventDto>(null);
+            return _mapper.Map<CalendarEventDto>(calendarEvent);
         }
     }
 }

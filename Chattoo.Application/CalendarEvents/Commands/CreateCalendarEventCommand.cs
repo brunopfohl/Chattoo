@@ -3,9 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Chattoo.Application.CalendarEvents.DTOs;
-using Chattoo.Application.Common.Services;
-using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.CalendarEvents.Commands
@@ -26,8 +25,9 @@ namespace Chattoo.Application.CalendarEvents.Commands
         public string CommunicationChannelId { get; set; }
         
         public string GroupId { get; set; }
-        public string CalendarEventTypeId { get; set; }
-
+        
+        public string CalendarEventTypeId { get; set; } 
+        
         public int? MaximalParticipantsCount { get; set; }
     }
 
@@ -35,39 +35,37 @@ namespace Chattoo.Application.CalendarEvents.Commands
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly CalendarEventManager _eventManager;
+        private readonly ICalendarEventRepository _eventRepository;
 
-        public CreateCalendarEventCommandHandler(IMapper mapper, IUnitOfWork unitOfWork)
+        public CreateCalendarEventCommandHandler(IMapper mapper, IUnitOfWork unitOfWork,
+            ICalendarEventRepository eventRepository, CalendarEventManager eventManager)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _eventRepository = eventRepository;
+            _eventManager = eventManager;
         }
 
         public async Task<CalendarEventDto> Handle(CreateCalendarEventCommand request, CancellationToken cancellationToken)
         {
-            // CommunicationChannel channel = await _getByIdUserSafeService
-            //         .GetAsync(_communicationChannelRepository, request.CommunicationChannelId);
-            //
-            // Group group = await _getByIdUserSafeService
-            //         .GetAsync(_groupRepository, request.GroupId);
-            //
-            // // Vytvořím entitu naplněnou daty z příkazu.
-            // var entity = CalendarEvent.Create(
-            //     request,
-            //     _currentUserService.User,
-            //     channel,
-            //     group,
-            //     null,
-            //     null
-            // );
-            //
-            // // Přidám záznam do datového zdroje a uložím.
-            // await _calendarEventRepository.AddOrUpdateAsync(entity, cancellationToken);
-            // await _unitOfWork.SaveChangesAsync(cancellationToken);
-            //
-            // // Vrátím Id vytvořeného záznamu.
-            // return _mapper.Map<CalendarEventDto>(entity);
+            var calendarEvent = await _eventManager.CreateEvent
+            (
+                request.CommunicationChannelId,
+                request.GroupId,
+                request.CalendarEventTypeId,
+                request.Name,
+                request.Description,
+                request.MaximalParticipantsCount,
+                request.StartsAt,
+                request.EndsAt
+            );
+
+            await _eventRepository.AddOrUpdateAsync(calendarEvent, cancellationToken);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             
-            return _mapper.Map<CalendarEventDto>(null);
+            return _mapper.Map<CalendarEventDto>(calendarEvent);
         }
     }
 }

@@ -19,5 +19,16 @@ namespace Chattoo.Domain.Entities
             yield return UserId;
             yield return EventId;
         }
+
+        public static UserToCalendarEvent Create(string userId, string eventId)
+        {
+            var entity = new UserToCalendarEvent()
+            {
+                UserId = userId,
+                EventId = eventId
+            };
+
+            return entity;
+        }
     }
 }

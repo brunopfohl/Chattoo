@@ -24,6 +24,10 @@ namespace Chattoo.Application.CalendarEvents.Commands
 
             RuleFor(v => v.EndsAt)
                 .GreaterThan(v => v.StartsAt).WithMessage("Konec události musí následovat po počátku události");
+            
+            RuleFor(v => v.MaximalParticipantsCount)
+                .GreaterThan(0)
+                    .WithMessage("Max. počet účastníků musí být neomezený nebo větší než 0");
         }
     }
 }

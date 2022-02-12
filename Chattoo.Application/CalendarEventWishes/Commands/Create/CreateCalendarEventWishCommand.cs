@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using AutoMapper;
 using Chattoo.Application.CalendarEvents.DTOs;
@@ -10,6 +11,7 @@ using Chattoo.Application.Common.Services;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.CalendarEventWishes.Commands.Create
@@ -50,48 +52,25 @@ namespace Chattoo.Application.CalendarEventWishes.Commands.Create
     public class CreateCalendarEventWishCommandHandler : IRequestHandler<CreateCalendarEventWishCommand, CalendarEventWishDto>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICalendarEventWishRepository _calendarEventWishRepository;
-        private readonly ICommunicationChannelRepository _communicationChannelRepository;
-        private readonly IGroupRepository _groupRepository;
-        private readonly ICurrentUserService _currentUserService;
         private readonly IMapper _mapper;
+        private readonly GroupManager _groupManager;
+        private readonly ChannelManager _channelManager;
 
-        public CreateCalendarEventWishCommandHandler(IUnitOfWork unitOfWork,
-            ICalendarEventWishRepository calendarEventWishRepository, ICurrentUserService currentUserService,
-            IMapper mapper, ICommunicationChannelRepository communicationChannelRepository,
-            IGroupRepository groupRepository)
+        public CreateCalendarEventWishCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, GroupManager groupManager, ChannelManager channelManager)
         {
             _unitOfWork = unitOfWork;
-            _calendarEventWishRepository = calendarEventWishRepository;
-            _currentUserService = currentUserService;
             _mapper = mapper;
-            _communicationChannelRepository = communicationChannelRepository;
-            _groupRepository = groupRepository;
+            _groupManager = groupManager;
+            _channelManager = channelManager;
         }
-        
+
         public async Task<CalendarEventWishDto> Handle(CreateCalendarEventWishCommand request, CancellationToken cancellationToken)
         {
-            // CommunicationChannel channel =
-            //     await _getByIdUserSafeService.GetAsync(_communicationChannelRepository, request.CommunicationChannelId);
-            //
-            // Group group =
-            //     await _getByIdUserSafeService.GetAsync(_groupRepository, request.GroupId);
-            //
-            // var entity = CalendarEventWish.Create(
-            //     _currentUserService.User,
-            //     channel,
-            //     group,
-            //     request.MinimalParticipantsCount,
-            //     request.MaximalParticipantsCount,
-            //     request.DateIntervals as ICollection<IDateInterval>,
-            //     request.Types as ICollection<ICalendarEventType>);
-            //
-            // // Přidám záznam do datového zdroje a uložím.
-            // await _calendarEventWishRepository.AddOrUpdateAsync(entity, cancellationToken);
-            // await _unitOfWork.SaveChangesAsync(cancellationToken);
-            //
-            // // Vrátím Id vytvořeného záznamu.
-            // return _mapper.Map<CalendarEventWishDto>(entity);
+            var group = await _groupManager.GetGroupOrThrow(request.GroupId);
+            var channel = await _groupManager.GetGroupOrThrow(request.CommunicationChannelId);
+            
+            var wish = CalendarEventWish.Create()
+            
             return _mapper.Map<CalendarEventWishDto>(null);
         }
     }

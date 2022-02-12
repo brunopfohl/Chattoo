@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Chattoo.Domain.Common;
+using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.ValueObjects;
 
@@ -80,29 +81,118 @@ namespace Chattoo.Domain.Entities
         {
             return Participants.Any(u => u.UserId == userId);
         }
-        
-        public static CalendarEvent Create(ICalendarEventCreateContract createContract, User author, CommunicationChannel channel,
-            Group group, Address address, CalendarEventType type)
+
+        internal void AddParticipant(string userId)
         {
-            var entity = new CalendarEvent();
-            entity.StartsAt = createContract.StartsAt;
-            entity.EndsAt = createContract.EndsAt;
-            entity.Name = createContract.Name;
-            entity.Description = createContract.Description;
-            entity.MaximalParticipantsCount = createContract.MaximalParticipantsCount;
+            if (HasParticipant(userId))
+            {
+                throw new DuplicateUserInCalendarEventException(Id, userId);
+            }
 
-            entity.AuthorId = author?.Id;
+            var participant = UserToCalendarEvent.Create(userId, Id);
             
-            entity.CommunicationChannelId = channel?.Id;
+            _participants.Add(participant);
+        }
+
+        public void RemoveParticipant(string participantId)
+        {
+            var participant =_participants.FirstOrDefault(p => p.UserId == participantId)
+                ?? throw new UserNotFoundException(participantId);
+
+            _participants.Remove(participant);
+        }
+
+        internal void SetMaximalParticipantsCount(int? count)
+        {
+            if (count.HasValue)
+            {
+                if (count.Value < 1)
+                {
+                    throw new ArgumentOutOfRangeException("Maximální počet účastníků musí být neomezený nebo vyšší než 0");
+                }
+
+                if (_participants.Count > count)
+                {
+                    throw new CalendarEventCapacityInsufficientException(Id, _participants.Count, count.Value);
+                }
+            }
+
+            MaximalParticipantsCount = count;
+        }
+        
+        internal void SetStartsAt(DateTime startsAt)
+        {
+            if (EndsAt.HasValue && startsAt > EndsAt.Value)
+            {
+                ThrowInvalidTimeRangeException();
+            }
+
+            StartsAt = startsAt;
+        }
+        
+        internal void SetEndsAt(DateTime? endsAt)
+        {
+            if (endsAt.HasValue && StartsAt > endsAt.Value)
+            {
+                ThrowInvalidTimeRangeException();
+            }
+
+            EndsAt = endsAt;
+        }
+
+        internal void SetName(string name)
+        {
+            Name = name;
+        }
+
+        internal void SetDescription(string description)
+        {
+            Description = description;
+        }
+
+        internal void SetAddress(Address address)
+        {
+            Address = address;
+        }
+
+        private static CalendarEvent Create(User author, CalendarEventType type, string name, string description)
+        {
+            var entity = new CalendarEvent()
+            {
+                AuthorId = author.Id,
+                CalendarEventType = type,
+                CalendarEventTypeId = type?.Id
+            };
             
-            entity.GroupId = group?.Id;
-
-            // entity.Address = address;
-
-            entity.CalendarEventType = type;
-            entity.CalendarEventTypeId = type?.Id;
+            entity.SetName(name);
+            entity.SetDescription(description);
 
             return entity;
+        }
+        
+        public static CalendarEvent Create(User author, CommunicationChannel channel, CalendarEventType type,
+            string name, string description)
+        {
+            var entity = Create(author, type, name, description);
+
+            entity.CommunicationChannelId = channel.Id;
+
+            return entity;
+        }
+        
+        public static CalendarEvent Create(User author, Group group, CalendarEventType type,
+            string name, string description)
+        {
+            var entity = Create(author, type, name, description);
+
+            entity.GroupId = group.Id;
+
+            return entity;
+        }
+
+        private void ThrowInvalidTimeRangeException()
+        {
+            throw new ArgumentOutOfRangeException("Čas 'od' nemůže být později než čas 'do'.");
         }
     }
 }

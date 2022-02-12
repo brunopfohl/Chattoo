@@ -8,6 +8,7 @@ using Chattoo.Domain.Entities;
 using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Repositories;
+using Chattoo.Domain.Services;
 using MediatR;
 
 namespace Chattoo.Application.CalendarEvents.Commands
@@ -41,41 +42,36 @@ namespace Chattoo.Application.CalendarEvents.Commands
         /// Vrací nebo nastavuje popisek události.
         /// </summary>
         public string Description { get; set; }
+        
+        public int? MaximalParticipantsCount { get; set; }
     }
     
     public class UpdateCalendarEventCommandHandler : IRequestHandler<UpdateCalendarEventCommand, Unit>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICurrentUserService _currentUserService;
-        private readonly ICalendarEventRepository _calendarEventRepository;
+        private readonly CalendarEventManager _eventManager;
 
-        public UpdateCalendarEventCommandHandler(IUnitOfWork unitOfWork, ICalendarEventRepository calendarEventRepository,
-            ICurrentUserService currentUserService)
+        public UpdateCalendarEventCommandHandler(IUnitOfWork unitOfWork, CalendarEventManager eventManager)
         {
             _unitOfWork = unitOfWork;
-            _calendarEventRepository = calendarEventRepository;
-            _currentUserService = currentUserService;
+            _eventManager = eventManager;
         }
 
         public async Task<Unit> Handle(UpdateCalendarEventCommand request, CancellationToken cancellationToken)
         {
-            // var entity = await _getByIdUserSafeService.GetAsync(_calendarEventRepository, request.Id);
-            //
-            // // Pokud uživatel nemá dostatečná práva vyhodím výjimku.
-            // if (entity.AuthorId != _currentUserService.User.Id)
-            // {
-            //     throw new ForbiddenAccessException();
-            // }
-            //
-            // // Naplním entitu daty z příkazu.
-            // entity.StartsAt = request.StartsAt;
-            // entity.EndsAt = request.EndsAt;
-            // entity.Name = request.Name;
-            // entity.Description = request.Description;
-            //
-            // // Přidám záznam do datového zdroje a uložím.`
-            // await _calendarEventRepository.AddOrUpdateAsync(entity, cancellationToken);
-            // await _unitOfWork.SaveChangesAsync(cancellationToken);
+            var calendarEvent = await _eventManager.GetEventOrThrow(request.Id);
+
+            await _eventManager.UpdateEvent
+            (
+                calendarEvent,
+                request.Name,
+                request.Description,
+                request.MaximalParticipantsCount,
+                request.StartsAt,
+                request.EndsAt
+            );
+           
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

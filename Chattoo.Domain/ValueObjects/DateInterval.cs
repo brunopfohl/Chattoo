@@ -57,10 +57,10 @@ namespace Chattoo.Domain.ValueObjects
         /// <param name="interval">Druhý časový interval</param>
         public DateInterval GetOverlap(DateInterval interval)
         {
-            // Intervaly mají průnik, pokud:
-            // - 2. interval končí později než 1. začíná A
+            // intervaly mají průnik, pokud:
+            // - 2. interval končí později než 1. začíná a
             // - 1. interval končí později než 2. začíná
-            if (StartsAt <= interval.EndsAt && interval.StartsAt <= EndsAt)
+            if (OverlapsWith(interval))
             {
                 // Počátek intervalu maximaluzuji.
                 DateTime startsAt = StartsAt > interval.StartsAt
@@ -76,6 +76,14 @@ namespace Chattoo.Domain.ValueObjects
             }
 
             return null;
+        }
+
+        public bool OverlapsWith(DateInterval interval)
+        {
+            // intervaly mají průnik, pokud:
+            // - 2. interval končí později než 1. začíná a
+            // - 1. interval končí později než 2. začíná
+            return StartsAt <= interval.EndsAt && interval.StartsAt <= EndsAt;
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
