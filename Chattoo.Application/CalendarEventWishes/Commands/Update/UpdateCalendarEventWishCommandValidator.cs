@@ -5,9 +5,9 @@ namespace Chattoo.Application.CalendarEvents.Commands
     /// <summary>
     /// Validátor příkazu <see cref="UpdateCommunicationChannelCalendarEventCommand"/>.
     /// </summary>
-    public class UpdateCalendarEventCommandValidator : AbstractValidator<UpdateCalendarEventCommand>
+    public class UpdateCommunicationChannelCalendarEventCommandValidator : AbstractValidator<UpdateCalendarEventCommand>
     {
-        public UpdateCalendarEventCommandValidator()
+        public UpdateCommunicationChannelCalendarEventCommandValidator()
         {
             RuleFor(v => v.Id)
                 .NotEmpty().WithMessage("Id kalendářní události musí být specifikováno.");

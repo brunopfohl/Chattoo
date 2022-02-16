@@ -77,7 +77,7 @@ namespace Chattoo.GraphQL.Services
 
         public bool CanViewWish(CalendarEventWish wish)
         {
-            return true;
+            return CanEditWish(wish);
         }
         
         public bool CanEditWish(CalendarEventWish wish)

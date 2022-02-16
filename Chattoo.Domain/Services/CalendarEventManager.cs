@@ -1,7 +1,4 @@
 using System;
-using System.Diagnostics.Tracing;
-using System.Linq;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Exceptions;

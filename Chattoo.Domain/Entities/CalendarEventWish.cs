@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Chattoo.Domain.Common;
+using Chattoo.Domain.Comparers;
 using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.ValueObjects;
@@ -73,7 +74,10 @@ namespace Chattoo.Domain.Entities
 
                 if (MaximalParticipantsCount.HasValue && count.Value > MaximalParticipantsCount.Value)
                 {
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(
+                        nameof(MinimalParticipantsCount), 
+                        $"{nameof(MaximalParticipantsCount)} has to be same or higher than {nameof(MinimalParticipantsCount)}."
+                    );
                 }
             }
 
@@ -82,7 +86,12 @@ namespace Chattoo.Domain.Entities
 
         public void SetMaximalParticipantsCount(int? count)
         {
-            
+            if (count.HasValue && count.Value < MinimalParticipantsCount)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            MaximalParticipantsCount = count;
         }
         
         public void AddInterval(DateInterval newInterval)
@@ -108,6 +117,16 @@ namespace Chattoo.Domain.Entities
             }
         }
 
+        public void UpdateDateIntervals(ICollection<DateInterval> dateIntervals)
+        {
+            _dateIntervals.Clear();
+
+            foreach (var dateInterval in dateIntervals)
+            {
+                AddInterval(dateInterval);
+            }
+        }
+
         public void AddType(CalendarEventType eventType)
         {
             if (Types.Contains(eventType))
@@ -127,7 +146,42 @@ namespace Chattoo.Domain.Entities
                 throw new CalendarEventTypeNotFoundException(eventType.Id);
             }
         }
-        
+
+        public void UpdateTypes(ICollection<CalendarEventType> eventTypes)
+        {
+            var set = new HashSet<CalendarEventType>(new CalendarEventTypeComparer());
+
+            foreach (var type in eventTypes)
+            {
+                set.Add(type);
+            }
+
+            var removedTypes = new HashSet<CalendarEventType>();
+            var addedTypes = new HashSet<CalendarEventType>();
+            
+            foreach (var type in Types)
+            {
+                if (set.Add(type))
+                {
+                    removedTypes.Add(type);
+                }
+                else
+                {
+                    addedTypes.Add(type);
+                }
+            }
+
+            foreach (var toRemove in removedTypes)
+            {
+                _types.Remove(toRemove);
+            }
+            
+            foreach (var toAdd in addedTypes)
+            {
+                _types.Remove(toAdd);
+            }
+        }
+
         private static CalendarEventWish Create(User user, ICollection<DateInterval> dateIntervals,
             ICollection<CalendarEventType> types, int? minimalParticipantsCount, int? maximalParticipantsCount)
         {
@@ -135,28 +189,45 @@ namespace Chattoo.Domain.Entities
             {
                 AuthorId = user.Id
             };
+
+            foreach (var interval in dateIntervals)
+            {
+                entity.AddInterval(interval);
+            }
+
+            foreach (var type in types)
+            {
+                entity.AddType(type);
+            }
             
+            entity.SetMinimalParticipantsCount(minimalParticipantsCount);
+            
+            entity.SetMaximalParticipantsCount(maximalParticipantsCount);
+
+            return entity;
         }
         
         public static CalendarEventWish Create(User author, CommunicationChannel channel,
             ICollection<DateInterval> dateIntervals, ICollection<CalendarEventType> types,
             int? minimalParticipantsCount, int? maximalParticipantsCount)
         {
-            
+            var entity = CalendarEventWish.Create(author, dateIntervals, types, minimalParticipantsCount,
+                maximalParticipantsCount);
+
+            entity.CommunicationChannelId = channel.Id;
+
+            return entity;
         }
         
-        public static CalendarEventWish Create(User author, CommunicationChannel channel, Group group,
-            int? minimalParticipantsCount, int? maximalParticipantsCount,
-            ICollection<IDateInterval> intervals, ICollection<ICalendarEventType> types)
+        public static CalendarEventWish Create(User author, Group group,
+            ICollection<DateInterval> dateIntervals, ICollection<CalendarEventType> types,
+            int? minimalParticipantsCount, int? maximalParticipantsCount)
         {
-            var entity = new CalendarEventWish();
-            
-            entity.AuthorId = author?.Id;
-            entity.CommunicationChannelId = channel?.Id;
-            entity.GroupId = group?.Id;
-            entity.MinimalParticipantsCount = minimalParticipantsCount;
-            entity.MaximalParticipantsCount = maximalParticipantsCount;
-            
+            var entity = CalendarEventWish.Create(author, dateIntervals, types, minimalParticipantsCount,
+                maximalParticipantsCount);
+
+            entity.GroupId = group.Id;
+
             return entity;
         }
     }

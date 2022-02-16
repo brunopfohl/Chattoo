@@ -4,7 +4,7 @@ using Chattoo.Domain.Extensions;
 using Chattoo.Domain.ValueObjects;
 using FluentValidation;
 
-namespace Chattoo.Application.CalendarEventWishes.Commands.Create
+namespace Chattoo.Application.CalendarEventWishes.Commands
 {
     public class CreateCalendarEventWishCommandValidator : AbstractValidator<CreateCalendarEventWishCommand>
     {

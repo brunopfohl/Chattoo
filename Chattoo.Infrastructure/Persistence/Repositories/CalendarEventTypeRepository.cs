@@ -1,28 +1,13 @@
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace Chattoo.Infrastructure.Persistence.Repositories
 {
-    public class CalendarEventTypeRepository : ICalendarEventTypeRepository
+    public class CalendarEventTypeRepository : ReadOnlyRepository<CalendarEventType>, ICalendarEventTypeRepository
     {
-        private readonly ApplicationDbContext _dbContext;
-        
-        public CalendarEventTypeRepository(ApplicationDbContext dbContext)
+        public CalendarEventTypeRepository(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
-            _dbContext = dbContext;
-        }
-        
-        public async Task<CalendarEventType> GetByIdAsync(string typeId)
-        {
-            return await _dbContext.Set<CalendarEventType>().FirstOrDefaultAsync(t => t.Id == typeId);
-        }
-
-        public CalendarEventType GetById(string typeId)
-        {
-            return _dbContext.Set<CalendarEventType>().FirstOrDefault(t => t.Id == typeId);
         }
     }
 }
