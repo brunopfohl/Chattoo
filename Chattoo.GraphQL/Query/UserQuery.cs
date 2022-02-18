@@ -1,8 +1,8 @@
 ﻿using Chattoo.Application.Common.Models;
-using Chattoo.Application.Groups.Queries.GetUsers;
+using Chattoo.Application.CommunicationChannels.Queries.GetUsers;
+using Chattoo.Application.Groups.Queries;
 using Chattoo.Application.Users.DTOs;
-using Chattoo.Application.Users.Queries.Get;
-using Chattoo.Application.Users.Queries.GetForCommunicationChannel;
+using Chattoo.Application.Users.Queries;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;
@@ -25,7 +25,7 @@ namespace Chattoo.GraphQL.Query
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var query = new GetUsersForCommunicationChannelQuery()
+                    var query = new GetUsersForChannelQuery()
                     {
                         ChannelId = ctx.GetString("channelId"),
                         PageNumber = ctx.GetInt("pageNumber"),

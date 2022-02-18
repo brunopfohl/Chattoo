@@ -89,7 +89,7 @@ namespace Chattoo.Domain.Services
         public CommunicationChannelRole GetRoleOrThrow(CommunicationChannel channel, string roleId)
         {
             return channel.GetRole(roleId)
-                ?? throw new ChannelRoleNotFound(channel.Id, roleId);
+                ?? throw new ChannelRoleNotFoundException(channel.Id, roleId);
         }
 
         #endregion

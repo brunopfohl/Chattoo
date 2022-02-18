@@ -1,5 +1,4 @@
-﻿using Chattoo.Application.Groups.Commands.DeleteRole;
-using Chattoo.Application.Groups.Commands.UpdateGroupRole;
+﻿using Chattoo.Application.Groups.Commands;
 using Chattoo.Domain.Enums;
 using Chattoo.GraphQL.Extensions;
 using GraphQL.Types;
@@ -41,12 +40,14 @@ namespace Chattoo.GraphQL.Mutation
                 arguments: 
                 new QueryArguments
                 (
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "groupId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "id" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
                     var command = new DeleteGroupRoleCommand()
                     {
+                        GroupId = ctx.GetString("groupId"),
                         Id = ctx.GetString("id")
                     };
 
@@ -61,15 +62,19 @@ namespace Chattoo.GraphQL.Mutation
                 arguments: 
                 new QueryArguments
                 (
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "groupId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "id" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" }
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" },
+                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "permission" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
                     var command = new UpdateGroupRoleCommand()
                     {
                         Id = ctx.GetString("id"),
-                        Name = ctx.GetString("name")
+                        Name = ctx.GetString("name"),
+                        Permission = (UserGroupPermission)ctx.GetInt("permission"),
+                        GroupId = ctx.GetString("groupId")
                     };
 
                     await mediator.Send(command);

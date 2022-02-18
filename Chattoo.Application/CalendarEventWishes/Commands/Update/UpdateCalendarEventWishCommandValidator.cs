@@ -1,33 +1,38 @@
-﻿using FluentValidation;
+﻿using System.Linq;
+using Chattoo.Application.Common.Services;
+using Chattoo.Domain.ValueObjects;
+using FluentValidation;
 
 namespace Chattoo.Application.CalendarEvents.Commands
 {
     /// <summary>
-    /// Validátor příkazu <see cref="UpdateCommunicationChannelCalendarEventCommand"/>.
+    /// Validátor příkazu <see cref="UpdateCalendarEventWishCommand"/>.
     /// </summary>
-    public class UpdateCommunicationChannelCalendarEventCommandValidator : AbstractValidator<UpdateCalendarEventCommand>
+    public class UpdateCalendarEventWishCommandValidator : AbstractValidator<UpdateCalendarEventWishCommand>
     {
-        public UpdateCommunicationChannelCalendarEventCommandValidator()
+        public UpdateCalendarEventWishCommandValidator(DateIntervalService dateIntervalService)
         {
             RuleFor(v => v.Id)
-                .NotEmpty().WithMessage("Id kalendářní události musí být specifikováno.");
+                .NotEmpty().WithMessage("Id přání musí být specifikováno.");
             
-            RuleFor(v => v.Name)
-                .MaximumLength(100).WithMessage("Název události v komunikačním kanálu nesmí být delší než 100 znaků.")
-                .NotEmpty().WithMessage("Název události v komunikačního kanálu je nutné vyplnit.");
-            
-            RuleFor(v => v.Description)
-                .NotEmpty().WithMessage("Popis události z komunikačního kanálu je nutné vyplnit.");
-            
-            RuleFor(v => v.StartsAt)
-                .NotEmpty().WithMessage("Počátek události musí být specifikován.");
+            RuleFor(x => x.DateIntervals)
+                .Must(x => x.Count > 0).WithMessage("Alespoň 1 časový blok musí být určen.")
+                .Must(x =>
+                {
+                    var intervals = x.Select(DateInterval.Create).ToList();
+                    var isOverlapping = dateIntervalService.GetOverlapOfIntervals(intervals);
 
-            RuleFor(v => v.EndsAt)
-                .GreaterThan(v => v.StartsAt).WithMessage("Konec události musí následovat po počátku události");
-            
-            RuleFor(v => v.MaximalParticipantsCount)
-                .GreaterThan(0)
-                    .WithMessage("Max. počet účastníků musí být neomezený nebo větší než 0");
+                    return !isOverlapping;
+                }).WithMessage("Časové bloky se překrývají.");
+
+            RuleFor(x => x.MinimalParticipantsCount)
+                .GreaterThan(1)
+                .WithMessage("Minimální počet účastníků musí být větší než 1.");
+
+            RuleFor(x => x.MaximalParticipantsCount)
+                .GreaterThan(x => x.MinimalParticipantsCount)
+                .When(x => x.MaximalParticipantsCount.HasValue && x.MinimalParticipantsCount.HasValue)
+                .WithMessage("Maximální počet účastníků musí být větší než minimální");
         }
     }
 }

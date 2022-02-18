@@ -1,23 +1,18 @@
 ﻿using Chattoo.Application.CommunicationChannels.Commands;
 using Chattoo.Application.CommunicationChannels.Commands.AddUser;
-using Chattoo.Application.CommunicationChannels.Commands.Create;
-using Chattoo.Application.CommunicationChannels.Commands.RemoveUser;
 using Chattoo.Application.CommunicationChannels.DTOs;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Subscription.CommunicationChannelMessage;
 using Chattoo.GraphQL.Types;
-using GraphQL;
 using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Mutation
 {
     public class CommunicationChannelMutation : ObjectGraphType
     {
-        private readonly ICommunicationChannelSubscriptionProvider _communicationChannelSubscriptionProvider;
-        
         public CommunicationChannelMutation(ICommunicationChannelSubscriptionProvider communicationChannelSubscriptionProvider)
         {
-            _communicationChannelSubscriptionProvider = communicationChannelSubscriptionProvider;
+            var communicationChannelSubscriptionProvider1 = communicationChannelSubscriptionProvider;
             Name = "CommunicationChannelMutation";
             
             this.FieldAsyncWithScope<CommunicationChannelGraphType, CommunicationChannelDto>(
@@ -38,7 +33,7 @@ namespace Chattoo.GraphQL.Mutation
 
                     var channel = await mediator.Send(command);
 
-                    _communicationChannelSubscriptionProvider.UpdateCommunicationChannel(channel);
+                    communicationChannelSubscriptionProvider1.UpdateCommunicationChannel(channel);
 
                     return channel;
                 }
@@ -106,7 +101,7 @@ namespace Chattoo.GraphQL.Mutation
 
                     var channel = await mediator.Send(command);
                     
-                    _communicationChannelSubscriptionProvider.UpdateCommunicationChannel(channel);
+                    communicationChannelSubscriptionProvider1.UpdateCommunicationChannel(channel);
 
                     return true;
                 }
@@ -130,7 +125,7 @@ namespace Chattoo.GraphQL.Mutation
 
                     var channel = await mediator.Send(command);
                     
-                    _communicationChannelSubscriptionProvider.UpdateCommunicationChannel(channel);
+                    communicationChannelSubscriptionProvider1.UpdateCommunicationChannel(channel);
 
                     return true;
                 }

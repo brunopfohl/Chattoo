@@ -8,7 +8,7 @@ namespace Chattoo.Application.CommunicationChannels.Commands
     /// </summary>
     public class UpdateCommunicationChannelCommandValidator : AbstractValidator<UpdateCommunicationChannelCommand>
     {
-        public UpdateCommunicationChannelCommandValidator(ChannelValidationService channelValidation)
+        public UpdateCommunicationChannelCommandValidator()
         {
             RuleFor(v => v.Id)
                 .NotEmpty()

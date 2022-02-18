@@ -1,7 +1,6 @@
 ﻿using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.Common.Models;
-using Chattoo.Application.CommunicationChannelMessages.Queries.GetById;
-using Chattoo.Application.CommunicationChannels.Queries.GetMessages;
+using Chattoo.Application.CommunicationChannels.Queries;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;
@@ -20,13 +19,15 @@ namespace Chattoo.GraphQL.Query
                 arguments: 
                 new QueryArguments
                 (
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "channelId" },
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "messageId" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var query = new GetCommunicationChannelMessageByIdQuery()
+                    var query = new GetMessageFromChannelQuery()
                     {
-                        Id = ctx.GetString("id")
+                        ChannelId = ctx.GetString("channelId"),
+                        MessageId = ctx.GetString("id")
                     };
 
                     return await mediator.Send(query);
@@ -49,7 +50,8 @@ namespace Chattoo.GraphQL.Query
                         PageSize = ctx.GetInt("pageSize")
                     };
 
-                    return await mediator.Send(query);
+                    var result = await mediator.Send(query);
+                    return result;
                 }
             );
         }

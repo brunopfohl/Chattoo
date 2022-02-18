@@ -1,6 +1,4 @@
-﻿using Chattoo.Application.CommunicationChannels.Commands.AddRole;
-using Chattoo.Application.CommunicationChannels.Commands.DeleteRole;
-using Chattoo.Application.CommunicationChannels.Commands.UpdateRole;
+﻿using Chattoo.Application.CommunicationChannels.Commands;
 using Chattoo.Domain.Enums;
 using Chattoo.GraphQL.Extensions;
 using GraphQL.Types;
@@ -24,7 +22,7 @@ namespace Chattoo.GraphQL.Mutation
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var command = new CreateCommunicationChannelRoleCommand()
+                    var command = new AddChannelRoleCommand()
                     {
                         ChannelId = ctx.GetString("channelId"),
                         Name = ctx.GetString("name"),
@@ -42,12 +40,14 @@ namespace Chattoo.GraphQL.Mutation
                 arguments: 
                 new QueryArguments
                 (
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "channelId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "id" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var command = new DeleteCommunicationChannelRoleCommand()
+                    var command = new DeleteChannelRoleCommand()
                     {
+                        ChannelId = ctx.GetString("channelId"),
                         Id = ctx.GetString("id")
                     };
 
@@ -62,6 +62,7 @@ namespace Chattoo.GraphQL.Mutation
                 arguments: 
                 new QueryArguments
                 (
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "channelId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "id" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "content" }
                 ),
@@ -69,6 +70,7 @@ namespace Chattoo.GraphQL.Mutation
                 {
                     var command = new UpdateChannelRoleCommand()
                     {
+                        ChannelId = ctx.GetString("channelId"),
                         Id = ctx.GetString("id"),
                         Name = ctx.GetString("name"),
                         Permission = (CommunicationChannelPermission)ctx.GetInt("permission")

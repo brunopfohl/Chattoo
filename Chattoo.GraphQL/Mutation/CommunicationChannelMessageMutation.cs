@@ -1,7 +1,5 @@
 ﻿using Chattoo.Application.Common.DTOs;
-using Chattoo.Application.CommunicationChannels.Commands.Message.UpdateMessage;
-using Chattoo.Application.CommunicationChannels.Commands.UpdateMessage;
-using Chattoo.Application.Users.Commands.AddMessage;
+using Chattoo.Application.CommunicationChannels.Commands;
 using Chattoo.Domain.Enums;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Subscription.CommunicationChannelMessage;
@@ -21,16 +19,14 @@ namespace Chattoo.GraphQL.Mutation
                 arguments: 
                 new QueryArguments
                 (
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "userId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "channelId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "content" },
                     new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "type" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var command = new CreateCommunicationChannelMessageCommand()
+                    var command = new AddChannelMessageCommand()
                     {
-                        UserId = ctx.GetString("userId"),
                         ChannelId = ctx.GetString("channelId"),
                         Content = ctx.GetString("content"),
                         Type = (CommunicationChannelMessageType)ctx.GetInt("type")
@@ -51,12 +47,14 @@ namespace Chattoo.GraphQL.Mutation
                 arguments: 
                 new QueryArguments
                 (
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "channelId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "id" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var command = new DeleteCommunicationChannelMessageCommand()
+                    var command = new DeleteChannelMessageCommand()
                     {
+                        ChannelId = ctx.GetString("channelId"),
                         Id = ctx.GetString("id")
                     };
 
@@ -71,6 +69,7 @@ namespace Chattoo.GraphQL.Mutation
                 arguments: 
                 new QueryArguments
                 (
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "channelId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "id" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "content" }
                 ),
@@ -78,6 +77,7 @@ namespace Chattoo.GraphQL.Mutation
                 {
                     var command = new UpdateChannelMessageCommand()
                     {
+                        ChannelId = ctx.GetString("channelId"),
                         Id = ctx.GetString("id"),
                         Content = ctx.GetString("content")
                     };

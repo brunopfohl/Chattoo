@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Chattoo.Application.Common.Services;
 using Chattoo.Domain.Repositories;
 using Chattoo.Domain.Services;
 using MediatR;

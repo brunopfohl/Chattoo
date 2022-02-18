@@ -14,7 +14,6 @@ export const GET_CALENDAR_EVENTS_FOR_CHANNEL = gql`
                     name,
                     description,
                     authorId,
-                    authorName,
                     createdAt,
                     modifiedAt
                 },

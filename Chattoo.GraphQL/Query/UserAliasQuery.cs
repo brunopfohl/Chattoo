@@ -1,7 +1,6 @@
 ﻿using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.Common.Models;
-using Chattoo.Application.UserAliases.Queries.GetById;
-using Chattoo.Application.Users.Queries.GetAliases;
+using Chattoo.Application.Users.Queries;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;
@@ -15,25 +14,6 @@ namespace Chattoo.GraphQL.Query
         {
             Name = "UserAliasQuery";
             
-            this.FieldAsyncWithScope<UserAliasGraphType, UserAliasDto>(
-                "get",
-                arguments: 
-                new QueryArguments
-                (
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
-                ),
-                resolve: async (ctx, mediator) =>
-                {
-                    var query = new GetUserAliasByIdQuery()
-                    {
-                        Id = ctx.GetString("id")
-                    };
-
-                    var userAlias = await mediator.Send(query);
-                    return userAlias;
-                }
-            );
-            
             this.FieldAsyncWithScope<PageInfoGraphType<UserAliasGraphType, UserAliasDto>, PaginatedList<UserAliasDto>>(
                 "getForUser",
                 arguments: 
@@ -43,7 +23,7 @@ namespace Chattoo.GraphQL.Query
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var query = new GetUserAliasesForUserQuery()
+                    var query = new GetAliasesForUserQuery()
                     {
                         UserId = ctx.GetString("userId"),
                         PageNumber = ctx.GetInt("pageNumber"),

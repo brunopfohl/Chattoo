@@ -1,8 +1,8 @@
 ﻿using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.Common.Models;
-using Chattoo.Application.CommunicationChannelMessages.Queries.GetById;
-using Chattoo.Application.CommunicationChannels.Queries.GetRole;
-using Chattoo.Application.Users.Queries.GetChannelRoles;
+using Chattoo.Application.CommunicationChannels.Queries;
+using Chattoo.Application.CommunicationChannels.Queries.GetRoles;
+using Chattoo.Application.Users.Queries;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;
@@ -21,13 +21,35 @@ namespace Chattoo.GraphQL.Query
                 arguments: 
                 new QueryArguments
                 (
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "channelId" },
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
                     var query = new GetCommunicationChannelRoleByIdQuery()
                     {
-                        Id = ctx.GetString("id")
+                        ChannelId = ctx.GetString("channelId"),
+                        RoleId = ctx.GetString("id")
+                    };
+
+                    return await mediator.Send(query);
+                }
+            );
+            
+            this.FieldAsyncWithScope<PageInfoGraphType<CommunicationChannelRoleGraphType, CommunicationChannelRoleDto>, PaginatedList<CommunicationChannelRoleDto>>(
+                "getForChannel",
+                arguments: 
+                new QueryArgumentsWithPagination
+                (
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "channelId" }
+                ),
+                resolve: async (ctx, mediator) =>
+                {
+                    var query = new GetCommunicationChannelRolesQuery()
+                    {
+                        ChannelId = ctx.GetString("channelId"),
+                        PageNumber = ctx.GetInt("pageNumber"),
+                        PageSize = ctx.GetInt("pageSize")
                     };
 
                     return await mediator.Send(query);

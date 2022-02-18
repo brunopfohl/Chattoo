@@ -8,7 +8,7 @@ namespace Chattoo.Application.CommunicationChannels.Commands
     /// </summary>
     public class AddChannelRoleCommandValidator : AbstractValidator<AddChannelRoleCommand>
     {
-        public AddChannelRoleCommandValidator(ChannelValidationService channelValidation)
+        public AddChannelRoleCommandValidator()
         {
             RuleFor(v => v.ChannelId)
                 .NotEmpty()

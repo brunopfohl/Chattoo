@@ -1,12 +1,10 @@
-﻿using Chattoo.Application.Common.Services;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Chattoo.Application.CommunicationChannels.Commands.AddUser
 {
     public class AddUserToCommunicationChannelCommandValidator : AbstractValidator<AddUserToCommunicationChannelCommand>
     {
-        public AddUserToCommunicationChannelCommandValidator(ChannelValidationService channelValidation,
-            UserValidationService userValidation)
+        public AddUserToCommunicationChannelCommandValidator()
         {
             RuleFor(v => v.ChannelId)
                 .NotEmpty()
@@ -14,9 +12,7 @@ namespace Chattoo.Application.CommunicationChannels.Commands.AddUser
 
             RuleFor(v => v.UserId)
                 .NotEmpty()
-                    .WithMessage("Id uživatele musí být zadáno")
-                .Must(userValidation.Found)
-                    .WithMessage("Uživatel neexistuje.");
+                    .WithMessage("Id uživatele musí být zadáno");
         }
     }
 }

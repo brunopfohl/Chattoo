@@ -79,7 +79,7 @@ namespace Chattoo.GraphQL.Subscription
         {
             var userId = context.GetString("userId");
             var communicationChannels = _communicationChannelSubscriptionProvider.CommunicationChannels();
-            return communicationChannels.Where(m => m.Users.Any(u => u.Id == userId));
+            return communicationChannels.Where(m => m.ParticipantIds.Contains(userId));
         }
     }
 }

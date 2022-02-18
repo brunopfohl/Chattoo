@@ -1,8 +1,9 @@
-﻿using GraphQL.Types;
+﻿using Chattoo.Domain.Enums;
+using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Types.Enums
 {
-    public class CommunicationChannelMessageTypeGraphType : EnumerationGraphType<Chattoo.Domain.Enums.CommunicationChannelMessageType>
+    public class CommunicationChannelMessageTypeGraphType : EnumerationGraphType<CommunicationChannelMessageType>
     {
         public CommunicationChannelMessageTypeGraphType()
         {

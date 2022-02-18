@@ -8,7 +8,7 @@ namespace Chattoo.Application.Groups.Commands
     /// </summary>
     public class AddGroupRoleCommandValidator : AbstractValidator<AddGroupRoleCommand>
     {
-        public AddGroupRoleCommandValidator(GroupValidationService groupValidation)
+        public AddGroupRoleCommandValidator()
         {
             RuleFor(v => v.GroupId)
                 .NotEmpty()
@@ -18,8 +18,7 @@ namespace Chattoo.Application.Groups.Commands
                 .MaximumLength(100)
                     .WithMessage("Název uživatelské role nesmí být delší než 100 znaků.")
                 .NotEmpty()
-                    .WithMessage("Název uživatelské role je nutné vyplnit.")
-                .Must(groupValidation.RoleCanBeAdded);
+                    .WithMessage("Název uživatelské role je nutné vyplnit.");
         }
     }
 }

@@ -19,62 +19,90 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type CommunicationChannel = {
-  __typename?: 'CommunicationChannel';
-  createdAt: Scalars['DateTime'];
-  description: Scalars['String'];
-  id: Scalars['String'];
-  modifiedAt?: Maybe<Scalars['DateTime']>;
-  name: Scalars['String'];
-};
-
-export type CommunicationChannelCalendarEvent = {
-  __typename?: 'CommunicationChannelCalendarEvent';
+export type CalendarEvent = {
+  __typename?: 'CalendarEvent';
   authorId: Scalars['String'];
-  authorName: Scalars['String'];
+  communicationChannelId?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  deletedBy: Scalars['String'];
   description: Scalars['String'];
   endsAt?: Maybe<Scalars['DateTime']>;
+  groupId?: Maybe<Scalars['String']>;
   id: Scalars['String'];
+  maximalParticipantsCount?: Maybe<Scalars['Int']>;
   modifiedAt?: Maybe<Scalars['DateTime']>;
+  modifiedBy: Scalars['String'];
   name: Scalars['String'];
   startsAt: Scalars['DateTime'];
+  type?: Maybe<CalendarEventType>;
 };
 
-export type CommunicationChannelCalendarEventMutation = {
-  __typename?: 'CommunicationChannelCalendarEventMutation';
-  create?: Maybe<CommunicationChannelCalendarEvent>;
+export type CalendarEventMutation = {
+  __typename?: 'CalendarEventMutation';
+  create?: Maybe<CalendarEvent>;
   delete?: Maybe<Scalars['Boolean']>;
   update?: Maybe<Scalars['Boolean']>;
 };
 
 
-export type CommunicationChannelCalendarEventMutationCreateArgs = {
-  channelId: Scalars['String'];
+export type CalendarEventMutationCreateArgs = {
+  channelId?: InputMaybe<Scalars['String']>;
   desc: Scalars['String'];
-  endsAt: Scalars['Date'];
+  endsAt?: InputMaybe<Scalars['Date']>;
+  eventTypeId?: InputMaybe<Scalars['String']>;
+  groupId?: InputMaybe<Scalars['String']>;
+  maximalParticipantsCount?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
-  startsAt?: InputMaybe<Scalars['Date']>;
+  startsAt: Scalars['Date'];
 };
 
 
-export type CommunicationChannelCalendarEventMutationDeleteArgs = {
+export type CalendarEventMutationDeleteArgs = {
   id: Scalars['String'];
 };
 
 
-export type CommunicationChannelCalendarEventMutationUpdateArgs = {
+export type CalendarEventMutationUpdateArgs = {
   desc: Scalars['String'];
   endsAt: Scalars['Date'];
   id: Scalars['String'];
+  maximalParticipantsCount?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
   startsAt?: InputMaybe<Scalars['Date']>;
+};
+
+export type CalendarEventType = {
+  __typename?: 'CalendarEventType';
+  createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  deletedBy: Scalars['String'];
+  id: Scalars['String'];
+  modifiedAt?: Maybe<Scalars['DateTime']>;
+  modifiedBy: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type CommunicationChannel = {
+  __typename?: 'CommunicationChannel';
+  createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  deletedBy: Scalars['String'];
+  description: Scalars['String'];
+  id: Scalars['String'];
+  modifiedAt?: Maybe<Scalars['DateTime']>;
+  modifiedBy: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type CommunicationChannelCalendarEventQuery = {
   __typename?: 'CommunicationChannelCalendarEventQuery';
-  get?: Maybe<CommunicationChannelCalendarEvent>;
-  getForCommunicationChannel?: Maybe<PaginationListCommunicationChannelCalendarEventGraphType>;
+  get?: Maybe<CalendarEvent>;
+  getForCommunicationChannel?: Maybe<PaginationListCalendarEventGraphType>;
+  getForGroup?: Maybe<PaginationListCalendarEventGraphType>;
 };
 
 
@@ -89,13 +117,24 @@ export type CommunicationChannelCalendarEventQueryGetForCommunicationChannelArgs
   pageSize?: Scalars['Int'];
 };
 
+
+export type CommunicationChannelCalendarEventQueryGetForGroupArgs = {
+  groupId: Scalars['String'];
+  pageNumber?: Scalars['Int'];
+  pageSize?: Scalars['Int'];
+};
+
 export type CommunicationChannelMessage = {
   __typename?: 'CommunicationChannelMessage';
   channelId: Scalars['String'];
   content: Scalars['String'];
   createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  deletedBy: Scalars['String'];
   id: Scalars['String'];
   modifiedAt?: Maybe<Scalars['DateTime']>;
+  modifiedBy: Scalars['String'];
   type?: Maybe<CommunicationChannelMessageType>;
   userId: Scalars['String'];
   userName: Scalars['String'];
@@ -118,12 +157,16 @@ export type CommunicationChannelMessageAttachmentMutationCreateArgs = {
 
 
 export type CommunicationChannelMessageAttachmentMutationDeleteArgs = {
+  channelId: Scalars['String'];
   id: Scalars['String'];
+  messageId: Scalars['String'];
 };
 
 
 export type CommunicationChannelMessageAttachmentMutationUpdateArgs = {
+  channelId: Scalars['String'];
   id: Scalars['String'];
+  messageId: Scalars['String'];
   name: Scalars['String'];
 };
 
@@ -139,16 +182,17 @@ export type CommunicationChannelMessageMutationCreateArgs = {
   channelId: Scalars['String'];
   content: Scalars['String'];
   type: Scalars['Int'];
-  userId: Scalars['String'];
 };
 
 
 export type CommunicationChannelMessageMutationDeleteArgs = {
+  channelId: Scalars['String'];
   id: Scalars['String'];
 };
 
 
 export type CommunicationChannelMessageMutationUpdateArgs = {
+  channelId: Scalars['String'];
   content: Scalars['String'];
   id: Scalars['String'];
 };
@@ -161,7 +205,8 @@ export type CommunicationChannelMessageQuery = {
 
 
 export type CommunicationChannelMessageQueryGetArgs = {
-  id: Scalars['ID'];
+  channelId: Scalars['ID'];
+  messageId: Scalars['ID'];
 };
 
 
@@ -237,8 +282,12 @@ export type CommunicationChannelRole = {
   __typename?: 'CommunicationChannelRole';
   channelId: Scalars['String'];
   createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  deletedBy: Scalars['String'];
   id: Scalars['String'];
   modifiedAt?: Maybe<Scalars['DateTime']>;
+  modifiedBy: Scalars['String'];
   name: Scalars['String'];
 };
 
@@ -258,11 +307,13 @@ export type CommunicationChannelRoleMutationCreateArgs = {
 
 
 export type CommunicationChannelRoleMutationDeleteArgs = {
+  channelId: Scalars['String'];
   id: Scalars['String'];
 };
 
 
 export type CommunicationChannelRoleMutationUpdateArgs = {
+  channelId: Scalars['String'];
   content: Scalars['String'];
   id: Scalars['String'];
 };
@@ -270,12 +321,21 @@ export type CommunicationChannelRoleMutationUpdateArgs = {
 export type CommunicationChannelRoleQuery = {
   __typename?: 'CommunicationChannelRoleQuery';
   get?: Maybe<CommunicationChannelRole>;
+  getForChannel?: Maybe<PaginationListCommunicationChannelRoleGraphType>;
   getForUserInChannel?: Maybe<PaginationListCommunicationChannelRoleGraphType>;
 };
 
 
 export type CommunicationChannelRoleQueryGetArgs = {
+  channelId: Scalars['ID'];
   id: Scalars['ID'];
+};
+
+
+export type CommunicationChannelRoleQueryGetForChannelArgs = {
+  channelId: Scalars['ID'];
+  pageNumber?: Scalars['Int'];
+  pageSize?: Scalars['Int'];
 };
 
 
@@ -289,8 +349,12 @@ export type CommunicationChannelRoleQueryGetForUserInChannelArgs = {
 export type Group = {
   __typename?: 'Group';
   createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  deletedBy: Scalars['String'];
   id: Scalars['String'];
   modifiedAt?: Maybe<Scalars['DateTime']>;
+  modifiedBy: Scalars['String'];
   name: Scalars['String'];
 };
 
@@ -352,8 +416,12 @@ export type GroupQueryGetForUserArgs = {
 export type GroupRole = {
   __typename?: 'GroupRole';
   createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  deletedBy: Scalars['String'];
   id: Scalars['String'];
   modifiedAt?: Maybe<Scalars['DateTime']>;
+  modifiedBy: Scalars['String'];
   name: Scalars['String'];
 };
 
@@ -373,13 +441,16 @@ export type GroupRoleMutationCreateArgs = {
 
 
 export type GroupRoleMutationDeleteArgs = {
+  groupId: Scalars['String'];
   id: Scalars['String'];
 };
 
 
 export type GroupRoleMutationUpdateArgs = {
+  groupId: Scalars['String'];
   id: Scalars['String'];
   name: Scalars['String'];
+  permission: Scalars['Int'];
 };
 
 export type GroupRoleQuery = {
@@ -390,7 +461,8 @@ export type GroupRoleQuery = {
 
 
 export type GroupRoleQueryGetArgs = {
-  id: Scalars['ID'];
+  groupId: Scalars['ID'];
+  roleId: Scalars['ID'];
 };
 
 
@@ -403,7 +475,7 @@ export type GroupRoleQueryGetForUserInGroupArgs = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  communicationChannelCalendarEvents?: Maybe<CommunicationChannelCalendarEventMutation>;
+  communicationChannelCalendarEvents?: Maybe<CalendarEventMutation>;
   communicationChannelMessageAttachments?: Maybe<CommunicationChannelMessageAttachmentMutation>;
   communicationChannelMessages?: Maybe<CommunicationChannelMessageMutation>;
   communicationChannelRoles?: Maybe<CommunicationChannelRoleMutation>;
@@ -411,12 +483,11 @@ export type Mutation = {
   groupRoles?: Maybe<GroupRoleMutation>;
   groups?: Maybe<GroupMutation>;
   userAliases?: Maybe<UserAliasMutation>;
-  users?: Maybe<UserMutation>;
 };
 
-export type PaginationListCommunicationChannelCalendarEventGraphType = {
-  __typename?: 'PaginationListCommunicationChannelCalendarEventGraphType';
-  data?: Maybe<Array<Maybe<CommunicationChannelCalendarEvent>>>;
+export type PaginationListCalendarEventGraphType = {
+  __typename?: 'PaginationListCalendarEventGraphType';
+  data?: Maybe<Array<Maybe<CalendarEvent>>>;
   hasNextPage: Scalars['Boolean'];
   hasPreviousPage: Scalars['Boolean'];
   pageIndex: Scalars['Int'];
@@ -525,8 +596,12 @@ export type SubscriptionCommunicationChannelMessageAddedToChannelArgs = {
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  deletedBy: Scalars['String'];
   id: Scalars['String'];
   modifiedAt?: Maybe<Scalars['DateTime']>;
+  modifiedBy: Scalars['String'];
   userName: Scalars['String'];
 };
 
@@ -534,8 +609,12 @@ export type UserAlias = {
   __typename?: 'UserAlias';
   alias: Scalars['String'];
   createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  deletedBy: Scalars['String'];
   id: Scalars['String'];
   modifiedAt?: Maybe<Scalars['DateTime']>;
+  modifiedBy: Scalars['String'];
   userId: Scalars['String'];
 };
 
@@ -564,13 +643,7 @@ export type UserAliasMutationUpdateArgs = {
 
 export type UserAliasQuery = {
   __typename?: 'UserAliasQuery';
-  get?: Maybe<UserAlias>;
   getForUser?: Maybe<PaginationListUserAliasGraphType>;
-};
-
-
-export type UserAliasQueryGetArgs = {
-  id: Scalars['ID'];
 };
 
 
@@ -578,17 +651,6 @@ export type UserAliasQueryGetForUserArgs = {
   pageNumber?: Scalars['Int'];
   pageSize?: Scalars['Int'];
   userId: Scalars['ID'];
-};
-
-export type UserMutation = {
-  __typename?: 'UserMutation';
-  create?: Maybe<Scalars['String']>;
-  delete?: Maybe<Scalars['Boolean']>;
-};
-
-
-export type UserMutationDeleteArgs = {
-  id: Scalars['String'];
 };
 
 export type UserQuery = {
@@ -629,14 +691,14 @@ export type CreateChannelCalendarEventMutationVariables = Exact<{
 }>;
 
 
-export type CreateChannelCalendarEventMutation = { __typename?: 'Mutation', communicationChannelCalendarEvents?: { __typename?: 'CommunicationChannelCalendarEventMutation', create?: { __typename?: 'CommunicationChannelCalendarEvent', id: string, startsAt: any, endsAt?: any | null | undefined, name: string, description: string, authorId: string, authorName: string, createdAt: any, modifiedAt?: any | null | undefined } | null | undefined } | null | undefined };
+export type CreateChannelCalendarEventMutation = { __typename?: 'Mutation', communicationChannelCalendarEvents?: { __typename?: 'CalendarEventMutation', create?: { __typename?: 'CalendarEvent', id: string, startsAt: any, endsAt?: any | null | undefined, name: string, description: string, authorId: string, createdAt: any, modifiedAt?: any | null | undefined } | null | undefined } | null | undefined };
 
 export type DeleteChannelCalendarEventMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type DeleteChannelCalendarEventMutation = { __typename?: 'Mutation', communicationChannelCalendarEvents?: { __typename?: 'CommunicationChannelCalendarEventMutation', delete?: boolean | null | undefined } | null | undefined };
+export type DeleteChannelCalendarEventMutation = { __typename?: 'Mutation', communicationChannelCalendarEvents?: { __typename?: 'CalendarEventMutation', delete?: boolean | null | undefined } | null | undefined };
 
 export type AddUserToCommunicationChannelMutationVariables = Exact<{
   userId: Scalars['String'];
@@ -663,27 +725,26 @@ export type RemoveUserFromCommunicationChannelMutationVariables = Exact<{
 export type RemoveUserFromCommunicationChannelMutation = { __typename?: 'Mutation', communicationChannels?: { __typename?: 'CommunicationChannelMutation', removeUser?: boolean | null | undefined } | null | undefined };
 
 export type CreateMessageMutationVariables = Exact<{
-  userId: Scalars['String'];
   channelId: Scalars['String'];
   content: Scalars['String'];
 }>;
 
 
-export type CreateMessageMutation = { __typename?: 'Mutation', communicationChannelMessages?: { __typename?: 'CommunicationChannelMessageMutation', create?: { __typename?: 'CommunicationChannelMessage', id: string, content: string, userName: string, type?: CommunicationChannelMessageType | null | undefined, userId: string, channelId: string, createdAt: any, modifiedAt?: any | null | undefined } | null | undefined } | null | undefined };
+export type CreateMessageMutation = { __typename?: 'Mutation', communicationChannelMessages?: { __typename?: 'CommunicationChannelMessageMutation', create?: { __typename?: 'CommunicationChannelMessage', id: string, content: string, userName: string, type?: CommunicationChannelMessageType | null | undefined, channelId: string, createdAt: any, modifiedAt?: any | null | undefined } | null | undefined } | null | undefined };
 
 export type GetCalendarEventsForChannelQueryVariables = Exact<{
   channelId: Scalars['String'];
 }>;
 
 
-export type GetCalendarEventsForChannelQuery = { __typename?: 'Query', communicationChannelCalendarEvents?: { __typename?: 'CommunicationChannelCalendarEventQuery', getForCommunicationChannel?: { __typename?: 'PaginationListCommunicationChannelCalendarEventGraphType', hasNextPage: boolean, hasPreviousPage: boolean, pageIndex: number, totalCount: number, totalPages: number, data?: Array<{ __typename?: 'CommunicationChannelCalendarEvent', id: string, startsAt: any, endsAt?: any | null | undefined, name: string, description: string, authorId: string, authorName: string, createdAt: any, modifiedAt?: any | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+export type GetCalendarEventsForChannelQuery = { __typename?: 'Query', communicationChannelCalendarEvents?: { __typename?: 'CommunicationChannelCalendarEventQuery', getForCommunicationChannel?: { __typename?: 'PaginationListCalendarEventGraphType', hasNextPage: boolean, hasPreviousPage: boolean, pageIndex: number, totalCount: number, totalPages: number, data?: Array<{ __typename?: 'CalendarEvent', id: string, startsAt: any, endsAt?: any | null | undefined, name: string, description: string, authorId: string, createdAt: any, modifiedAt?: any | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
 
 export type GetChannelCalendarEventQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetChannelCalendarEventQuery = { __typename?: 'Query', communicationChannelCalendarEvents?: { __typename?: 'CommunicationChannelCalendarEventQuery', get?: { __typename?: 'CommunicationChannelCalendarEvent', id: string, startsAt: any, endsAt?: any | null | undefined, name: string, description: string, authorId: string, authorName: string, createdAt: any, modifiedAt?: any | null | undefined } | null | undefined } | null | undefined };
+export type GetChannelCalendarEventQuery = { __typename?: 'Query', communicationChannelCalendarEvents?: { __typename?: 'CommunicationChannelCalendarEventQuery', get?: { __typename?: 'CalendarEvent', id: string, startsAt: any, endsAt?: any | null | undefined, name: string, description: string, authorId: string, createdAt: any, modifiedAt?: any | null | undefined } | null | undefined } | null | undefined };
 
 export type GetChannelsForUserQueryVariables = Exact<{
   userId: Scalars['String'];
@@ -749,7 +810,6 @@ export const CreateChannelCalendarEventDocument = gql`
       name
       description
       authorId
-      authorName
       createdAt
       modifiedAt
     }
@@ -924,14 +984,13 @@ export type RemoveUserFromCommunicationChannelMutationHookResult = ReturnType<ty
 export type RemoveUserFromCommunicationChannelMutationResult = Apollo.MutationResult<RemoveUserFromCommunicationChannelMutation>;
 export type RemoveUserFromCommunicationChannelMutationOptions = Apollo.BaseMutationOptions<RemoveUserFromCommunicationChannelMutation, RemoveUserFromCommunicationChannelMutationVariables>;
 export const CreateMessageDocument = gql`
-    mutation CreateMessage($userId: String!, $channelId: String!, $content: String!) {
+    mutation CreateMessage($channelId: String!, $content: String!) {
   communicationChannelMessages {
-    create(userId: $userId, channelId: $channelId, content: $content, type: 1) {
+    create(channelId: $channelId, content: $content, type: 1) {
       id
       content
       userName
       type
-      userId
       channelId
       createdAt
       modifiedAt
@@ -954,7 +1013,6 @@ export type CreateMessageMutationFn = Apollo.MutationFunction<CreateMessageMutat
  * @example
  * const [createMessageMutation, { data, loading, error }] = useCreateMessageMutation({
  *   variables: {
- *      userId: // value for 'userId'
  *      channelId: // value for 'channelId'
  *      content: // value for 'content'
  *   },
@@ -978,7 +1036,6 @@ export const GetCalendarEventsForChannelDocument = gql`
         name
         description
         authorId
-        authorName
         createdAt
         modifiedAt
       }
@@ -1029,7 +1086,6 @@ export const GetChannelCalendarEventDocument = gql`
       name
       description
       authorId
-      authorName
       createdAt
       modifiedAt
     }

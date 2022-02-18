@@ -67,7 +67,7 @@ namespace Chattoo.Domain.Entities
         {
             if (count.HasValue)
             {
-                if (count.Value < 1)
+                if (count.Value < 2)
                 {
                     throw new ArgumentOutOfRangeException(nameof(MinimalParticipantsCount));
                 }

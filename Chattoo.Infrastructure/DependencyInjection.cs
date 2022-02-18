@@ -39,6 +39,8 @@ namespace Chattoo.Infrastructure
             services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
             services.AddScoped(typeof(ICalendarEventRepository), typeof(CalendarEventRepository));
             services.AddScoped(typeof(ICalendarEventWishRepository), typeof(CalendarEventWishRepository));
+            services.AddScoped(typeof(ICalendarEventTypeRepository), typeof(CalendarEventTypeRepository));
+            services.AddScoped(typeof(IChannelMessageRepository), typeof(ChannelMessageRepository));
 
             // Jednotka pro správu/manipulaci datového zdroje.
             services.AddScoped<IUnitOfWork>(provider => provider.GetService<ApplicationDbContext>());

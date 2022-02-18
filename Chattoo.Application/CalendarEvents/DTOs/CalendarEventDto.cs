@@ -21,11 +21,6 @@ namespace Chattoo.Application.CalendarEvents.DTOs
         public DateTime? EndsAt { get; set; }
         
         /// <summary>
-        /// Vrací nebo nastavuje Id autora kalendářní události.
-        /// </summary>
-        public string AuthorId { get; set; }
-        
-        /// <summary>
         /// Vrací nebo nastavuje název události.
         /// </summary>
         public string Name { get; set; }
@@ -39,5 +34,25 @@ namespace Chattoo.Application.CalendarEvents.DTOs
         /// Vrací nebo nastavuje maximální počet účastníků.
         /// </summary>
         public int? MaximalParticipantsCount { get; set; }
+        
+        /// <summary>
+        /// Vrací nebo nastavuje Id autora kalendářní události.
+        /// </summary>
+        public string AuthorId { get; set; }
+        
+        /// <summary>
+        /// Vrací nebo nastavuje Id komunikačního kanálu.
+        /// </summary>
+        public string CommunicationChannelId { get; set; }
+        
+        /// <summary>
+        /// Vrací nebo nastavuje Id skupiny.
+        /// </summary>
+        public string GroupId { get; set; }
+        
+        /// <summary>
+        /// Vrací nebo nastavuje typ kalendářní události.
+        /// </summary>
+        public CalendarEventTypeDto Type { get; set; }
     }
 }

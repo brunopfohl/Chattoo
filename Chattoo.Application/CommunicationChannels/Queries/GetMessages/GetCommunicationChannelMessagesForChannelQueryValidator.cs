@@ -1,4 +1,3 @@
-using Chattoo.Application.Common.Services;
 using FluentValidation;
 
 namespace Chattoo.Application.CommunicationChannels.Queries
@@ -6,7 +5,7 @@ namespace Chattoo.Application.CommunicationChannels.Queries
     public class GetCommunicationChannelMessagesForChannelQueryValidator
         : AbstractValidator<GetCommunicationChannelMessagesForChannelQuery>
     {
-        public GetCommunicationChannelMessagesForChannelQueryValidator(ChannelValidationService channelValidation)
+        public GetCommunicationChannelMessagesForChannelQueryValidator()
         {
             RuleFor(v => v.ChannelId)
                 .NotEmpty()

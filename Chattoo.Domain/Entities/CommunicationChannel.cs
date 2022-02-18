@@ -105,7 +105,7 @@ namespace Chattoo.Domain.Entities
 
             if (!wasRemoved)
             {
-                throw new ChannelRoleNotFound(Id, role.Id);
+                throw new ChannelRoleNotFoundException(Id, role.Id);
             }
         }
 

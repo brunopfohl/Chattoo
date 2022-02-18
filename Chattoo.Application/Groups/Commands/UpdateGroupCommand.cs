@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Chattoo.Application.Common.Services;
 using Chattoo.Application.Groups.DTOs;
 using Chattoo.Domain.Repositories;
 using Chattoo.Domain.Services;

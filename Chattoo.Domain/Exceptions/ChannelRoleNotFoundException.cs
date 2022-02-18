@@ -2,9 +2,9 @@ using System;
 
 namespace Chattoo.Domain.Exceptions
 {
-    public class ChannelRoleNotFound : Exception
+    public class ChannelRoleNotFoundException : Exception
     {
-        public ChannelRoleNotFound(string channelId, string roleId)
+        public ChannelRoleNotFoundException(string channelId, string roleId)
         {
             ChannelId = channelId;
             RoleId = roleId;

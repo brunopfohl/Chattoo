@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.Common.Mappings;
-using Chattoo.Application.Users.DTOs;
 using Chattoo.Domain.Entities;
 
 namespace Chattoo.Application.CommunicationChannels.DTOs
@@ -21,9 +22,16 @@ namespace Chattoo.Application.CommunicationChannels.DTOs
         /// </summary>
         public string Description { get; set; }
         
-        /// <summary>
-        /// Vrací nebo nastavuje uživatele, kteří jsou součástí tohoto komunikačního kanálu.
-        /// </summary>
-        public ICollection<UserDto> Users { get; set; }
+        public ICollection<string> ParticipantIds { get; set; }
+        
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<CommunicationChannel, CommunicationChannelDto>()
+                 .ForMember(d => 
+                     d.ParticipantIds, 
+                     opt => opt
+                         .MapFrom(s => s.Users.Select(utc => utc.UserId))
+                     );
+        }
     }
 }

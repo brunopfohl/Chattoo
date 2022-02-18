@@ -24,5 +24,10 @@ namespace Chattoo.GraphQL.Extensions
         {
             return ctx.GetArgument<int>(argumentName);
         }
+        
+        public static int? GetNullableInt(this IResolveFieldContext ctx, string argumentName)
+        {
+            return ctx.GetArgument<int?>(argumentName);
+        }
     }
 }

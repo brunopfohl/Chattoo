@@ -1,7 +1,7 @@
 ﻿using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.Common.Models;
-using Chattoo.Application.Groups.Queries.GetRole;
-using Chattoo.Application.Users.Queries.GetGroupRoles;
+using Chattoo.Application.Groups.Queries;
+using Chattoo.Application.Users.Queries;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;
@@ -20,13 +20,15 @@ namespace Chattoo.GraphQL.Query
                 arguments: 
                 new QueryArguments
                 (
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "groupId" },
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "roleId" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
                     var query = new GetGroupRoleByIdQuery()
                     {
-                        Id = ctx.GetString("id")
+                        GroupId = ctx.GetString("groupId"),
+                        RoleId = ctx.GetString("roleId")
                     };
 
                     var groupRole = await mediator.Send(query);

@@ -1,7 +1,7 @@
-import { MenuOutlined } from '@mui/icons-material';
-import { AppBar, Button, IconButton, Stack, Toolbar, Typography, } from '@mui/material';
+import { Chat, MenuOutlined, AccountBox, Event } from '@mui/icons-material';
+import { AppBar, Button, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Stack, Toolbar, Typography, } from '@mui/material';
 import { useRouter } from 'next/router';
-import { FC, useCallback, useContext } from 'react'
+import { FC, useCallback, useContext, useState } from 'react'
 import authService from '../api-authorization/AuthorizeService';
 import { AppStateContext } from '../app-state-provider.component';
 
@@ -20,6 +20,16 @@ const Header: FC = () => {
         authService.signOut(router.asPath);
     }, []);
 
+    var [isDrawerOpenned, setIsDrawerOpenned] = useState<boolean>(false);
+
+    const onDrawerOpen = useCallback(() => {
+        setIsDrawerOpenned(true);
+    }, [setIsDrawerOpenned]);
+
+    const onDrawerClosed = useCallback(() => {
+        setIsDrawerOpenned(false);
+    }, [setIsDrawerOpenned]);
+
     return (
         <>
             {/* Navigační lišta */}
@@ -27,7 +37,13 @@ const Header: FC = () => {
                 <Toolbar variant="dense">
 
                     {/* Hamburger menu */}
-                    <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                        onClick={onDrawerOpen}
+                    >
                         <MenuOutlined />
                     </IconButton>
 
@@ -45,6 +61,31 @@ const Header: FC = () => {
                         {/* Tlačítko pro odhlášení */}
                         <Button size="small" variant="contained" color="secondary" onClick={onLogout}>Odhlásit se</Button>
                     </Stack>
+
+                    <Drawer open={isDrawerOpenned} onClose={onDrawerClosed}>
+                        <List>
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <Chat />
+                                </ListItemIcon>
+                                <ListItemText primary="Chat" />
+                            </ListItem>
+
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <Event />
+                                </ListItemIcon>
+                                <ListItemText primary="Události" />
+                            </ListItem>
+
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <AccountBox />
+                                </ListItemIcon>
+                                <ListItemText primary="Profil" />
+                            </ListItem>
+                        </List>
+                    </Drawer>
                 </Toolbar>
             </AppBar>
         </>

@@ -1,11 +1,10 @@
-using Chattoo.Application.Common.Services;
 using FluentValidation;
 
 namespace Chattoo.Application.CommunicationChannels.Queries
 {
     public class GetCommunicationChannelRoleByIdQueryValidator : AbstractValidator<GetCommunicationChannelRoleByIdQuery>
     {
-        public GetCommunicationChannelRoleByIdQueryValidator(ChannelValidationService channelValidation)
+        public GetCommunicationChannelRoleByIdQueryValidator()
         {
             RuleFor(v => v.ChannelId)
                 .NotEmpty()

@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Chattoo.Application.Common.Interfaces;
 using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Repositories;
 using MediatR;
@@ -12,11 +11,6 @@ namespace Chattoo.Application.Users.Commands
     /// </summary>
     public class AddUserAliasCommand : IRequest<string>
     {
-        /// <summary>
-        /// Vrací nebo nastavuje Id uživatele, kterému se má vytvořit nová přezdívka.
-        /// </summary>
-        public string UserId { get; set; }
-        
         /// <summary>
         /// Vrací nebo nastavuje přezdívku uživatele.
         /// </summary>

@@ -13,8 +13,6 @@ namespace Chattoo.Application.CalendarEvents.Commands
     {
         public string Id { get; set; }
         
-        public string CommunicationChannelId { get; set; }
-        
         public int? MinimalParticipantsCount { get; set; }
         
         public int? MaximalParticipantsCount { get; set; }
@@ -29,9 +27,10 @@ namespace Chattoo.Application.CalendarEvents.Commands
         private readonly IUnitOfWork _unitOfWork;
         private readonly CalendarEventWishManager _wishManager;
 
-        public UpdateCalendarEventWishCommandHandler(IUnitOfWork unitOfWork)
+        public UpdateCalendarEventWishCommandHandler(IUnitOfWork unitOfWork, CalendarEventWishManager wishManager)
         {
             _unitOfWork = unitOfWork;
+            _wishManager = wishManager;
         }
 
         public async Task<Unit> Handle(UpdateCalendarEventWishCommand request, CancellationToken cancellationToken)

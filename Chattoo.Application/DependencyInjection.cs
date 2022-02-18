@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Chattoo.Application.Common.Services;
+using Chattoo.Domain.Services;
 
 namespace Chattoo.Application
 {
@@ -19,6 +20,13 @@ namespace Chattoo.Application
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
             services.AddScoped<DateIntervalService>();
+            services.AddScoped<ChannelManager>();
+            services.AddScoped<MessageManager>();
+            services.AddScoped<GroupManager>();
+            services.AddScoped<UserManager>();
+            services.AddScoped<CalendarEventManager>();
+            services.AddScoped<CalendarEventWishManager>();
+            services.AddScoped<CalendarEventTypeManager>();
 
             return services;
         }

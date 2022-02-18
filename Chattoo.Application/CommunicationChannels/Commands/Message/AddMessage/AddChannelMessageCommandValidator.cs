@@ -1,5 +1,4 @@
-﻿using Chattoo.Application.Common.Services;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Chattoo.Application.CommunicationChannels.Commands
 {
@@ -8,7 +7,7 @@ namespace Chattoo.Application.CommunicationChannels.Commands
     /// </summary>
     public class CreateCommunicationChannelMessageCommandValidator : AbstractValidator<AddChannelMessageCommand>
     {
-        public CreateCommunicationChannelMessageCommandValidator(ChannelValidationService channelValidation)
+        public CreateCommunicationChannelMessageCommandValidator()
         {
             RuleFor(v => v.ChannelId)
                 .NotEmpty()

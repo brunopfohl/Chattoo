@@ -9,9 +9,6 @@ namespace Chattoo.Application.Users.Commands
     {
         public AddUserAliasCommandValidator()
         {
-            RuleFor(v => v.UserId)
-                .NotEmpty().WithMessage("Id uživatele je nutné vyplnit.");
-            
             RuleFor(v => v.Alias)
                 .MaximumLength(100).WithMessage("Název skupiny nesmí být delší než 100 znaků.")
                 .NotEmpty().WithMessage("Název skupiny je nutné vyplnit.");

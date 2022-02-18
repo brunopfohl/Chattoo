@@ -5,7 +5,7 @@ namespace Chattoo.Application.CommunicationChannels.Commands
 {
     public class RemoveUserFromCommunicationChannelCommandValidator : AbstractValidator<RemoveUserFromCommunicationChannelCommand>
     {
-        public RemoveUserFromCommunicationChannelCommandValidator(ChannelValidationService channelValidation)
+        public RemoveUserFromCommunicationChannelCommandValidator()
         {
             RuleFor(v => v.ChannelId)
                 .NotEmpty()

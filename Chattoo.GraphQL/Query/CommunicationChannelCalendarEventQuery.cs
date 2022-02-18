@@ -1,7 +1,8 @@
 using Chattoo.Application.CalendarEvents.DTOs;
 using Chattoo.Application.CalendarEvents.Queries;
 using Chattoo.Application.Common.Models;
-using Chattoo.Application.CommunicationChannels.Queries.GetEvents;
+using Chattoo.Application.CommunicationChannels.Queries;
+using Chattoo.Application.Groups.Queries;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;
@@ -15,7 +16,7 @@ namespace Chattoo.GraphQL.Query
         {
             
             Name = "CommunicationChannelCalendarEventQuery";
-            this.FieldAsyncWithScope<CommunicationChannelCalendarEventGraphType, CalendarEventDto>(
+            this.FieldAsyncWithScope<CalendarEventGraphType, CalendarEventDto>(
                 "get",
                 arguments: 
                 new QueryArguments
@@ -33,7 +34,7 @@ namespace Chattoo.GraphQL.Query
                 }
             );
             
-            this.FieldAsyncWithScope<PageInfoGraphType<CommunicationChannelCalendarEventGraphType, CalendarEventDto>, PaginatedList<CalendarEventDto>>(
+            this.FieldAsyncWithScope<PageInfoGraphType<CalendarEventGraphType, CalendarEventDto>, PaginatedList<CalendarEventDto>>(
                 "getForCommunicationChannel",
                 arguments: 
                 new QueryArgumentsWithPagination
@@ -44,7 +45,27 @@ namespace Chattoo.GraphQL.Query
                 {
                     var query = new GetCalendarEventsForCommunicationChannelQuery()
                     {
-                        CommunicationChannelId = ctx.GetString("channelId"),
+                        ChannelId = ctx.GetString("channelId"),
+                        PageNumber = ctx.GetInt("pageNumber"),
+                        PageSize = ctx.GetInt("pageSize")
+                    };
+
+                    return await mediator.Send(query);
+                }
+            );
+            
+            this.FieldAsyncWithScope<PageInfoGraphType<CalendarEventGraphType, CalendarEventDto>, PaginatedList<CalendarEventDto>>(
+                "getForGroup",
+                arguments: 
+                new QueryArgumentsWithPagination
+                (
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "groupId" }
+                ),
+                resolve: async (ctx, mediator) =>
+                {
+                    var query = new GetCalendarEventsForGroupQuery()
+                    {
+                        GroupId = ctx.GetString("groupId"),
                         PageNumber = ctx.GetInt("pageNumber"),
                         PageSize = ctx.GetInt("pageSize")
                     };

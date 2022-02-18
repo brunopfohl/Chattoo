@@ -8,7 +8,7 @@ namespace Chattoo.Application.CommunicationChannels.Commands
     /// </summary>
     public class DeleteMessageAttachmentCommandValidator : AbstractValidator<DeleteMessageAttachmentCommand>
     {
-        public DeleteMessageAttachmentCommandValidator(ChannelValidationService channelValidation)
+        public DeleteMessageAttachmentCommandValidator()
         {
             RuleFor(v => v.ChannelId)
                 .NotEmpty()

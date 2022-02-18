@@ -4,13 +4,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Chattoo.Application.Common.DTOs;
-using Chattoo.Application.Common.Interfaces;
 using Chattoo.Application.Common.Mappings;
 using Chattoo.Application.Common.Models;
 using Chattoo.Application.Common.Queries;
-using Chattoo.Application.Common.Services;
-using Chattoo.Domain.Entities;
-using Chattoo.Domain.Repositories;
 using Chattoo.Domain.Services;
 
 namespace Chattoo.Application.Users.Queries

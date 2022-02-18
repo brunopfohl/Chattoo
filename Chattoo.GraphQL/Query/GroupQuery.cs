@@ -1,7 +1,7 @@
 ﻿using Chattoo.Application.Common.Models;
 using Chattoo.Application.Groups.DTOs;
 using Chattoo.Application.Groups.Queries.GetById;
-using Chattoo.Application.Users.Queries.GetGroups;
+using Chattoo.Application.Users.Queries;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;
@@ -49,7 +49,6 @@ namespace Chattoo.GraphQL.Query
                         PageNumber = ctx.GetInt("pageNumber"),
                         PageSize = ctx.GetInt("pageSize")
                     };
-
             
                     var groups = await mediator.Send(query);
                     return groups;

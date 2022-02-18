@@ -1,5 +1,4 @@
-﻿using Chattoo.Application.Common.Services;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Chattoo.Application.Groups.Commands
 {
@@ -8,7 +7,7 @@ namespace Chattoo.Application.Groups.Commands
     /// </summary>
     public class DeleteGroupCommandValidator : AbstractValidator<DeleteGroupCommand>
     {
-        public DeleteGroupCommandValidator(GroupValidationService groupValidation)
+        public DeleteGroupCommandValidator()
         {
             RuleFor(v => v.Id)
                 .NotEmpty()

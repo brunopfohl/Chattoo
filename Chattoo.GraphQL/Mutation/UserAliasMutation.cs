@@ -1,6 +1,4 @@
-﻿using Chattoo.Application.Users.Commands.AddAlias;
-using Chattoo.Application.Users.Commands.DeleteAlias;
-using Chattoo.Application.Users.Commands.UpdateAlias;
+﻿using Chattoo.Application.Users.Commands;
 using Chattoo.GraphQL.Extensions;
 using GraphQL.Types;
 

@@ -1,5 +1,4 @@
-﻿using Chattoo.Application.Common.Services;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Chattoo.Application.Groups.Commands
 {
@@ -8,7 +7,7 @@ namespace Chattoo.Application.Groups.Commands
     /// </summary>
     public class UpdateGroupCommandValidator : AbstractValidator<UpdateGroupCommand>
     {
-        public UpdateGroupCommandValidator(GroupValidationService groupValidation)
+        public UpdateGroupCommandValidator()
         {
             RuleFor(v => v.Id)
                 .NotEmpty()

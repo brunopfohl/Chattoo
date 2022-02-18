@@ -1,14 +1,7 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Chattoo.Application.CalendarEvents.DTOs;
-using Chattoo.Application.Common.Exceptions;
-using Chattoo.Application.Common.Interfaces;
-using Chattoo.Domain.Entities;
-using Chattoo.Domain.Exceptions;
-using Chattoo.Domain.Interfaces;
-using Chattoo.Domain.Repositories;
 using Chattoo.Domain.Services;
 using MediatR;
 

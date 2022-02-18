@@ -1,5 +1,4 @@
-﻿using Chattoo.Application.CommunicationChannels.AddMessageAttachment;
-using Chattoo.Application.CommunicationChannels.Commands.UpdateMessageAttachment;
+﻿using Chattoo.Application.CommunicationChannels.Commands;
 using Chattoo.Domain.Enums;
 using Chattoo.Domain.Extensions;
 using Chattoo.GraphQL.Extensions;
@@ -25,7 +24,7 @@ namespace Chattoo.GraphQL.Mutation
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var command = new CreateCommunicationChannelMessageAttachmentCommand()
+                    var command = new AddMessageAttachmentCommand()
                     {
                         Name = ctx.GetString("name"),
                         Content = ctx.GetString("content").GetBytes(),
@@ -44,12 +43,16 @@ namespace Chattoo.GraphQL.Mutation
                 arguments: 
                 new QueryArguments
                 (
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "channelId" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "messageId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "id" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var command = new DeleteCommunicationChannelMessageAttachmentCommand()
+                    var command = new DeleteMessageAttachmentCommand()
                     {
+                        ChannelId = ctx.GetString("channelId"),
+                        MessageId = ctx.GetString("messageId"),
                         Id = ctx.GetString("id")
                     };
 
@@ -64,13 +67,17 @@ namespace Chattoo.GraphQL.Mutation
                 arguments: 
                 new QueryArguments
                 (
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "channelId" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "messageId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "id" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
-                    var command = new UpdateCommunicationChannelMessageAttachmentCommand()
+                    var command = new UpdateMessageAttachmentCommand()
                     {
+                        ChannelId = ctx.GetString("channelId"),
+                        MessageId = ctx.GetString("messageId"),
                         Id = ctx.GetString("id"),
                         Name = ctx.GetString("name")
                     };

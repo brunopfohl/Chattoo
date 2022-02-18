@@ -1,7 +1,6 @@
 using System.Linq;
 using Chattoo.Application;
 using Chattoo.Application.Common.Exceptions;
-using Chattoo.Application.Common.Interfaces;
 using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Interfaces;
 using Chattoo.GraphQL.Extensions;
@@ -87,15 +86,80 @@ namespace Chattoo.GraphQL
                                 ctx.Context.Errors.AddRange(executionErrors);
                             }
                         }
+                        else if (ctx.Exception is ForbiddenAccessException forbiddenAccessException)
+                        {
+                            ctx.Context.Errors.Add(new ExecutionError("Nedostatečná oprávnění."));
+                        }
                         else if (ctx.Exception is ChannelNotFoundException channelNotFoundException)
                         {
-                            ctx.Context.Errors.Add( new ExecutionError("Komunikační kanál nebyl nalezen."));
+                            ctx.Context.Errors.Add(new ExecutionError("Komunikační kanál nebyl nalezen."));
                         }
-                        else if (ctx.Exception is ChannelReadPermissionDeniedException
-                                 channelReadPermissionDeniedException)
+                        else if (ctx.Exception is ChannelRoleNotFoundException)
                         {
-                            ctx.Context.Errors.Add(
-                                new ExecutionError("Uživatel nemá právo na zobrazení komunikačního kanálu."));
+                            ctx.Context.Errors.Add
+                            (
+                                new ExecutionError("Uživatelská role komunikačního kanálu nebyla nalezena.")
+                            );
+                        }
+                        else if (ctx.Exception is GroupNotFoundException groupNotFoundException)
+                        {
+                            ctx.Context.Errors.Add(new ExecutionError("Skupina nebyla nalezena."));
+                        }
+                        else if (ctx.Exception is GroupRoleNotFoundException)
+                        {
+                            ctx.Context.Errors.Add(new ExecutionError("Uživatelská role skupiny nebyla nalezena."));
+                        }
+                        else if (ctx.Exception is UserNotFoundException userNotFoundException)
+                        {
+                            ctx.Context.Errors.Add(new ExecutionError("Uživatel nebyl nalezen."));
+                        }
+                        else if (ctx.Exception is MessageNotFoundException messageNotFoundException)
+                        {
+                            ctx.Context.Errors.Add(new ExecutionError("Zpráva nebyla nalezena."));
+                        }
+                        else if (ctx.Exception is CalendarEventNotFoundException eventNotFoundException)
+                        {
+                            ctx.Context.Errors.Add(new ExecutionError("Událost nebyla nalezena."));
+                        }
+                        else if (ctx.Exception is CalendarEventTypeNotFoundException eventTypeNotFoundException)
+                        {
+                            ctx.Context.Errors.Add(new ExecutionError("Typ události nebyl nalezen."));
+                        }
+                        else if (ctx.Exception is CalendarEventWishNotFoundException wishNotFoundException)
+                        {
+                            ctx.Context.Errors.Add(new ExecutionError("Přání nebylo nalezeno."));
+                        }
+                        else if (ctx.Exception is AttachmentNotFoundException attachmentNotFoundException)
+                        {
+                            ctx.Context.Errors.Add(new ExecutionError("Příloha zprávy nebyla nalezena."));
+                        }
+                        else if (ctx.Exception is CalendarEventCapacityInsufficientException eventCapacityInsufficientException)
+                        {
+                            ctx.Context.Errors.Add
+                            (
+                                new ExecutionError("Do události již nelze přidat další uživatele.")
+                            );
+                        }
+                        else if (ctx.Exception is DuplicateUserInCalendarEventException duplicateUserInCalendarEventException)
+                        {
+                            ctx.Context.Errors.Add
+                            (
+                                new ExecutionError("Uživatel může ve skupině existovat pouze jedinkrát.")
+                            );
+                        }
+                        else if (ctx.Exception is DuplicitCalendarEventTypeException duplicitCalendarEventTypeException)
+                        {
+                            ctx.Context.Errors.Add
+                            (
+                                new ExecutionError("Typ události může být v přání pouze jedinkrát.")
+                            );
+                        }
+                        else if (ctx.Exception is DuplicitChannelRoleNameException duplicitChannelRoleNameException)
+                        {
+                            ctx.Context.Errors.Add
+                            (
+                                new ExecutionError("V komunikačním kanálu již existuje role se stejným názvem.")
+                            );
                         }
                         
                         logger.LogError("{Error} occurred", ctx.OriginalException.Message);
@@ -123,7 +187,7 @@ namespace Chattoo.GraphQL
 
             app.UseCors("MyPolicy");
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseSpaStaticFiles();
