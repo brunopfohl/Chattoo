@@ -1,13 +1,14 @@
+import { LocalizationProvider } from "@mui/lab";
 import styled from "@emotion/styled";
-import { Container, ThemeProvider } from "@mui/material";
+import { Box, ThemeProvider } from "@mui/material";
 import { FC } from "react";
 import theme from "../../../styles/theme";
+import DateAdapter from '@mui/lab/AdapterMoment';
 
 /** Styl pozadí */
 const Gradient = styled.div`
-    background: linear-gradient(149deg, rgba(2,184,147,1) 0%, rgba(39,160,221,1) 50%, rgba(194,39,194,1) 100%);
+    background: #F0F2F5;
     height: 100vh;
-    width: 100vw;
 `;
 
 /**
@@ -15,12 +16,14 @@ const Gradient = styled.div`
  */
 const Layout: FC = ({ children }) => (
     <ThemeProvider theme={theme}>
-        {/* Obsah z children komponenty */}
-        <Gradient>
-            <Container maxWidth="xl" sx={{ pt: 10 }}>
-                {children}
-            </Container>
-        </Gradient>
+        <LocalizationProvider dateAdapter={DateAdapter}>
+            {/* Obsah z children komponenty */}
+            <Gradient>
+                <Box sx={{ pt: 5, height: "100%", boxSizing: "border-box" }}>
+                    {children}
+                </Box>
+            </Gradient>
+        </LocalizationProvider>
     </ThemeProvider>
 );
 

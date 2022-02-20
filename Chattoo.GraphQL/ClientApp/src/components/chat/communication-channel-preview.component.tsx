@@ -1,4 +1,4 @@
-import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Avatar, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { CommunicationChannel } from 'graphql/graphql-types';
 import { FC, useCallback, useContext } from 'react'
 import { ChatStateContext } from './chat-state-provider.component';
@@ -25,11 +25,13 @@ const CommunicationChannelPreview: FC<CommunicationChannelPreviewProps> = (props
 
     return (
         // Klikatelný prvek pro zvolení komunikačního kanálu
-        <ListItemButton onClick={onClickHandler}>
+        <ListItemButton onClick={onClickHandler} sx={{ pl: 1 }}>
             {/* Ikona kanálu */}
-            <ListItemIcon>
-                <PeopleAltIcon />
-            </ListItemIcon>
+            <ListItemAvatar>
+                <Avatar>
+                    <PeopleAltIcon />
+                </Avatar>
+            </ListItemAvatar>
             {/* Popis kanálu */}
             <ListItemText primary={channel.name} secondary={channel.description} sx={{ wordBreak: "break-word" }} />
         </ListItemButton>

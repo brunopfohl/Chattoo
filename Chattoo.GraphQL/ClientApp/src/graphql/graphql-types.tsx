@@ -683,11 +683,14 @@ export type UserQueryGetForGroupArgs = {
 };
 
 export type CreateChannelCalendarEventMutationVariables = Exact<{
-  channelId: Scalars['String'];
   name: Scalars['String'];
   desc: Scalars['String'];
   startsAt: Scalars['Date'];
-  endsAt: Scalars['Date'];
+  endsAt?: InputMaybe<Scalars['Date']>;
+  channelId?: InputMaybe<Scalars['String']>;
+  groupId?: InputMaybe<Scalars['String']>;
+  eventTypeId: Scalars['String'];
+  maximalParticipantsCount?: InputMaybe<Scalars['Int']>;
 }>;
 
 
@@ -795,14 +798,17 @@ export type MessageAddedToChannelSubscription = { __typename?: 'Subscription', c
 
 
 export const CreateChannelCalendarEventDocument = gql`
-    mutation CreateChannelCalendarEvent($channelId: String!, $name: String!, $desc: String!, $startsAt: Date!, $endsAt: Date!) {
+    mutation CreateChannelCalendarEvent($name: String!, $desc: String!, $startsAt: Date!, $endsAt: Date, $channelId: String, $groupId: String, $eventTypeId: String!, $maximalParticipantsCount: Int) {
   communicationChannelCalendarEvents {
     create(
-      channelId: $channelId
       name: $name
       desc: $desc
       startsAt: $startsAt
       endsAt: $endsAt
+      channelId: $channelId
+      groupId: $groupId
+      eventTypeId: $eventTypeId
+      maximalParticipantsCount: $maximalParticipantsCount
     ) {
       id
       startsAt
@@ -831,11 +837,14 @@ export type CreateChannelCalendarEventMutationFn = Apollo.MutationFunction<Creat
  * @example
  * const [createChannelCalendarEventMutation, { data, loading, error }] = useCreateChannelCalendarEventMutation({
  *   variables: {
- *      channelId: // value for 'channelId'
  *      name: // value for 'name'
  *      desc: // value for 'desc'
  *      startsAt: // value for 'startsAt'
  *      endsAt: // value for 'endsAt'
+ *      channelId: // value for 'channelId'
+ *      groupId: // value for 'groupId'
+ *      eventTypeId: // value for 'eventTypeId'
+ *      maximalParticipantsCount: // value for 'maximalParticipantsCount'
  *   },
  * });
  */

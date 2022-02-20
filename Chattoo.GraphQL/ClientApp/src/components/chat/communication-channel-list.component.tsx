@@ -53,9 +53,6 @@ const CommunicationChannelList: FC = () => {
                 <>
                     <CommunicationChannelPreview channel={ch} />
 
-                    {i < channels.length - 1 &&
-                        <Divider />
-                    }
                 </>
             ))}
         </List>

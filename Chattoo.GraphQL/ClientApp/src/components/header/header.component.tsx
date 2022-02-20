@@ -1,16 +1,23 @@
 import { Chat, MenuOutlined, AccountBox, Event } from '@mui/icons-material';
 import { AppBar, Button, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Stack, Toolbar, Typography, } from '@mui/material';
+import { Page } from 'common/enums/page.enum';
 import { useRouter } from 'next/router';
-import { FC, useCallback, useContext, useState } from 'react'
+import { Dispatch, FC, SetStateAction, useCallback, useContext, useState } from 'react'
 import authService from '../api-authorization/AuthorizeService';
 import { AppStateContext } from '../app-state-provider.component';
+
+interface HeaderProps {
+    setPage: Dispatch<SetStateAction<Page>>;
+}
 
 /**
  * Komponenta sloužící jako hlavička stránky
  */
-const Header: FC = () => {
+const Header: FC<HeaderProps> = (props) => {
     const { appState } = useContext(AppStateContext);
     const { user } = appState;
+
+    const { setPage } = props;
 
     // Router pro zjištění aktuálně navštívené stránky.
     const router = useRouter();
@@ -30,12 +37,16 @@ const Header: FC = () => {
         setIsDrawerOpenned(false);
     }, [setIsDrawerOpenned]);
 
+    const setPageSafe = useCallback((page: Page) => {
+        onDrawerClosed();
+        setPage(page);
+    }, [setPage]);
+
     return (
         <>
             {/* Navigační lišta */}
-            <AppBar position="fixed" sx={{ color: "white" }}>
+            <AppBar position="fixed" sx={{ color: "black", backgroundColor: "white" }}>
                 <Toolbar variant="dense">
-
                     {/* Hamburger menu */}
                     <IconButton
                         edge="start"
@@ -49,22 +60,17 @@ const Header: FC = () => {
 
                     {/* Nadpis */}
                     <Typography variant="h6" color="inherit" component="div">
-                        The chattoo
+                        Chattoo
                     </Typography>
 
                     <Stack direction="row" sx={{ flexGrow: 1, justifyContent: "flex-end" }}>
-                        {/* Jméno přihlášeného uživatele */}
-                        <Typography variant="subtitle1" color="inherit" align="center" mr={1}>
-                            {user && user.userName}
-                        </Typography>
-
                         {/* Tlačítko pro odhlášení */}
-                        <Button size="small" variant="contained" color="secondary" onClick={onLogout}>Odhlásit se</Button>
+                        <Button size="small" variant="outlined" color="primary" onClick={onLogout}>Odhlásit se</Button>
                     </Stack>
 
                     <Drawer open={isDrawerOpenned} onClose={onDrawerClosed}>
                         <List>
-                            <ListItem button>
+                            <ListItem button onClick={() => setPageSafe(Page.Chat)}>
                                 <ListItemIcon>
                                     <Chat />
                                 </ListItemIcon>
@@ -72,14 +78,14 @@ const Header: FC = () => {
                             </ListItem>
 
                             <ListItem button>
-                                <ListItemIcon>
+                                <ListItemIcon onClick={() => setPageSafe(Page.Events)}>
                                     <Event />
                                 </ListItemIcon>
                                 <ListItemText primary="Události" />
                             </ListItem>
 
                             <ListItem button>
-                                <ListItemIcon>
+                                <ListItemIcon onClick={() => setPageSafe(Page.Profile)}>
                                     <AccountBox />
                                 </ListItemIcon>
                                 <ListItemText primary="Profil" />

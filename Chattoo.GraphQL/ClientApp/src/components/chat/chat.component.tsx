@@ -10,7 +10,7 @@ import ChatStateProvider from './chat-state-provider.component';
 const Chat: FC = () => (
     // Komponenta má přístup k globálnímu datovému kontextu ChatStateContext
     <ChatStateProvider>
-        <Grid container spacing={1} mx={{ height: "80vh" }}>
+        <Grid spacing={1} container sx={{ height: "100%", p: 1, pt: 2 }}>
             {/* Levá strana */}
             <Grid item md={3}>
                 <ChatLeftPanel />

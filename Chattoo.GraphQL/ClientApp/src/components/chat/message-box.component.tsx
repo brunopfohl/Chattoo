@@ -38,7 +38,7 @@ const MessageBox: FC<MessageBoxProps> = (props) => {
         <Box>
             <form onSubmit={handleOnSubmit}>
                 <Stack direction="row">
-                    <CustomInput placeholder="Zadejte zprávu..." value={text} onChange={handleInputOnChange} size="small" />
+                    <CustomInput placeholder="Zadejte zprávu..." value={text} onChange={handleInputOnChange} full={true} />
                     <IconButton color="primary" onClick={handleOnSubmit}>
                         {text && text.length > 0
                             ? <SendIcon />
