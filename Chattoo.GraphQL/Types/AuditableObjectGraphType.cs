@@ -11,9 +11,9 @@ namespace Chattoo.GraphQL.Types
             Field(o => o.CreatedAt);
             Field(o => o.CreatedBy);
             Field(o => o.DeletedAt, true);
-            Field(o => o.DeletedBy);
+            Field(o => o.DeletedBy, true);
             Field(o => o.ModifiedAt, true);
-            Field(o => o.ModifiedBy);
+            Field(o => o.ModifiedBy, true);
         }
     }
 }

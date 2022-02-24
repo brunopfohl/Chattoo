@@ -1,32 +1,40 @@
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
+import { FC, useCallback, useMemo } from "react";
 import moment from "moment";
-import { FC, useMemo } from "react";
+import { CalendarEvent } from "graphql/graphql-types";
+import { useRouter } from "next/router";
 
 export interface EventCardProps {
-    title: string;
-    description: string;
-    participantsCount: number;
-    maximalParticipantsCount: number;
-    startsAt: Date;
-    endsAt?: Date;
+    calendarEvent: CalendarEvent;
 }
 
 const EventCard: FC<EventCardProps> = (props) => {
+    const router = useRouter();
+    const { calendarEvent } = props;
 
     const dateText = useMemo(() => {
-        let result = moment(props.startsAt).format("d. MM. YYYY - hh:mm");
+        let result = moment(calendarEvent.startsAt).format("d. MM. YYYY - hh:mm");
 
-        if (props.endsAt) {
-            const endsAt = moment(props.endsAt).format("d. MM. YYYY - hh:mm");
+        if (calendarEvent.endsAt) {
+            const endsAt = moment(calendarEvent.endsAt).format("d. MM. YYYY - hh:mm");
             result = `Od ${result} do ${endsAt}`;
         }
 
         return result;
-    }, [props.startsAt, props.endsAt]);
+    }, [calendarEvent]);
+
+    const redirectToDetail = useCallback(() => {
+        router.push({
+            pathname: "/events/[id]",
+            query: {
+                id: calendarEvent.id
+            }
+        });
+    }, [router]);
 
     return (
         <Card sx={{ maxWidth: 345, m: 1 }}>
-            <CardActionArea>
+            <CardActionArea onClick={redirectToDetail}>
                 <CardMedia
                     component="img"
                     alt="green iguana"
@@ -38,18 +46,18 @@ const EventCard: FC<EventCardProps> = (props) => {
                         {dateText}
                     </Typography>
                     <Typography gutterBottom variant="h5" component="div">
-                        {props.title}
+                        {calendarEvent.name}
                     </Typography>
                     <Typography gutterBottom variant="body2">
-                        {props.description}
+                        {calendarEvent.description}
                     </Typography>
                 </CardContent>
-                <CardActions>
-                    <Button size="small" color="primary">
-                        Připojit se
-                    </Button>
-                </CardActions>
             </CardActionArea>
+            <CardActions>
+                <Button size="small" color="primary">
+                    Připojit se
+                </Button>
+            </CardActions>
         </Card>
     );
 };

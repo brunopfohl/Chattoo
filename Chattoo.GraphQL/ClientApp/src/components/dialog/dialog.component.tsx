@@ -45,8 +45,8 @@ const CustomDialog: FC<CustomDialogProps> = ({ title, open, onClose, closeButton
             <Divider />
         }
         <DialogActions>
-            {actions && actions.map(action =>
-                <Button onClick={action.onClick} fullWidth={!!action.fullWidth}>{action.text}</Button>
+            {actions && actions.map((action, i) =>
+                <Button onClick={action.onClick} fullWidth={!!action.fullWidth} key={i}>{action.text}</Button>
             )}
             {closeButtonPosition === "bottom" &&
                 <Button onClick={onClose}>Zavřít</Button>

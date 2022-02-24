@@ -14,7 +14,7 @@ interface MessageBoxProps {
  */
 const MessageBox: FC<MessageBoxProps> = (props) => {
     const { callback } = props;
-    const [text, setText] = useState<string | null>(null);
+    const [text, setText] = useState<string>("");
 
     /** Callback vyvolaný po změne textu v textovém poli */
     const handleInputOnChange = useCallback((ev: any) => {

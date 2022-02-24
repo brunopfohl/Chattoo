@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Chattoo.Domain.Entities;
+using Chattoo.Domain.Enums;
 using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Extensions;
 using Chattoo.Domain.Interfaces;
@@ -14,16 +15,14 @@ namespace Chattoo.Domain.Services
         private readonly ICalendarEventRepository _calendarEventRepository;
         private readonly GroupManager _groupManager;
         private readonly ChannelManager _channelManager;
-        private readonly CalendarEventTypeManager _eventTypeManager;
 
         public CalendarEventManager(ICurrentUserService currentUserService, ICalendarEventRepository calendarEventRepository,
-            GroupManager groupManager, ChannelManager channelManager, CalendarEventTypeManager eventTypeManager)
+            GroupManager groupManager, ChannelManager channelManager)
         {
             _currentUserService = currentUserService;
             _calendarEventRepository = calendarEventRepository;
             _groupManager = groupManager;
             _channelManager = channelManager;
-            _eventTypeManager = eventTypeManager;
         }
 
         public async Task<CalendarEvent> GetEventOrThrow(string eventId)
@@ -54,13 +53,11 @@ namespace Chattoo.Domain.Services
             return calendarEvent;
         }
 
-        public async Task<CalendarEvent> CreateEvent(string channelId, string groupId, string typeId, string name, string description,
+        public async Task<CalendarEvent> CreateEvent(string channelId, string groupId, CalendarEventType type, string name, string description,
             int? maximalParticipants, DateTime startsAt, DateTime? endsAt)
         {
             CalendarEvent calendarEvent;
 
-            var type = await _eventTypeManager.GetOrThrow(typeId);
-                    
             if (channelId.IsNotNullOrEmpty())
             {
                 var channel = await _channelManager.GetChannelOrThrow(channelId);

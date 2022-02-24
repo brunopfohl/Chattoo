@@ -10,7 +10,7 @@ import CustomInput from '@components/input/input.component';
  * Komponenta - levá část komponenty chatu.
  */
 const ChatLeftPanel: FC = () => {
-    const [showCreateCommunicationChannelPopup, setShowCreateCommunicationChannelPopup] = useState<boolean>();
+    const [showCreateCommunicationChannelPopup, setShowCreateCommunicationChannelPopup] = useState<boolean>(false);
 
     /** Obstará otevření dialogu pro vytvoření komunikačního kanálu. */
     const handleCreateCommunicationChannelDialogOpen = useCallback(() => {

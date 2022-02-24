@@ -1,4 +1,5 @@
 using Chattoo.Application.CalendarEvents.DTOs;
+using Chattoo.GraphQL.Types.Enums;
 
 namespace Chattoo.GraphQL.Types
 {

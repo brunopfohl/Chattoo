@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Chattoo.Application.Common.DTOs;
+using Chattoo.Domain.Enums;
 using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Repositories;
 using Chattoo.Domain.Services;
@@ -17,7 +18,7 @@ namespace Chattoo.Application.CalendarEvents.Commands
         
         public int? MaximalParticipantsCount { get; set; }
         
-        public virtual ICollection<string> TypeIds { get; set; }
+        public CalendarEventType Type { get; set; }
         
         public ICollection<DateIntervalDto> DateIntervals { get; set; }
     }
@@ -40,7 +41,7 @@ namespace Chattoo.Application.CalendarEvents.Commands
             await _wishManager.UpdateWish
             (
                 wish,
-                request.TypeIds,
+                request.Type,
                 request.DateIntervals as ICollection<IDateInterval>,
                 request.MinimalParticipantsCount,
                 request.MaximalParticipantsCount

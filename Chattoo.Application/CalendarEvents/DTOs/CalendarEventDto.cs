@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using AutoMapper;
 using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.Common.Mappings;
 using Chattoo.Domain.Entities;
+using Chattoo.Domain.Enums;
 
 namespace Chattoo.Application.CalendarEvents.DTOs
 {
@@ -53,6 +56,6 @@ namespace Chattoo.Application.CalendarEvents.DTOs
         /// <summary>
         /// Vrací nebo nastavuje typ kalendářní události.
         /// </summary>
-        public CalendarEventTypeDto Type { get; set; }
+        public CalendarEventType Type { get; set; }
     }
 }

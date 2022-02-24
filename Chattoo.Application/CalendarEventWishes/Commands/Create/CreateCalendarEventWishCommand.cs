@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Chattoo.Application.CalendarEventWishes.DTOs;
 using Chattoo.Application.Common.DTOs;
+using Chattoo.Domain.Enums;
 using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Repositories;
 using Chattoo.Domain.Services;
@@ -34,9 +35,9 @@ namespace Chattoo.Application.CalendarEventWishes.Commands
         public int? MaximalParticipantsCount { get; set; }
         
         /// <summary>
-        /// Vrací nebo nastavuje kolekci Ids typů událostí, o které má uživatel zájem.
+        /// Vrací nebo nastavuje typ události.
         /// </summary>
-        public virtual ICollection<string> TypeIds { get; set; }
+        public CalendarEventType Type { get; set; }
         
         /// <summary>
         /// Vrací nebo nastavuje kolekci časových bloků, kdy si uživatel přeje vytvoření události.
@@ -66,7 +67,7 @@ namespace Chattoo.Application.CalendarEventWishes.Commands
                 request.CommunicationChannelId,
                 request.GroupId,
                 request.DateIntervals as ICollection<IDateInterval>,
-                request.TypeIds,
+                request.Type,
                 request.MinimalParticipantsCount,
                 request.MaximalParticipantsCount
             );

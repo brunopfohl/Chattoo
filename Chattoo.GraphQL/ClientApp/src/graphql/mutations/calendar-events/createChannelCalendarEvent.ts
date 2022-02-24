@@ -4,9 +4,9 @@ import { gql } from "@apollo/client";
  * GraphQL mutace pro vytvoření kalendářní události skrz API.
  */
 export const CREATE_CHANNEL_CALENDAR_EVENT = gql`
-    mutation CreateChannelCalendarEvent($name: String!, $desc: String!, $startsAt: Date!, $endsAt: Date, $channelId: String, $groupId: String, $eventTypeId: String!, $maximalParticipantsCount: Int) {
+    mutation CreateChannelCalendarEvent($name: String!, $desc: String!, $startsAt: DateTime!, $endsAt: DateTime, $channelId: String, $groupId: String, $type: String!, $maximalParticipantsCount: Int) {
         communicationChannelCalendarEvents {
-            create(name: $name, desc: $desc, startsAt: $startsAt, endsAt: $endsAt, channelId: $channelId, groupId: $groupId, eventTypeId: $eventTypeId, maximalParticipantsCount: $maximalParticipantsCount) {
+            create(name: $name, desc: $desc, startsAt: $startsAt, endsAt: $endsAt, channelId: $channelId, groupId: $groupId, type: $type, maximalParticipantsCount: $maximalParticipantsCount) {
                 id,
                 startsAt,
                 endsAt,

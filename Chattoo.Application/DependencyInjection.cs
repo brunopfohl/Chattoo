@@ -26,7 +26,6 @@ namespace Chattoo.Application
             services.AddScoped<UserManager>();
             services.AddScoped<CalendarEventManager>();
             services.AddScoped<CalendarEventWishManager>();
-            services.AddScoped<CalendarEventTypeManager>();
 
             return services;
         }

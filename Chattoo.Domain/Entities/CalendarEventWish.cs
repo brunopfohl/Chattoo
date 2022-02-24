@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Chattoo.Domain.Common;
-using Chattoo.Domain.Comparers;
+using Chattoo.Domain.Enums;
 using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.ValueObjects;
@@ -14,12 +13,10 @@ namespace Chattoo.Domain.Entities
     /// </summary>
     public class CalendarEventWish : AuditableEntity, IAuditableEntity, IAggregateRoot
     {
-        private List<CalendarEventType> _types;
         private List<DateInterval> _dateIntervals;
         
         protected CalendarEventWish()
         {
-            _types = new List<CalendarEventType>();
             _dateIntervals = new List<DateInterval>();
         }
         
@@ -56,7 +53,7 @@ namespace Chattoo.Domain.Entities
         /// <summary>
         /// Vrací nebo nastavuje kolekci typů událostí, o které má uživatel zájem.
         /// </summary>
-        public virtual IReadOnlyCollection<CalendarEventType> Types => _types.AsReadOnly();
+        public CalendarEventType Type { get; set; }
 
         /// <summary>
         /// Vrací nebo nastavuje kolekci časových bloků, kdy si uživatel přeje konání události.
@@ -93,6 +90,11 @@ namespace Chattoo.Domain.Entities
 
             MaximalParticipantsCount = count;
         }
+
+        public void SetType(CalendarEventType type)
+        {
+            Type = type;
+        }
         
         public void AddInterval(DateInterval newInterval)
         {
@@ -127,77 +129,73 @@ namespace Chattoo.Domain.Entities
             }
         }
 
-        public void AddType(CalendarEventType eventType)
-        {
-            if (Types.Contains(eventType))
-            {
-                throw new DuplicitCalendarEventTypeException(Id, eventType.Id);
-            }
-            
-            _types.Add(eventType);
-        }
-        
-        public void RemoveType(CalendarEventType eventType)
-        {
-            bool wasRemoved = _types.Remove(eventType);
-            
-            if (!wasRemoved)
-            {
-                throw new CalendarEventTypeNotFoundException(eventType.Id);
-            }
-        }
-
-        public void UpdateTypes(ICollection<CalendarEventType> eventTypes)
-        {
-            var set = new HashSet<CalendarEventType>(new CalendarEventTypeComparer());
-
-            foreach (var type in eventTypes)
-            {
-                set.Add(type);
-            }
-
-            var removedTypes = new HashSet<CalendarEventType>();
-            var addedTypes = new HashSet<CalendarEventType>();
-            
-            foreach (var type in Types)
-            {
-                if (set.Add(type))
-                {
-                    removedTypes.Add(type);
-                }
-                else
-                {
-                    addedTypes.Add(type);
-                }
-            }
-
-            foreach (var toRemove in removedTypes)
-            {
-                _types.Remove(toRemove);
-            }
-            
-            foreach (var toAdd in addedTypes)
-            {
-                _types.Remove(toAdd);
-            }
-        }
+        // public void AddType(CalendarEventType eventType)
+        // {
+        //     if (Types.Contains(eventType))
+        //     {
+        //         throw new DuplicitCalendarEventTypeException(Id, eventType.Id);
+        //     }
+        //     
+        //     _types.Add(eventType);
+        // }
+        //
+        // public void RemoveType(CalendarEventType eventType)
+        // {
+        //     bool wasRemoved = _types.Remove(eventType);
+        //     
+        //     if (!wasRemoved)
+        //     {
+        //         throw new CalendarEventTypeNotFoundException(eventType.Id);
+        //     }
+        // }
+        //
+        // public void UpdateTypes(ICollection<CalendarEventType> eventTypes)
+        // {
+        //     var set = new HashSet<CalendarEventType>(new CalendarEventTypeComparer());
+        //
+        //     foreach (var type in eventTypes)
+        //     {
+        //         set.Add(type);
+        //     }
+        //
+        //     var removedTypes = new HashSet<CalendarEventType>();
+        //     var addedTypes = new HashSet<CalendarEventType>();
+        //     
+        //     foreach (var type in Types)
+        //     {
+        //         if (set.Add(type))
+        //         {
+        //             removedTypes.Add(type);
+        //         }
+        //         else
+        //         {
+        //             addedTypes.Add(type);
+        //         }
+        //     }
+        //
+        //     foreach (var toRemove in removedTypes)
+        //     {
+        //         _types.Remove(toRemove);
+        //     }
+        //     
+        //     foreach (var toAdd in addedTypes)
+        //     {
+        //         _types.Remove(toAdd);
+        //     }
+        // }
 
         private static CalendarEventWish Create(User user, ICollection<DateInterval> dateIntervals,
-            ICollection<CalendarEventType> types, int? minimalParticipantsCount, int? maximalParticipantsCount)
+            CalendarEventType type, int? minimalParticipantsCount, int? maximalParticipantsCount)
         {
             var entity = new CalendarEventWish()
             {
-                AuthorId = user.Id
+                AuthorId = user.Id,
+                Type = type
             };
 
             foreach (var interval in dateIntervals)
             {
                 entity.AddInterval(interval);
-            }
-
-            foreach (var type in types)
-            {
-                entity.AddType(type);
             }
             
             entity.SetMinimalParticipantsCount(minimalParticipantsCount);
@@ -208,10 +206,10 @@ namespace Chattoo.Domain.Entities
         }
         
         public static CalendarEventWish Create(User author, CommunicationChannel channel,
-            ICollection<DateInterval> dateIntervals, ICollection<CalendarEventType> types,
+            ICollection<DateInterval> dateIntervals, CalendarEventType type,
             int? minimalParticipantsCount, int? maximalParticipantsCount)
         {
-            var entity = CalendarEventWish.Create(author, dateIntervals, types, minimalParticipantsCount,
+            var entity = Create(author, dateIntervals, type, minimalParticipantsCount,
                 maximalParticipantsCount);
 
             entity.CommunicationChannelId = channel.Id;
@@ -220,10 +218,10 @@ namespace Chattoo.Domain.Entities
         }
         
         public static CalendarEventWish Create(User author, Group group,
-            ICollection<DateInterval> dateIntervals, ICollection<CalendarEventType> types,
+            ICollection<DateInterval> dateIntervals, CalendarEventType type,
             int? minimalParticipantsCount, int? maximalParticipantsCount)
         {
-            var entity = CalendarEventWish.Create(author, dateIntervals, types, minimalParticipantsCount,
+            var entity = Create(author, dateIntervals, type, minimalParticipantsCount,
                 maximalParticipantsCount);
 
             entity.GroupId = group.Id;

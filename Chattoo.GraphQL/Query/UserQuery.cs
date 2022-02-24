@@ -1,4 +1,5 @@
-﻿using Chattoo.Application.Common.Models;
+﻿using Chattoo.Application.CalendarEvents.Queries;
+using Chattoo.Application.Common.Models;
 using Chattoo.Application.CommunicationChannels.Queries.GetUsers;
 using Chattoo.Application.Groups.Queries;
 using Chattoo.Application.Users.DTOs;
@@ -48,6 +49,26 @@ namespace Chattoo.GraphQL.Query
                     var query = new GetUsersForGroupQuery()
                     {
                         GroupId = ctx.GetString("channelId"),
+                        PageNumber = ctx.GetInt("pageNumber"),
+                        PageSize = ctx.GetInt("pageSize")
+                    };
+
+                    return await mediator.Send(query);
+                }
+            );
+            
+            this.FieldAsyncWithScope<PageInfoGraphType<UserGraphType, UserDto>, PaginatedList<UserDto>>(
+                "getForCalendarEvent",
+                arguments: 
+                new QueryArgumentsWithPagination
+                (
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "calendarEventId" }
+                ),
+                resolve: async (ctx, mediator) =>
+                {
+                    var query = new GetUsersForCalendarEventQuery()
+                    {
+                        EventId = ctx.GetString("calendarEventId"),
                         PageNumber = ctx.GetInt("pageNumber"),
                         PageSize = ctx.GetInt("pageSize")
                     };

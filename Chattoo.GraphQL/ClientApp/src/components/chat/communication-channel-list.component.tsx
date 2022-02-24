@@ -1,5 +1,5 @@
 import { AppStateContext } from '@components/app-state-provider.component';
-import { Divider, List } from '@mui/material';
+import { List } from '@mui/material';
 import { useGetChannelsForUserQuery, useUserAddedToChannelSubscription } from 'graphql/graphql-types';
 import { FC, useContext } from 'react'
 import { useEffect } from 'react';
@@ -49,11 +49,8 @@ const CommunicationChannelList: FC = () => {
 
     return (
         <List sx={{ overflowY: "auto", flexGrow: 1, flexBasis: 100 }}>
-            {channels && channels.map((ch, i) => (
-                <>
-                    <CommunicationChannelPreview channel={ch} />
-
-                </>
+            {channels && channels.map((ch) => (
+                <CommunicationChannelPreview channel={ch} key={ch.id} />
             ))}
         </List>
     );

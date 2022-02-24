@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Chattoo.Domain.Common;
+using Chattoo.Domain.Enums;
 using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.ValueObjects;
@@ -160,8 +161,7 @@ namespace Chattoo.Domain.Entities
             var entity = new CalendarEvent()
             {
                 AuthorId = author.Id,
-                CalendarEventType = type,
-                CalendarEventTypeId = type?.Id
+                CalendarEventType = type
             };
             
             entity.SetName(name);

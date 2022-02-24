@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Chattoo.Application.CalendarEvents.DTOs;
+using Chattoo.Domain.Enums;
 using Chattoo.Domain.Repositories;
 using Chattoo.Domain.Services;
 using MediatR;
@@ -26,7 +27,7 @@ namespace Chattoo.Application.CalendarEvents.Commands
         
         public string GroupId { get; set; }
         
-        public string CalendarEventTypeId { get; set; } 
+        public CalendarEventType Type { get; set; } 
         
         public int? MaximalParticipantsCount { get; set; }
     }
@@ -53,7 +54,7 @@ namespace Chattoo.Application.CalendarEvents.Commands
             (
                 request.CommunicationChannelId,
                 request.GroupId,
-                request.CalendarEventTypeId,
+                request.Type,
                 request.Name,
                 request.Description,
                 request.MaximalParticipantsCount,

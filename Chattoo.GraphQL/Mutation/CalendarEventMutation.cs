@@ -1,7 +1,10 @@
+using System;
 using Chattoo.Application.CalendarEvents.Commands;
 using Chattoo.Application.CalendarEvents.DTOs;
+using Chattoo.Domain.Enums;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;
+using Chattoo.GraphQL.Types.Enums;
 using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Mutation
@@ -19,15 +22,21 @@ namespace Chattoo.GraphQL.Mutation
                 (
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "desc" },
-                    new QueryArgument<NonNullGraphType<DateGraphType>> { Name = "startsAt" },
-                    new QueryArgument<DateGraphType> { Name = "endsAt" },
+                    new QueryArgument<NonNullGraphType<DateTimeGraphType>> { Name = "startsAt" },
+                    new QueryArgument<DateTimeGraphType> { Name = "endsAt" },
                     new QueryArgument<StringGraphType> { Name = "channelId" },
                     new QueryArgument<StringGraphType> { Name = "groupId" },
-                    new QueryArgument<StringGraphType> { Name = "eventTypeId" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "type" },
                     new QueryArgument<IntGraphType> { Name = "maximalParticipantsCount" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
+                    // TODO: Tady to asi chce, mít přímo nějaký vlastní input type.
+                    if (!Enum.TryParse(ctx.GetString("type"), out CalendarEventType type))
+                    {
+                        throw new ArgumentOutOfRangeException();
+                    }
+                    
                     var command = new CreateCalendarEventCommand()
                     {
                         Name = ctx.GetString("name"),
@@ -36,7 +45,7 @@ namespace Chattoo.GraphQL.Mutation
                         EndsAt = ctx.GetNullableDateTime("endsAt"),
                         CommunicationChannelId = ctx.GetString("channelId"),
                         GroupId = ctx.GetString("groupId"),
-                        CalendarEventTypeId = ctx.GetString("eventTypeId"),
+                        Type = type,
                         MaximalParticipantsCount = ctx.GetNullableInt("maximalParticipantsCount")
                     };
 
@@ -74,8 +83,8 @@ namespace Chattoo.GraphQL.Mutation
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "id" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "desc" },
-                    new QueryArgument<DateGraphType> { Name = "startsAt" },
-                    new QueryArgument<NonNullGraphType<DateGraphType>> { Name = "endsAt" },
+                    new QueryArgument<DateTimeGraphType> { Name = "startsAt" },
+                    new QueryArgument<NonNullGraphType<DateTimeGraphType>> { Name = "endsAt" },
                     new QueryArgument<IntGraphType> { Name = "maximalParticipantsCount" }
                 ),
                 resolve: async (ctx, mediator) =>

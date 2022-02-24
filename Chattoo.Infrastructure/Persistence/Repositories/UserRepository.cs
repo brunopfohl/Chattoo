@@ -33,6 +33,14 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
             return result;
         }
         
+        public IQueryable<User> GetByCalendarEventId(string calendarEventId)
+        {
+            var result = GetAll()
+                .Where(u => u.JoinedEvents.Any(e => e.EventId == calendarEventId));
+
+            return result;
+        }
+        
         public IQueryable<User> GetBySearchTerm(string searchTerm, string excludeUsersFromCommunicationChannelWithId)
         {
             var result = GetAll()

@@ -1,21 +1,24 @@
 import { gql } from "@apollo/client";
 
 /**
- * GraphQL dotaz na API pro získání kalendářních události pro daný komunikační kanál.
+ * GraphQL dotaz na API pro získání kalendářních událostí přihlášeného uživatele.
  */
-export const GET_CALENDAR_EVENTS_FOR_CHANNEL = gql`
-    query GetCalendarEventsForChannel($channelId: String!) {
-        communicationChannelCalendarEvents {
-            getForCommunicationChannel(channelId: $channelId) {
+export const GET_CALENDAR_EVENTS = gql`
+    query GetCalendarEvents($pageNumber: Int!, $pageSize: Int!) {
+        calendarEvents {
+            getJoined(pageNumber: $pageNumber, pageSize: $pageSize) {
                 data {
                     id,
                     startsAt,
                     endsAt,
                     name,
                     description,
+                    maximalParticipantsCount,
                     authorId,
+                    communicationChannelId,
                     createdAt,
-                    modifiedAt
+                    modifiedAt,
+                    type
                 },
                 hasNextPage,
                 hasPreviousPage,

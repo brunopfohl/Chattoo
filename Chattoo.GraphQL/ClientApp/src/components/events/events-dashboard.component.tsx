@@ -1,8 +1,11 @@
-import { Event, SportsBar, RecordVoiceOver, Celebration } from '@mui/icons-material';
+import { Event, QuestionMark, SportsBar, RecordVoiceOver, Celebration } from '@mui/icons-material';
 import { Box, Button, Container, Divider, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Stack, Typography } from "@mui/material";
-import { FC, useCallback, useState } from "react";
+import { AutocompleteItem } from 'common/interfaces/autocomplete-item.interface';
+import { getKeysWithValues } from 'common/utils/enum.utils';
+import { CalendarEvent, CalendarEventTypeGraphType, useGetCalendarEventsQuery } from 'graphql/graphql-types';
+import { FC, useCallback, useMemo, useState } from "react";
 import EventCreatePopup from './create-event-form.component';
-import EventCard, { EventCardProps } from "./event-card.component";
+import EventCard from "./event-card.component";
 
 const EventsDashboard: FC = () => {
     const [isEventCreatePopupOpenned, setEventCreatePopupOpenned] = useState<boolean>(false);
@@ -15,33 +18,39 @@ const EventsDashboard: FC = () => {
         setEventCreatePopupOpenned(true);
     }, [setEventCreatePopupOpenned]);
 
-    let events: EventCardProps[] = [
-        {
-            title: "Událost 1",
-            description: "Událost je super!",
-            startsAt: new Date(),
-            participantsCount: 1,
-            maximalParticipantsCount: 1
-        },
-        {
-            title: "Událost 2",
-            description: "Událost je super!",
-            startsAt: new Date(),
-            participantsCount: 1,
-            maximalParticipantsCount: 1
-        },
-        {
-            title: "Událost 3",
-            description: "Událost je super!",
-            startsAt: new Date(),
-            participantsCount: 1,
-            maximalParticipantsCount: 1
+    const { data: joinedEventsQuery, refetch: refetchJoinedEvents } = useGetCalendarEventsQuery({
+        variables: {
+            pageNumber: 1,
+            pageSize: 1000
         }
-    ];
+    });
+
+    const joinedEvents = joinedEventsQuery?.calendarEvents?.getJoined?.data;
+
+    const renderTypeIcon = (type: CalendarEventTypeGraphType) => {
+        switch (type) {
+            case CalendarEventTypeGraphType.Drink: {
+                return <SportsBar />
+            }
+            case CalendarEventTypeGraphType.Celebration: {
+                return <Celebration />
+            }
+            case CalendarEventTypeGraphType.Brainstorming: {
+                return <RecordVoiceOver />
+            }
+            default: {
+                <QuestionMark />
+            }
+        }
+    };
+
+    const eventTypes: AutocompleteItem<CalendarEventTypeGraphType>[] = useMemo(() => {
+        return getKeysWithValues(CalendarEventTypeGraphType);
+    }, []);
 
     return (
         <>
-            <EventCreatePopup onClose={onEventCreatePopupClosed} open={isEventCreatePopupOpenned} />
+            <EventCreatePopup onSubmit={refetchJoinedEvents} onClose={onEventCreatePopupClosed} open={isEventCreatePopupOpenned} types={eventTypes} />
             <Box sx={{ height: "100%", width: "100%", pt: 1 }}>
                 <Grid container sx={{ width: "100%", height: "100%" }}>
                     <Grid item xs={2}>
@@ -81,6 +90,7 @@ const EventsDashboard: FC = () => {
                                     </ListItemButton>
                                 </ListItem>
                             </List>
+
                             <Button fullWidth variant="outlined" sx={{ mb: 1 }} onClick={showEventCreatePopup}>Vytvořit událost</Button>
                             <Button fullWidth variant="outlined" color="secondary">Vytvořit přání</Button>
 
@@ -90,36 +100,18 @@ const EventsDashboard: FC = () => {
                                 Kategorie
                             </Typography>
                             <List>
-                                <ListItem disablePadding>
-                                    <ListItemButton sx={{ pl: 0 }}>
-                                        <ListItemIcon>
-                                            <SportsBar />
-                                        </ListItemIcon>
-                                        <ListItemText>
-                                            Pivo
-                                        </ListItemText>
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem disablePadding>
-                                    <ListItemButton sx={{ pl: 0 }}>
-                                        <ListItemIcon>
-                                            <Celebration />
-                                        </ListItemIcon>
-                                        <ListItemText>
-                                            Oslava
-                                        </ListItemText>
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem disablePadding>
-                                    <ListItemButton sx={{ pl: 0 }}>
-                                        <ListItemIcon>
-                                            <RecordVoiceOver />
-                                        </ListItemIcon>
-                                        <ListItemText>
-                                            Pokec
-                                        </ListItemText>
-                                    </ListItemButton>
-                                </ListItem>
+                                {eventTypes.map(t => (
+                                    <ListItem disablePadding>
+                                        <ListItemButton sx={{ pl: 0 }}>
+                                            <ListItemIcon>
+                                                {renderTypeIcon(t.value)}
+                                            </ListItemIcon>
+                                            <ListItemText>
+                                                {t.key}
+                                            </ListItemText>
+                                        </ListItemButton>
+                                    </ListItem>
+                                ))}
                             </List>
                         </Paper>
                     </Grid>
@@ -129,9 +121,9 @@ const EventsDashboard: FC = () => {
                                 <Typography variant="h5">
                                     Vaše události
                                 </Typography>
-                                <Stack direction="row">
-                                    {events.length > 0 && events.map(e =>
-                                        <EventCard {...e} />
+                                <Stack direction="row" sx={{ flexWrap: "wrap" }}>
+                                    {joinedEvents && joinedEvents.length > 0 && joinedEvents.map(e =>
+                                        <EventCard calendarEvent={e as CalendarEvent} key={e.id} />
                                     )}
                                 </Stack>
                             </Paper>

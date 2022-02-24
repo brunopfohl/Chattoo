@@ -13,8 +13,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The `Date` scalar type represents a year, month and day in accordance with the [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard. */
-  Date: any;
   /** The `DateTime` scalar type represents a date and time. `DateTime` expects timestamps to be formatted in accordance with the [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard. */
   DateTime: any;
 };
@@ -26,17 +24,17 @@ export type CalendarEvent = {
   createdAt: Scalars['DateTime'];
   createdBy: Scalars['String'];
   deletedAt?: Maybe<Scalars['DateTime']>;
-  deletedBy: Scalars['String'];
+  deletedBy?: Maybe<Scalars['String']>;
   description: Scalars['String'];
   endsAt?: Maybe<Scalars['DateTime']>;
   groupId?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   maximalParticipantsCount?: Maybe<Scalars['Int']>;
   modifiedAt?: Maybe<Scalars['DateTime']>;
-  modifiedBy: Scalars['String'];
+  modifiedBy?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   startsAt: Scalars['DateTime'];
-  type?: Maybe<CalendarEventType>;
+  type?: Maybe<CalendarEventTypeGraphType>;
 };
 
 export type CalendarEventMutation = {
@@ -50,12 +48,12 @@ export type CalendarEventMutation = {
 export type CalendarEventMutationCreateArgs = {
   channelId?: InputMaybe<Scalars['String']>;
   desc: Scalars['String'];
-  endsAt?: InputMaybe<Scalars['Date']>;
-  eventTypeId?: InputMaybe<Scalars['String']>;
+  endsAt?: InputMaybe<Scalars['DateTime']>;
   groupId?: InputMaybe<Scalars['String']>;
   maximalParticipantsCount?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
-  startsAt: Scalars['Date'];
+  startsAt: Scalars['DateTime'];
+  type: Scalars['String'];
 };
 
 
@@ -66,62 +64,68 @@ export type CalendarEventMutationDeleteArgs = {
 
 export type CalendarEventMutationUpdateArgs = {
   desc: Scalars['String'];
-  endsAt: Scalars['Date'];
+  endsAt: Scalars['DateTime'];
   id: Scalars['String'];
   maximalParticipantsCount?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
-  startsAt?: InputMaybe<Scalars['Date']>;
+  startsAt?: InputMaybe<Scalars['DateTime']>;
 };
 
-export type CalendarEventType = {
-  __typename?: 'CalendarEventType';
-  createdAt: Scalars['DateTime'];
-  createdBy: Scalars['String'];
-  deletedAt?: Maybe<Scalars['DateTime']>;
-  deletedBy: Scalars['String'];
-  id: Scalars['String'];
-  modifiedAt?: Maybe<Scalars['DateTime']>;
-  modifiedBy: Scalars['String'];
-  name: Scalars['String'];
-};
-
-export type CommunicationChannel = {
-  __typename?: 'CommunicationChannel';
-  createdAt: Scalars['DateTime'];
-  createdBy: Scalars['String'];
-  deletedAt?: Maybe<Scalars['DateTime']>;
-  deletedBy: Scalars['String'];
-  description: Scalars['String'];
-  id: Scalars['String'];
-  modifiedAt?: Maybe<Scalars['DateTime']>;
-  modifiedBy: Scalars['String'];
-  name: Scalars['String'];
-};
-
-export type CommunicationChannelCalendarEventQuery = {
-  __typename?: 'CommunicationChannelCalendarEventQuery';
+export type CalendarEventQuery = {
+  __typename?: 'CalendarEventQuery';
   get?: Maybe<CalendarEvent>;
+  getAvailable?: Maybe<CalendarEvent>;
   getForCommunicationChannel?: Maybe<PaginationListCalendarEventGraphType>;
   getForGroup?: Maybe<PaginationListCalendarEventGraphType>;
+  getJoined?: Maybe<PaginationListCalendarEventGraphType>;
 };
 
 
-export type CommunicationChannelCalendarEventQueryGetArgs = {
+export type CalendarEventQueryGetArgs = {
   id: Scalars['ID'];
 };
 
 
-export type CommunicationChannelCalendarEventQueryGetForCommunicationChannelArgs = {
+export type CalendarEventQueryGetForCommunicationChannelArgs = {
   channelId: Scalars['String'];
   pageNumber?: Scalars['Int'];
   pageSize?: Scalars['Int'];
 };
 
 
-export type CommunicationChannelCalendarEventQueryGetForGroupArgs = {
+export type CalendarEventQueryGetForGroupArgs = {
   groupId: Scalars['String'];
   pageNumber?: Scalars['Int'];
   pageSize?: Scalars['Int'];
+};
+
+
+export type CalendarEventQueryGetJoinedArgs = {
+  pageNumber?: Scalars['Int'];
+  pageSize?: Scalars['Int'];
+};
+
+export enum CalendarEventTypeGraphType {
+  Brainstorming = 'BRAINSTORMING',
+  Celebration = 'CELEBRATION',
+  Cinema = 'CINEMA',
+  Drink = 'DRINK',
+  Sports = 'SPORTS',
+  Theatre = 'THEATRE',
+  Walk = 'WALK'
+}
+
+export type CommunicationChannel = {
+  __typename?: 'CommunicationChannel';
+  createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  deletedBy?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
+  id: Scalars['String'];
+  modifiedAt?: Maybe<Scalars['DateTime']>;
+  modifiedBy?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
 };
 
 export type CommunicationChannelMessage = {
@@ -131,10 +135,10 @@ export type CommunicationChannelMessage = {
   createdAt: Scalars['DateTime'];
   createdBy: Scalars['String'];
   deletedAt?: Maybe<Scalars['DateTime']>;
-  deletedBy: Scalars['String'];
+  deletedBy?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   modifiedAt?: Maybe<Scalars['DateTime']>;
-  modifiedBy: Scalars['String'];
+  modifiedBy?: Maybe<Scalars['String']>;
   type?: Maybe<CommunicationChannelMessageType>;
   userId: Scalars['String'];
   userName: Scalars['String'];
@@ -284,10 +288,10 @@ export type CommunicationChannelRole = {
   createdAt: Scalars['DateTime'];
   createdBy: Scalars['String'];
   deletedAt?: Maybe<Scalars['DateTime']>;
-  deletedBy: Scalars['String'];
+  deletedBy?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   modifiedAt?: Maybe<Scalars['DateTime']>;
-  modifiedBy: Scalars['String'];
+  modifiedBy?: Maybe<Scalars['String']>;
   name: Scalars['String'];
 };
 
@@ -351,10 +355,10 @@ export type Group = {
   createdAt: Scalars['DateTime'];
   createdBy: Scalars['String'];
   deletedAt?: Maybe<Scalars['DateTime']>;
-  deletedBy: Scalars['String'];
+  deletedBy?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   modifiedAt?: Maybe<Scalars['DateTime']>;
-  modifiedBy: Scalars['String'];
+  modifiedBy?: Maybe<Scalars['String']>;
   name: Scalars['String'];
 };
 
@@ -418,10 +422,10 @@ export type GroupRole = {
   createdAt: Scalars['DateTime'];
   createdBy: Scalars['String'];
   deletedAt?: Maybe<Scalars['DateTime']>;
-  deletedBy: Scalars['String'];
+  deletedBy?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   modifiedAt?: Maybe<Scalars['DateTime']>;
-  modifiedBy: Scalars['String'];
+  modifiedBy?: Maybe<Scalars['String']>;
   name: Scalars['String'];
 };
 
@@ -567,7 +571,7 @@ export type PaginationListUserGraphType = {
 
 export type Query = {
   __typename?: 'Query';
-  communicationChannelCalendarEvents?: Maybe<CommunicationChannelCalendarEventQuery>;
+  calendarEvents?: Maybe<CalendarEventQuery>;
   communicationChannelMessages?: Maybe<CommunicationChannelMessageQuery>;
   communicationChannelRoles?: Maybe<CommunicationChannelRoleQuery>;
   communicationChannels?: Maybe<CommunicationChannelQuery>;
@@ -598,10 +602,10 @@ export type User = {
   createdAt: Scalars['DateTime'];
   createdBy: Scalars['String'];
   deletedAt?: Maybe<Scalars['DateTime']>;
-  deletedBy: Scalars['String'];
+  deletedBy?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   modifiedAt?: Maybe<Scalars['DateTime']>;
-  modifiedBy: Scalars['String'];
+  modifiedBy?: Maybe<Scalars['String']>;
   userName: Scalars['String'];
 };
 
@@ -611,10 +615,10 @@ export type UserAlias = {
   createdAt: Scalars['DateTime'];
   createdBy: Scalars['String'];
   deletedAt?: Maybe<Scalars['DateTime']>;
-  deletedBy: Scalars['String'];
+  deletedBy?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   modifiedAt?: Maybe<Scalars['DateTime']>;
-  modifiedBy: Scalars['String'];
+  modifiedBy?: Maybe<Scalars['String']>;
   userId: Scalars['String'];
 };
 
@@ -656,6 +660,7 @@ export type UserAliasQueryGetForUserArgs = {
 export type UserQuery = {
   __typename?: 'UserQuery';
   get?: Maybe<PaginationListUserGraphType>;
+  getForCalendarEvent?: Maybe<PaginationListUserGraphType>;
   getForCommunicationChannel?: Maybe<PaginationListUserGraphType>;
   getForGroup?: Maybe<PaginationListUserGraphType>;
 };
@@ -666,6 +671,13 @@ export type UserQueryGetArgs = {
   pageNumber?: Scalars['Int'];
   pageSize?: Scalars['Int'];
   searchTerm: Scalars['String'];
+};
+
+
+export type UserQueryGetForCalendarEventArgs = {
+  calendarEventId: Scalars['ID'];
+  pageNumber?: Scalars['Int'];
+  pageSize?: Scalars['Int'];
 };
 
 
@@ -685,11 +697,11 @@ export type UserQueryGetForGroupArgs = {
 export type CreateChannelCalendarEventMutationVariables = Exact<{
   name: Scalars['String'];
   desc: Scalars['String'];
-  startsAt: Scalars['Date'];
-  endsAt?: InputMaybe<Scalars['Date']>;
+  startsAt: Scalars['DateTime'];
+  endsAt?: InputMaybe<Scalars['DateTime']>;
   channelId?: InputMaybe<Scalars['String']>;
   groupId?: InputMaybe<Scalars['String']>;
-  eventTypeId: Scalars['String'];
+  type: Scalars['String'];
   maximalParticipantsCount?: InputMaybe<Scalars['Int']>;
 }>;
 
@@ -735,19 +747,20 @@ export type CreateMessageMutationVariables = Exact<{
 
 export type CreateMessageMutation = { __typename?: 'Mutation', communicationChannelMessages?: { __typename?: 'CommunicationChannelMessageMutation', create?: { __typename?: 'CommunicationChannelMessage', id: string, content: string, userName: string, type?: CommunicationChannelMessageType | null | undefined, channelId: string, createdAt: any, modifiedAt?: any | null | undefined } | null | undefined } | null | undefined };
 
-export type GetCalendarEventsForChannelQueryVariables = Exact<{
-  channelId: Scalars['String'];
-}>;
-
-
-export type GetCalendarEventsForChannelQuery = { __typename?: 'Query', communicationChannelCalendarEvents?: { __typename?: 'CommunicationChannelCalendarEventQuery', getForCommunicationChannel?: { __typename?: 'PaginationListCalendarEventGraphType', hasNextPage: boolean, hasPreviousPage: boolean, pageIndex: number, totalCount: number, totalPages: number, data?: Array<{ __typename?: 'CalendarEvent', id: string, startsAt: any, endsAt?: any | null | undefined, name: string, description: string, authorId: string, createdAt: any, modifiedAt?: any | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
-
-export type GetChannelCalendarEventQueryVariables = Exact<{
+export type GetCalendarEventQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetChannelCalendarEventQuery = { __typename?: 'Query', communicationChannelCalendarEvents?: { __typename?: 'CommunicationChannelCalendarEventQuery', get?: { __typename?: 'CalendarEvent', id: string, startsAt: any, endsAt?: any | null | undefined, name: string, description: string, authorId: string, createdAt: any, modifiedAt?: any | null | undefined } | null | undefined } | null | undefined };
+export type GetCalendarEventQuery = { __typename?: 'Query', calendarEvents?: { __typename?: 'CalendarEventQuery', get?: { __typename?: 'CalendarEvent', id: string, startsAt: any, endsAt?: any | null | undefined, name: string, description: string, maximalParticipantsCount?: number | null | undefined, authorId: string, communicationChannelId?: string | null | undefined, createdAt: any, modifiedAt?: any | null | undefined, createdBy: string, deletedBy?: string | null | undefined, modifiedBy?: string | null | undefined, type?: CalendarEventTypeGraphType | null | undefined } | null | undefined } | null | undefined };
+
+export type GetCalendarEventsQueryVariables = Exact<{
+  pageNumber: Scalars['Int'];
+  pageSize: Scalars['Int'];
+}>;
+
+
+export type GetCalendarEventsQuery = { __typename?: 'Query', calendarEvents?: { __typename?: 'CalendarEventQuery', getJoined?: { __typename?: 'PaginationListCalendarEventGraphType', hasNextPage: boolean, hasPreviousPage: boolean, pageIndex: number, totalCount: number, totalPages: number, data?: Array<{ __typename?: 'CalendarEvent', id: string, startsAt: any, endsAt?: any | null | undefined, name: string, description: string, maximalParticipantsCount?: number | null | undefined, authorId: string, communicationChannelId?: string | null | undefined, createdAt: any, modifiedAt?: any | null | undefined, type?: CalendarEventTypeGraphType | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
 
 export type GetChannelsForUserQueryVariables = Exact<{
   userId: Scalars['String'];
@@ -775,6 +788,13 @@ export type GetUsersQueryVariables = Exact<{
 
 export type GetUsersQuery = { __typename?: 'Query', users?: { __typename?: 'UserQuery', get?: { __typename?: 'PaginationListUserGraphType', hasNextPage: boolean, hasPreviousPage: boolean, pageIndex: number, totalCount: number, totalPages: number, data?: Array<{ __typename?: 'User', id: string, userName: string } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
 
+export type GetUsersForCalendarEventQueryVariables = Exact<{
+  calendarEventId: Scalars['ID'];
+}>;
+
+
+export type GetUsersForCalendarEventQuery = { __typename?: 'Query', users?: { __typename?: 'UserQuery', getForCalendarEvent?: { __typename?: 'PaginationListUserGraphType', hasNextPage: boolean, hasPreviousPage: boolean, pageIndex: number, totalCount: number, totalPages: number, data?: Array<{ __typename?: 'User', id: string, userName: string, createdAt: any, modifiedAt?: any | null | undefined, createdBy: string, deletedBy?: string | null | undefined, modifiedBy?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+
 export type GetUsersForChannelQueryVariables = Exact<{
   channelId: Scalars['ID'];
 }>;
@@ -798,7 +818,7 @@ export type MessageAddedToChannelSubscription = { __typename?: 'Subscription', c
 
 
 export const CreateChannelCalendarEventDocument = gql`
-    mutation CreateChannelCalendarEvent($name: String!, $desc: String!, $startsAt: Date!, $endsAt: Date, $channelId: String, $groupId: String, $eventTypeId: String!, $maximalParticipantsCount: Int) {
+    mutation CreateChannelCalendarEvent($name: String!, $desc: String!, $startsAt: DateTime!, $endsAt: DateTime, $channelId: String, $groupId: String, $type: String!, $maximalParticipantsCount: Int) {
   communicationChannelCalendarEvents {
     create(
       name: $name
@@ -807,7 +827,7 @@ export const CreateChannelCalendarEventDocument = gql`
       endsAt: $endsAt
       channelId: $channelId
       groupId: $groupId
-      eventTypeId: $eventTypeId
+      type: $type
       maximalParticipantsCount: $maximalParticipantsCount
     ) {
       id
@@ -843,7 +863,7 @@ export type CreateChannelCalendarEventMutationFn = Apollo.MutationFunction<Creat
  *      endsAt: // value for 'endsAt'
  *      channelId: // value for 'channelId'
  *      groupId: // value for 'groupId'
- *      eventTypeId: // value for 'eventTypeId'
+ *      type: // value for 'type'
  *      maximalParticipantsCount: // value for 'maximalParticipantsCount'
  *   },
  * });
@@ -1034,19 +1054,72 @@ export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
 export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
 export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
-export const GetCalendarEventsForChannelDocument = gql`
-    query GetCalendarEventsForChannel($channelId: String!) {
-  communicationChannelCalendarEvents {
-    getForCommunicationChannel(channelId: $channelId) {
+export const GetCalendarEventDocument = gql`
+    query GetCalendarEvent($id: ID!) {
+  calendarEvents {
+    get(id: $id) {
+      id
+      startsAt
+      endsAt
+      name
+      description
+      maximalParticipantsCount
+      authorId
+      communicationChannelId
+      createdAt
+      modifiedAt
+      createdBy
+      deletedBy
+      modifiedBy
+      type
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCalendarEventQuery__
+ *
+ * To run a query within a React component, call `useGetCalendarEventQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCalendarEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCalendarEventQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetCalendarEventQuery(baseOptions: Apollo.QueryHookOptions<GetCalendarEventQuery, GetCalendarEventQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCalendarEventQuery, GetCalendarEventQueryVariables>(GetCalendarEventDocument, options);
+      }
+export function useGetCalendarEventLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCalendarEventQuery, GetCalendarEventQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCalendarEventQuery, GetCalendarEventQueryVariables>(GetCalendarEventDocument, options);
+        }
+export type GetCalendarEventQueryHookResult = ReturnType<typeof useGetCalendarEventQuery>;
+export type GetCalendarEventLazyQueryHookResult = ReturnType<typeof useGetCalendarEventLazyQuery>;
+export type GetCalendarEventQueryResult = Apollo.QueryResult<GetCalendarEventQuery, GetCalendarEventQueryVariables>;
+export const GetCalendarEventsDocument = gql`
+    query GetCalendarEvents($pageNumber: Int!, $pageSize: Int!) {
+  calendarEvents {
+    getJoined(pageNumber: $pageNumber, pageSize: $pageSize) {
       data {
         id
         startsAt
         endsAt
         name
         description
+        maximalParticipantsCount
         authorId
+        communicationChannelId
         createdAt
         modifiedAt
+        type
       }
       hasNextPage
       hasPreviousPage
@@ -1059,76 +1132,33 @@ export const GetCalendarEventsForChannelDocument = gql`
     `;
 
 /**
- * __useGetCalendarEventsForChannelQuery__
+ * __useGetCalendarEventsQuery__
  *
- * To run a query within a React component, call `useGetCalendarEventsForChannelQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCalendarEventsForChannelQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetCalendarEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCalendarEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCalendarEventsForChannelQuery({
+ * const { data, loading, error } = useGetCalendarEventsQuery({
  *   variables: {
- *      channelId: // value for 'channelId'
+ *      pageNumber: // value for 'pageNumber'
+ *      pageSize: // value for 'pageSize'
  *   },
  * });
  */
-export function useGetCalendarEventsForChannelQuery(baseOptions: Apollo.QueryHookOptions<GetCalendarEventsForChannelQuery, GetCalendarEventsForChannelQueryVariables>) {
+export function useGetCalendarEventsQuery(baseOptions: Apollo.QueryHookOptions<GetCalendarEventsQuery, GetCalendarEventsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCalendarEventsForChannelQuery, GetCalendarEventsForChannelQueryVariables>(GetCalendarEventsForChannelDocument, options);
+        return Apollo.useQuery<GetCalendarEventsQuery, GetCalendarEventsQueryVariables>(GetCalendarEventsDocument, options);
       }
-export function useGetCalendarEventsForChannelLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCalendarEventsForChannelQuery, GetCalendarEventsForChannelQueryVariables>) {
+export function useGetCalendarEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCalendarEventsQuery, GetCalendarEventsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCalendarEventsForChannelQuery, GetCalendarEventsForChannelQueryVariables>(GetCalendarEventsForChannelDocument, options);
+          return Apollo.useLazyQuery<GetCalendarEventsQuery, GetCalendarEventsQueryVariables>(GetCalendarEventsDocument, options);
         }
-export type GetCalendarEventsForChannelQueryHookResult = ReturnType<typeof useGetCalendarEventsForChannelQuery>;
-export type GetCalendarEventsForChannelLazyQueryHookResult = ReturnType<typeof useGetCalendarEventsForChannelLazyQuery>;
-export type GetCalendarEventsForChannelQueryResult = Apollo.QueryResult<GetCalendarEventsForChannelQuery, GetCalendarEventsForChannelQueryVariables>;
-export const GetChannelCalendarEventDocument = gql`
-    query GetChannelCalendarEvent($id: ID!) {
-  communicationChannelCalendarEvents {
-    get(id: $id) {
-      id
-      startsAt
-      endsAt
-      name
-      description
-      authorId
-      createdAt
-      modifiedAt
-    }
-  }
-}
-    `;
-
-/**
- * __useGetChannelCalendarEventQuery__
- *
- * To run a query within a React component, call `useGetChannelCalendarEventQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChannelCalendarEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetChannelCalendarEventQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetChannelCalendarEventQuery(baseOptions: Apollo.QueryHookOptions<GetChannelCalendarEventQuery, GetChannelCalendarEventQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetChannelCalendarEventQuery, GetChannelCalendarEventQueryVariables>(GetChannelCalendarEventDocument, options);
-      }
-export function useGetChannelCalendarEventLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetChannelCalendarEventQuery, GetChannelCalendarEventQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetChannelCalendarEventQuery, GetChannelCalendarEventQueryVariables>(GetChannelCalendarEventDocument, options);
-        }
-export type GetChannelCalendarEventQueryHookResult = ReturnType<typeof useGetChannelCalendarEventQuery>;
-export type GetChannelCalendarEventLazyQueryHookResult = ReturnType<typeof useGetChannelCalendarEventLazyQuery>;
-export type GetChannelCalendarEventQueryResult = Apollo.QueryResult<GetChannelCalendarEventQuery, GetChannelCalendarEventQueryVariables>;
+export type GetCalendarEventsQueryHookResult = ReturnType<typeof useGetCalendarEventsQuery>;
+export type GetCalendarEventsLazyQueryHookResult = ReturnType<typeof useGetCalendarEventsLazyQuery>;
+export type GetCalendarEventsQueryResult = Apollo.QueryResult<GetCalendarEventsQuery, GetCalendarEventsQueryVariables>;
 export const GetChannelsForUserDocument = gql`
     query GetChannelsForUser($userId: String!, $pageNumber: Int!, $pageSize: Int!) {
   communicationChannels {
@@ -1285,6 +1315,56 @@ export function useGetUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetUsersQueryHookResult = ReturnType<typeof useGetUsersQuery>;
 export type GetUsersLazyQueryHookResult = ReturnType<typeof useGetUsersLazyQuery>;
 export type GetUsersQueryResult = Apollo.QueryResult<GetUsersQuery, GetUsersQueryVariables>;
+export const GetUsersForCalendarEventDocument = gql`
+    query GetUsersForCalendarEvent($calendarEventId: ID!) {
+  users {
+    getForCalendarEvent(calendarEventId: $calendarEventId) {
+      data {
+        id
+        userName
+        createdAt
+        modifiedAt
+        createdBy
+        deletedBy
+        modifiedBy
+      }
+      hasNextPage
+      hasPreviousPage
+      pageIndex
+      totalCount
+      totalPages
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUsersForCalendarEventQuery__
+ *
+ * To run a query within a React component, call `useGetUsersForCalendarEventQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUsersForCalendarEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUsersForCalendarEventQuery({
+ *   variables: {
+ *      calendarEventId: // value for 'calendarEventId'
+ *   },
+ * });
+ */
+export function useGetUsersForCalendarEventQuery(baseOptions: Apollo.QueryHookOptions<GetUsersForCalendarEventQuery, GetUsersForCalendarEventQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUsersForCalendarEventQuery, GetUsersForCalendarEventQueryVariables>(GetUsersForCalendarEventDocument, options);
+      }
+export function useGetUsersForCalendarEventLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUsersForCalendarEventQuery, GetUsersForCalendarEventQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUsersForCalendarEventQuery, GetUsersForCalendarEventQueryVariables>(GetUsersForCalendarEventDocument, options);
+        }
+export type GetUsersForCalendarEventQueryHookResult = ReturnType<typeof useGetUsersForCalendarEventQuery>;
+export type GetUsersForCalendarEventLazyQueryHookResult = ReturnType<typeof useGetUsersForCalendarEventLazyQuery>;
+export type GetUsersForCalendarEventQueryResult = Apollo.QueryResult<GetUsersForCalendarEventQuery, GetUsersForCalendarEventQueryVariables>;
 export const GetUsersForChannelDocument = gql`
     query GetUsersForChannel($channelId: ID!) {
   users {

@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Comparers" />
     <Folder Include="Events\" />
   </ItemGroup>
 

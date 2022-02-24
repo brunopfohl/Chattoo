@@ -2,12 +2,12 @@ import { Chat, MenuOutlined, AccountBox, Event } from '@mui/icons-material';
 import { AppBar, Button, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Stack, Toolbar, Typography, } from '@mui/material';
 import { Page } from 'common/enums/page.enum';
 import { useRouter } from 'next/router';
-import { Dispatch, FC, SetStateAction, useCallback, useContext, useState } from 'react'
+import { FC, useCallback, useContext, useState } from 'react'
 import authService from '../api-authorization/AuthorizeService';
 import { AppStateContext } from '../app-state-provider.component';
+import NextLink from "next/link";
 
 interface HeaderProps {
-    setPage: Dispatch<SetStateAction<Page>>;
 }
 
 /**
@@ -16,8 +16,6 @@ interface HeaderProps {
 const Header: FC<HeaderProps> = (props) => {
     const { appState } = useContext(AppStateContext);
     const { user } = appState;
-
-    const { setPage } = props;
 
     // Router pro zjištění aktuálně navštívené stránky.
     const router = useRouter();
@@ -36,11 +34,6 @@ const Header: FC<HeaderProps> = (props) => {
     const onDrawerClosed = useCallback(() => {
         setIsDrawerOpenned(false);
     }, [setIsDrawerOpenned]);
-
-    const setPageSafe = useCallback((page: Page) => {
-        onDrawerClosed();
-        setPage(page);
-    }, [setPage]);
 
     return (
         <>
@@ -70,26 +63,32 @@ const Header: FC<HeaderProps> = (props) => {
 
                     <Drawer open={isDrawerOpenned} onClose={onDrawerClosed}>
                         <List>
-                            <ListItem button onClick={() => setPageSafe(Page.Chat)}>
-                                <ListItemIcon>
-                                    <Chat />
-                                </ListItemIcon>
-                                <ListItemText primary="Chat" />
-                            </ListItem>
+                            <NextLink href="/">
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <Chat />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Chat" />
+                                </ListItem>
+                            </NextLink>
 
-                            <ListItem button>
-                                <ListItemIcon onClick={() => setPageSafe(Page.Events)}>
-                                    <Event />
-                                </ListItemIcon>
-                                <ListItemText primary="Události" />
-                            </ListItem>
+                            <NextLink href="/events">
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <Event />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Události" />
+                                </ListItem>
+                            </NextLink>
 
-                            <ListItem button>
-                                <ListItemIcon onClick={() => setPageSafe(Page.Profile)}>
-                                    <AccountBox />
-                                </ListItemIcon>
-                                <ListItemText primary="Profil" />
-                            </ListItem>
+                            <NextLink href="/profile">
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <AccountBox />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Profil" />
+                                </ListItem>
+                            </NextLink>
                         </List>
                     </Drawer>
                 </Toolbar>

@@ -19,11 +19,12 @@ export const useValidation = (props: ValidationHookProps) => {
             })
             .then(() => {
                 setIsValid(true);
+                setValidationErrors({});
             })
             .catch((error) => {
-                let errors = {};
+                let errors: any = {};
 
-                error.inner.forEach(e => {
+                error.inner.forEach((e: any) => {
                     errors[e.path] = e.errors;
                 });
 
@@ -34,7 +35,7 @@ export const useValidation = (props: ValidationHookProps) => {
 
     useEffect(() => {
         validate();
-    }, [object]);
+    }, [object, schema]);
 
     return [isValid, validationErrors];
 }
