@@ -22,6 +22,12 @@ const ChatLeftPanel: FC = () => {
         setShowCreateCommunicationChannelPopup(false);
     }, [setShowCreateCommunicationChannelPopup]);
 
+    const [searchTerm, setSearchTerm] = useState<string>("");
+
+    const onSearchTermChanged = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    }, [setSearchTerm]);
+
     return (
         <Paper sx={{ p: 2, height: "100%", display: "flex" }}>
             {/* Dialog pro vytvoření kanálu */}
@@ -37,10 +43,10 @@ const ChatLeftPanel: FC = () => {
                     </IconButton>
                 </Stack>
 
-                <CustomInput placeholder="Zadejte hledaný výraz" icon={<Search />} />
+                <CustomInput placeholder="Zadejte hledaný výraz" icon={<Search />} value={searchTerm} onChange={onSearchTermChanged} />
 
                 {/* Seznam kanálů */}
-                <CommunicationChannelList />
+                <CommunicationChannelList filterText={searchTerm} />
             </Stack>
         </Paper>
     );

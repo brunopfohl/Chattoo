@@ -10,6 +10,7 @@ export const GET_CALENDAR_EVENT = gql`
                 name,
                 description,
                 maximalParticipantsCount,
+                participantsCount,
                 authorId,
                 communicationChannelId,
                 createdAt,

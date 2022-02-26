@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -20,10 +21,7 @@ namespace Chattoo.Application.Users.Queries
         /// </summary>
         public string SearchTerm { get; set; }
         
-        /// <summary>
-        /// Vrací nebo nastavuje Id komunikačního kanálu, jehož uživatelé se mají z výsledku vynechat.
-        /// </summary>
-        public string ExcludeUsersFromCommunicationChannelWithId { get; set; }
+        public List<string> ExcludedUserIds { get; set; }
     }
     
     public class GetUsersQueryHandler : PaginatedQueryHandler<GetUsersQuery, UserDto>
@@ -40,7 +38,7 @@ namespace Chattoo.Application.Users.Queries
         public override async Task<PaginatedList<UserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
             // Načtu kolekci uživatelů v dané skupině a zpracuju na stránkovanou kolekci.
-            var result = await _userRepository.GetBySearchTerm(request.SearchTerm, request.ExcludeUsersFromCommunicationChannelWithId)
+            var result = await _userRepository.GetBySearchTerm(request.SearchTerm, request.ExcludedUserIds)
                 .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.PageNumber, request.PageSize);
 

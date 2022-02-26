@@ -15,6 +15,7 @@ namespace Chattoo.GraphQL.Types
             Field(o => o.Name);
             Field(o => o.Description);
             Field(o => o.MaximalParticipantsCount, true);
+            Field(o => o.ParticipantsCount);
             Field<CalendarEventTypeGraphType>(nameof(CalendarEventDto.Type));
             
             Field(o => o.AuthorId);

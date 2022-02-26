@@ -1,8 +1,9 @@
-import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
+import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Icon, LinearProgress, Stack, Typography } from "@mui/material";
 import { FC, useCallback, useMemo } from "react";
 import moment from "moment";
 import { CalendarEvent } from "graphql/graphql-types";
 import { useRouter } from "next/router";
+import { Person } from "@mui/icons-material";
 
 export interface EventCardProps {
     calendarEvent: CalendarEvent;
@@ -11,17 +12,6 @@ export interface EventCardProps {
 const EventCard: FC<EventCardProps> = (props) => {
     const router = useRouter();
     const { calendarEvent } = props;
-
-    const dateText = useMemo(() => {
-        let result = moment(calendarEvent.startsAt).format("d. MM. YYYY - hh:mm");
-
-        if (calendarEvent.endsAt) {
-            const endsAt = moment(calendarEvent.endsAt).format("d. MM. YYYY - hh:mm");
-            result = `Od ${result} do ${endsAt}`;
-        }
-
-        return result;
-    }, [calendarEvent]);
 
     const redirectToDetail = useCallback(() => {
         router.push({
@@ -43,21 +33,22 @@ const EventCard: FC<EventCardProps> = (props) => {
                 />
                 <CardContent>
                     <Typography gutterBottom variant="caption" component="div">
-                        {dateText}
+                        {moment(calendarEvent.startsAt).format("d. MM. YYYY - hh:mm")}
                     </Typography>
                     <Typography gutterBottom variant="h5" component="div">
                         {calendarEvent.name}
                     </Typography>
-                    <Typography gutterBottom variant="body2">
-                        {calendarEvent.description}
-                    </Typography>
+                    <Stack direction="row" sx={{ alignItems: "center" }}>
+                        <Icon sx={{ mr: 1 }}>
+                            <Person />
+                        </Icon>
+                        {!!calendarEvent.maximalParticipantsCount
+                            ? `${calendarEvent.participantsCount} / ${calendarEvent.maximalParticipantsCount}`
+                            : `${calendarEvent.participantsCount}`
+                        }
+                    </Stack>
                 </CardContent>
             </CardActionArea>
-            <CardActions>
-                <Button size="small" color="primary">
-                    Připojit se
-                </Button>
-            </CardActions>
         </Card>
     );
 };

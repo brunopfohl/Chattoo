@@ -7,7 +7,8 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 /** Parametry komponenty náhledu komunikačního kanálu */
 interface CommunicationChannelPreviewProps {
     /** Objekt reprezentující komunikanční kanál */
-    channel: CommunicationChannel,
+    channel: CommunicationChannel;
+    selected: boolean;
 };
 
 /**
@@ -15,7 +16,7 @@ interface CommunicationChannelPreviewProps {
  * @param props Parametry pro render komponenty.
  */
 const CommunicationChannelPreview: FC<CommunicationChannelPreviewProps> = (props) => {
-    const { channel } = props;
+    const { channel, selected } = props;
     const { setCurrentChannel } = useContext(ChatStateContext);
 
     /** Callback volaný po zvolení komunikačního kanálu */
@@ -25,7 +26,7 @@ const CommunicationChannelPreview: FC<CommunicationChannelPreviewProps> = (props
 
     return (
         // Klikatelný prvek pro zvolení komunikačního kanálu
-        <ListItemButton onClick={onClickHandler} sx={{ pl: 1 }}>
+        <ListItemButton onClick={onClickHandler} sx={{ pl: 1 }} selected={selected}>
             {/* Ikona kanálu */}
             <ListItemAvatar>
                 <Avatar>

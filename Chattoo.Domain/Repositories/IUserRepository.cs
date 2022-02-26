@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Chattoo.Domain.Entities;
 
 namespace Chattoo.Domain.Repositories
@@ -28,7 +29,7 @@ namespace Chattoo.Domain.Repositories
         /// Vrací všechny uživatele, kteří odpovídají hledanému výrazu.
         /// </summary>
         /// <param name="searchTerm">Výraz, dle kterého se mají dohledat uživatelé.</param>
-        /// <param name="excludeUsersFromCommunicationChannelWithId">Id komunikačního kanálu, jehož uživatelé se z výsledku mají vynechat.</param>
-        public IQueryable<User> GetBySearchTerm(string searchTerm, string excludeUsersFromCommunicationChannelWithId);
+        /// <param name="excludedUserIds">List Id uživatelů, kteří jsou mimo vyhledávání..</param>
+        public IQueryable<User> GetBySearchTerm(string searchTerm, List<string> excludedUserIds);
     }
 }

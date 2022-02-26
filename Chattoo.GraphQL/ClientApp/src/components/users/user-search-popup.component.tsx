@@ -1,48 +1,47 @@
 import CustomDialog from '@components/dialog/dialog.component';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, List, ListItem, Typography } from '@mui/material';
-import { useGetUsersQuery } from 'graphql/graphql-types';
-import { FC, useCallback, useMemo, useState } from 'react'
-import { AppUser } from '../../common/interfaces/app-user.interface';
+import { List, Typography } from '@mui/material';
+import { useGetUsersQuery, User } from 'graphql/graphql-types';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import SearchBox, { SearchBoxProps } from '../search-box/search-box.component';
 import UserSearchItem from './user-search-item.component';
 
 /** Parametry komponenty pro vyhledávání mezi uživateli */
 interface UserSearchProps {
     onClose: () => void;
-    onSubmit: (users: AppUser[]) => void;
+    onSubmit: (users: User[]) => void;
     open: boolean;
-    channelId?: string;
+    excludedUsers: User[];
 }
 
 /** Komponenta - vyhledávání mezi uživateli */
 const UserSearchPopup: FC<UserSearchProps> = (props) => {
-    const { onClose, onSubmit, channelId, open } = props;
+    const { onClose, onSubmit, open, excludedUsers } = props;
 
-    const [searchTerm, setSearchTerm] = useState<string>();
+    const [searchTerm, setSearchTerm] = useState<string>("");
 
     const getUsersQuery = useGetUsersQuery({
         variables: {
-            searchTerm: searchTerm, excludeUsersFromChannelWithId: channelId
+            searchTerm: searchTerm, excludedUserIds: excludedUsers.map(u => u.id)
         }
     });
 
     const users = getUsersQuery.data?.users?.get?.data;
 
     // Pole vybraných uživatelů.
-    const [selectedUsers, setSelectedUsers] = useState<AppUser[]>([]);
+    const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
     /** Callback volaný po přidání uživatele */
-    const addUser = useCallback((user: AppUser) => {
+    const addUser = useCallback((user: User) => {
         setSelectedUsers([...selectedUsers, user]);
     }, [setSelectedUsers, selectedUsers]);
 
-    /** Callback volaný po zvolení uživatele */
-    const isUserSelected = useCallback((user: AppUser) => {
+    const isUserSelected = useCallback((user: User) => {
         return selectedUsers.indexOf(user) > -1;
     }, [selectedUsers]);
 
     /** Callback volaný po odebrání uživatele */
-    const removeUser = useCallback((user: AppUser) => {
+
+    const removeUser = useCallback((user: User) => {
         // Najdu index uživatele, kterého chci odebrat z pole.
         const index = selectedUsers.indexOf(user);
         // Uložím dosavadní pole zvolených uživatelů do pomocného pole.
@@ -71,6 +70,10 @@ const UserSearchPopup: FC<UserSearchProps> = (props) => {
         // Zavolám callback "po zavření okna".
         onClose();
     }, [selectedUsers, onSubmit, onClose])
+
+    useEffect(() => {
+        setSelectedUsers([]);
+    }, [open]);
 
     const MemoUsers = useMemo(() => {
         if (users && users.length > 0) {

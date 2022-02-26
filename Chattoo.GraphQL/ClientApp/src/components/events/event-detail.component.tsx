@@ -1,16 +1,27 @@
-import { MoreHoriz, People, Person, Place } from '@mui/icons-material';
-import { Button, Card, CardContent, CardMedia, Container, Divider, Icon, List, ListItem, ListItemIcon, ListItemText, Paper, Stack, Typography } from "@mui/material";
-import { CalendarEvent, User } from "graphql/graphql-types";
+import { AppStateContext } from '@components/app-state-provider.component';
+import ConfirmDialog from '@components/confirm-dialog.component';
+import UsersManagePopup from '@components/users/users-manage.popup.component';
+import { Delete, People, Person, Place } from '@mui/icons-material';
+import { Button, Card, CardContent, CardMedia, Container, Divider, List, ListItem, ListItemIcon, ListItemText, Paper, Stack, Typography } from "@mui/material";
+import { CalendarEvent, useAddUserToCalendarEventMutation, User, useRemoveUserFromCalendarEventMutation } from "graphql/graphql-types";
 import moment from "moment";
-import { FC, useMemo } from "react";
+import { FC, useCallback, useContext, useMemo, useState } from "react";
 
 export interface EventDetailProps {
-    calendarEvent: CalendarEvent
-    participants: User[]
+    calendarEvent: CalendarEvent;
+    participants: User[];
+    canEdit: boolean;
+    refetchParticipants: () => void;
 }
 
 const EventDetail: FC<EventDetailProps> = (props) => {
-    const { calendarEvent, participants } = props;
+    const { calendarEvent, participants, refetchParticipants, canEdit } = props;
+    const { appState } = useContext(AppStateContext);
+    const { user } = appState;
+
+    const [showUsersManagePopup, setShowUsersManagePopup] = useState<boolean>(false);
+
+    const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
 
     const dateText = useMemo(() => {
         let result = moment(calendarEvent.startsAt).format("d. MM. YYYY - hh:mm");
@@ -23,8 +34,63 @@ const EventDetail: FC<EventDetailProps> = (props) => {
         return result;
     }, [calendarEvent]);
 
+    const isJoined = useMemo(() => {
+        return participants.some(p => p.id === user?.id)
+    }, [participants]);
+
+    const onEventDeleteButtonClicked = useCallback(() => {
+        setShowDeleteDialog(true);
+    }, [setShowDeleteDialog]);
+
+    const hideEventDeleteDialog = useCallback(() => {
+        setShowDeleteDialog(false);
+    }, [setShowDeleteDialog]);
+
+    const onDeleteConfirmed = useCallback(() => {
+        // TODO: Smazání eventu.
+
+        hideEventDeleteDialog();
+    }, []);
+
+    const [addUserToCalendarEvent] = useAddUserToCalendarEventMutation();
+    const onUserAdd = (user: User) => {
+        addUserToCalendarEvent({
+            variables: {
+                userId: user.id,
+                eventId: calendarEvent.id
+            }
+        });
+    };
+
+    const [removeUserFromCalendarEvent] = useRemoveUserFromCalendarEventMutation();
+    const onUserRemoved = useCallback((user: User) => {
+        removeUserFromCalendarEvent({
+            variables: {
+                userId: user.id,
+                eventId: calendarEvent.id
+            }
+        }).then(() => {
+            refetchParticipants();
+        });
+    }, [calendarEvent, refetchParticipants]);
+
+    const onUsersManageSubmit = useCallback((users: User[]) => {
+        users.forEach(onUserAdd);
+        refetchParticipants();
+    }, [refetchParticipants]);
+
+    const openUsersManage = useCallback(() => {
+        setShowUsersManagePopup(true);
+    }, [setShowUsersManagePopup]);
+
+    const closeUsersManage = useCallback(() => {
+        setShowUsersManagePopup(false);
+    }, [setShowUsersManagePopup]);
+
     return (
         <>
+            <UsersManagePopup open={showUsersManagePopup} onClose={closeUsersManage} users={participants} onUserRemoved={onUserRemoved} onSubmit={onUsersManageSubmit} />
+            <ConfirmDialog open={showDeleteDialog} title="Zrušit" description="Opravdu si přejete zrušit událost?" onClose={hideEventDeleteDialog} onSuccess={onDeleteConfirmed} />
             <Paper sx={{ mt: 2, p: 2 }}>
                 <Container maxWidth="md">
                     <CardMedia
@@ -42,13 +108,15 @@ const EventDetail: FC<EventDetailProps> = (props) => {
                     </Typography>
                     <Divider />
                     <Stack direction="row-reverse" spacing={1} sx={{ pt: 1 }}>
-                        <Button variant="outlined">
-                            <Icon>
-                                <MoreHoriz />
-                            </Icon>
-                        </Button>
-                        <Button variant="outlined">Zúčastnit se</Button>
-                        <Button variant="outlined">Zrušit účast</Button>
+                        {canEdit &&
+                            <Button variant="outlined" startIcon={<Delete />} onClick={onEventDeleteButtonClicked}>
+                                Zrušit událost
+                            </Button>
+                        }
+                        {isJoined
+                            ? <Button variant="outlined">Zrušit účast</Button>
+                            : <Button variant="outlined">Zúčastnit se</Button>
+                        }
                     </Stack>
                 </Container>
             </Paper>
@@ -65,7 +133,10 @@ const EventDetail: FC<EventDetailProps> = (props) => {
                                     <People />
                                 </ListItemIcon>
                                 <ListItemText>
-                                    Počet lidí: 9/10
+                                    {!!calendarEvent.maximalParticipantsCount
+                                        ? `${calendarEvent.participantsCount} / ${calendarEvent.maximalParticipantsCount}`
+                                        : `${calendarEvent.participantsCount}`
+                                    }
                                 </ListItemText>
                             </ListItem>
                             <ListItem disablePadding sx={{ mt: 1, mb: 1 }}>
@@ -87,9 +158,12 @@ const EventDetail: FC<EventDetailProps> = (props) => {
             <Container maxWidth="md" sx={{ mt: 1 }}>
                 <Card>
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                            Seznam uživatelů
-                        </Typography>
+                        <Stack direction="row" sx={{ justifyContent: "space-between" }}>
+                            <Typography gutterBottom variant="h5" component="div">
+                                Seznam uživatelů
+                            </Typography>
+                            <Button onClick={openUsersManage}>Spravovat účastníky</Button>
+                        </Stack>
                         <List>
                             {participants.map(p => (
                                 <ListItem disablePadding key={p.id}>

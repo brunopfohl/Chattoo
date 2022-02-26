@@ -1,21 +1,15 @@
-import { Avatar, Button, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Stack, Typography } from '@mui/material';
-import { useAddUserToCommunicationChannelMutation, useGetUsersForChannelQuery, useRemoveUserFromCommunicationChannelMutation } from 'graphql/graphql-types';
-import React, { useCallback, useContext, useState } from 'react'
+import { useAddUserToCommunicationChannelMutation, useGetUsersForChannelQuery, User, useRemoveUserFromCommunicationChannelMutation } from 'graphql/graphql-types';
+import React, { useCallback, useContext } from 'react'
 import { AppUser } from '../../common/interfaces/app-user.interface';
 import { ChatStateContext } from '../chat/chat-state-provider.component';
-import UserSearchPopup from '../user-search/user-search-popup.component';
-import { FC } from "react";
-import { Delete, Person, Add } from '@mui/icons-material';
-import CustomDialog from '@components/dialog/dialog.component';
+import UsersManagePopup from '@components/users/users-manage.popup.component';
 
 interface CommunicationChannelSettingsProps {
     onClose: () => void;
     open: boolean;
 }
 
-const CommunicationChannelSettings: FC = () => {
-    const [showUserSearchPopup, setShowUserSearchPopup] = useState<boolean>(false);
-
+const CommunicationChannelSettingsPopup: React.FC<CommunicationChannelSettingsProps> = ({ onClose, open }) => {
     const { currentChannel } = useContext(ChatStateContext);
 
     const getUsersForChannelQuery = useGetUsersForChannelQuery({
@@ -24,7 +18,7 @@ const CommunicationChannelSettings: FC = () => {
         }
     });
 
-    const users = getUsersForChannelQuery.data?.users?.getForCommunicationChannel?.data;
+    const users = (getUsersForChannelQuery.data?.users?.getForCommunicationChannel?.data || []) as User[];
 
     // Metoda pro odebrání uživatele z komunikačního kanálu (pošle request na server).
     const [removeUserFromCommunicationChannel] = useRemoveUserFromCommunicationChannelMutation();
@@ -33,7 +27,7 @@ const CommunicationChannelSettings: FC = () => {
     const [addUserToCommunicationChannel] = useAddUserToCommunicationChannelMutation();
 
     // Metoda, kterou zavolá okno pro vyhledání uživatelů po jeho potvrzení.
-    const onUserSearchSubmit = (selectedUsers: AppUser[]) => {
+    const onUserSearchSubmit = (selectedUsers: User[]) => {
         selectedUsers.forEach(onUserAdd);
         getUsersForChannelQuery.refetch();
     };
@@ -49,7 +43,7 @@ const CommunicationChannelSettings: FC = () => {
     };
 
     // Metoda, která odebere uživatele.
-    const onUserRemove = useCallback((user: AppUser) => {
+    const onUserRemove = useCallback((user: User) => {
         removeUserFromCommunicationChannel({
             variables: {
                 userId: user.id,
@@ -60,55 +54,10 @@ const CommunicationChannelSettings: FC = () => {
         });
     }, [currentChannel, getUsersForChannelQuery]);
 
-    /** Callback volaný po kliknutí na tlačítko "Přidat uživatele" */
-    const onUserSearchOpen = useCallback(() => {
-        setShowUserSearchPopup(true);
-    }, [setShowUserSearchPopup]);
-
     return (
-        <Stack>
-            <UserSearchPopup channelId={currentChannel?.id} onClose={() => setShowUserSearchPopup(false)} onSubmit={onUserSearchSubmit} open={showUserSearchPopup} />
-            <Typography variant="subtitle2" sx={{ pl: 1 }}>Seznam účastníků</Typography>
-            <List dense={true}>
-                {users && users.map(user => (
-                    <ListItem key={user.id} sx={{ pl: 1, pb: 1, minWidth: "250px" }} disablePadding secondaryAction={
-                        <IconButton edge="end" aria-label="delete">
-                            <Delete onClick={() => onUserRemove(user)} />
-                        </IconButton>
-                    }>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <Person />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary={user.userName} sx={{ pr: 6 }} />
-                    </ListItem>
-                ))}
-                <ListItem disablePadding>
-                    <ListItemButton onClick={onUserSearchOpen} sx={{ pl: 1, borderRadius: 2 }}>
-                        <ListItemAvatar>
-                            <Avatar sx={{ bgcolor: "#e9e9e9", color: "black" }}>
-                                <Add />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary="Přidat uživatele" />
-                    </ListItemButton>
-                </ListItem>
-            </List>
-        </Stack>
+        <UsersManagePopup users={users} onUserRemoved={onUserRemove} onSubmit={onUserSearchSubmit} onClose={onClose} open={open} />
     );
 }
-
-const CommunicationChannelSettingsPopup: React.FC<CommunicationChannelSettingsProps> = ({ onClose, open }) => (
-    <CustomDialog
-        title="Nastavení kanálu"
-        open={open}
-        onClose={onClose}
-        closeButtonPosition="top"
-    >
-        <CommunicationChannelSettings />
-    </CustomDialog>
-)
 
 CommunicationChannelSettingsPopup.displayName = "CommunicationChannelSettingsPopup";
 export default CommunicationChannelSettingsPopup;

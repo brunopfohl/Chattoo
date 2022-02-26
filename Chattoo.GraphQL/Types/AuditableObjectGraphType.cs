@@ -8,8 +8,8 @@ namespace Chattoo.GraphQL.Types
         public AuditableObjectGraphType()
         {
             Field(o => o.Id);
-            Field(o => o.CreatedAt);
-            Field(o => o.CreatedBy);
+            Field(o => o.CreatedAt, true);
+            Field(o => o.CreatedBy, true);
             Field(o => o.DeletedAt, true);
             Field(o => o.DeletedBy, true);
             Field(o => o.ModifiedAt, true);

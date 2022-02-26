@@ -101,7 +101,7 @@ const EventsDashboard: FC = () => {
                             </Typography>
                             <List>
                                 {eventTypes.map(t => (
-                                    <ListItem disablePadding>
+                                    <ListItem disablePadding key={t.value}>
                                         <ListItemButton sx={{ pl: 0 }}>
                                             <ListItemIcon>
                                                 {renderTypeIcon(t.value)}

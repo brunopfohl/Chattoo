@@ -1,11 +1,15 @@
+import { AppStateContext } from '@components/app-state-provider.component';
 import EventDetail from '@components/events/event-detail.component';
 import Header from '@components/header/header.component';
 import { Typography } from '@mui/material';
-import { CalendarEvent, useGetCalendarEventQuery, useGetUsersForCalendarEventQuery, User } from 'graphql/graphql-types';
+import { useGetCalendarEventQuery, useGetUsersForCalendarEventQuery, User } from 'graphql/graphql-types';
 import { useRouter } from 'next/router';
-import { FC, useMemo } from 'react';
+import { FC, useContext, useMemo } from 'react';
 
 const EventPage: FC = () => {
+    const { appState } = useContext(AppStateContext);
+    const { user } = appState;
+
     const router = useRouter();
     const { id } = router.query;
 
@@ -15,7 +19,7 @@ const EventPage: FC = () => {
         }
     });
 
-    const { data: usersQueryData, error: usersQueryError } = useGetUsersForCalendarEventQuery({
+    const { data: usersQueryData, error: usersQueryError, refetch: refetchParticipants } = useGetUsersForCalendarEventQuery({
         variables: {
             calendarEventId: id as string
         }
@@ -29,12 +33,16 @@ const EventPage: FC = () => {
         return (usersQueryData?.users?.getForCalendarEvent?.data || []) as User[];
     }, [usersQueryData]);
 
+    const canEdit = useMemo(() => {
+        return event && user.id == event?.authorId || false;
+    }, [user, event]);
+
     return (
         <>
             <Header />
 
             {event
-                ? <EventDetail calendarEvent={event} participants={users} />
+                ? <EventDetail calendarEvent={event} participants={users} canEdit={canEdit} refetchParticipants={refetchParticipants} />
                 : <Typography>Událost neexistuje</Typography>
             }
         </>

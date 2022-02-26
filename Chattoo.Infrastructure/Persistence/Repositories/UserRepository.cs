@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Castle.Core.Internal;
@@ -41,17 +40,16 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
             return result;
         }
         
-        public IQueryable<User> GetBySearchTerm(string searchTerm, string excludeUsersFromCommunicationChannelWithId)
+        public IQueryable<User> GetBySearchTerm(string searchTerm, List<string> excludedUserIds)
         {
             var result = GetAll()
                 .Where(u =>
                     searchTerm.IsNullOrEmpty() || u.UserName.ToLower().Contains(searchTerm.ToLower())
                 );
 
-            // Pokud bylo specifikováno Id komunikačního kanálu, jehož uživatelé se mají vynechat, omezím query.
-            if (!excludeUsersFromCommunicationChannelWithId.IsNullOrEmpty())
+            if (excludedUserIds?.Count > 0)
             {
-                result = result.Where(u => u.Channels.All(ch => ch.ChannelId != excludeUsersFromCommunicationChannelWithId));
+                result = result.Where(u => !excludedUserIds.Contains(u.Id));
             }
 
             return result;

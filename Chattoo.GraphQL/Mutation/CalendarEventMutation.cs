@@ -1,10 +1,10 @@
 using System;
 using Chattoo.Application.CalendarEvents.Commands;
+using Chattoo.Application.CalendarEvents.Commands.User;
 using Chattoo.Application.CalendarEvents.DTOs;
 using Chattoo.Domain.Enums;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;
-using Chattoo.GraphQL.Types.Enums;
 using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Mutation
@@ -97,6 +97,50 @@ namespace Chattoo.GraphQL.Mutation
                         StartsAt =  ctx.GetDateTime("startsAt"),
                         EndsAt =  ctx.GetNullableDateTime("endsAt"),
                         MaximalParticipantsCount = ctx.GetNullableInt("maximalParticipantsCount")
+                    };
+
+                    await mediator.Send(command);
+
+                    return true;
+                }
+            );
+            
+            this.FieldAsyncWithScope<BooleanGraphType, bool>(
+                "addUser",
+                arguments: 
+                new QueryArguments
+                (
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "userId" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "eventId" }
+                ),
+                resolve: async (ctx, mediator) =>
+                {
+                    var command = new AddUserToCalendarEventCommand()
+                    {
+                        UserId = ctx.GetString("userId"),
+                        EventId = ctx.GetString("eventId")
+                    };
+
+                    await mediator.Send(command);
+
+                    return true;
+                }
+            );
+
+            this.FieldAsyncWithScope<BooleanGraphType, bool>(
+                "removeUser",
+                arguments:
+                new QueryArguments
+                (
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "userId" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "eventId" }
+                ),
+                resolve: async (ctx, mediator) =>
+                {
+                    var command = new RemoveUserFromCalendarEventCommand()
+                    {
+                        UserId = ctx.GetString("userId"),
+                        EventId = ctx.GetString("eventId")
                     };
 
                     await mediator.Send(command);

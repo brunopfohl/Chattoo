@@ -1,4 +1,5 @@
-﻿using Chattoo.Application.CalendarEvents.Queries;
+﻿using System.Collections.Generic;
+using Chattoo.Application.CalendarEvents.Queries;
 using Chattoo.Application.Common.Models;
 using Chattoo.Application.CommunicationChannels.Queries.GetUsers;
 using Chattoo.Application.Groups.Queries;
@@ -7,6 +8,7 @@ using Chattoo.Application.Users.Queries;
 using Chattoo.GraphQL.Arguments;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Types;
+using GraphQL;
 using GraphQL.Types;
 
 namespace Chattoo.GraphQL.Query
@@ -83,17 +85,18 @@ namespace Chattoo.GraphQL.Query
                 new QueryArgumentsWithPagination
                 (
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "searchTerm" },
-                    new QueryArgument<StringGraphType> { Name = "excludeUsersFromChannelWithId" }
+                    new QueryArgument<ListGraphType<StringGraphType>> { Name = "excludedUserIds" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {
                     var query = new GetUsersQuery()
                     {
                         SearchTerm = ctx.GetString("searchTerm"),
-                        ExcludeUsersFromCommunicationChannelWithId = ctx.GetString("excludeUsersFromChannelWithId"),
+                        ExcludedUserIds = ctx.GetArgument<List<string>>("excludedUserIds")
                     };
 
-                    return await mediator.Send(query);
+                    var result = await mediator.Send(query);
+                    return result;
                 }
             );
         }

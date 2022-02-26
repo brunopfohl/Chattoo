@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.Common.Mappings;
@@ -57,5 +57,20 @@ namespace Chattoo.Application.CalendarEvents.DTOs
         /// Vrací nebo nastavuje typ kalendářní události.
         /// </summary>
         public CalendarEventType Type { get; set; }
+        
+        /// <summary>
+        /// Vrací nebo nastavuje počet účastníků.
+        /// </summary>
+        public int ParticipantsCount { get; set; }
+        
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<CalendarEvent, CalendarEventDto>()
+                .ForMember(d => 
+                    d.ParticipantsCount, 
+            opt => opt
+                            .MapFrom(e => e.Participants.Count())
+            );
+        }
     }
 }

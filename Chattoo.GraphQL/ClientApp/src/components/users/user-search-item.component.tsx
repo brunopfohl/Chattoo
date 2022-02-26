@@ -1,5 +1,5 @@
 import { Person } from '@mui/icons-material';
-import { Avatar, Button, Checkbox, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Avatar, Checkbox, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { FC, useCallback, useState } from 'react';
 import { AppUser } from '../../common/interfaces/app-user.interface';
 
