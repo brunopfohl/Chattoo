@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Castle.Core.Internal;
 using Chattoo.Domain.Entities;
+using Chattoo.Domain.Extensions;
 using Chattoo.Domain.Repositories;
+using CollectionExtensions = Castle.Core.Internal.CollectionExtensions;
 
 namespace Chattoo.Infrastructure.Persistence.Repositories
 {
@@ -40,12 +41,23 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
             return result;
         }
         
-        public IQueryable<User> GetBySearchTerm(string searchTerm, List<string> excludedUserIds)
+        public IQueryable<User> GetBySearchTerm(string searchTerm, List<string> excludedUserIds,
+            string channelId = null, string groupId = null)
         {
             var result = GetAll()
                 .Where(u =>
-                    searchTerm.IsNullOrEmpty() || u.UserName.ToLower().Contains(searchTerm.ToLower())
+                    CollectionExtensions.IsNullOrEmpty(searchTerm) || u.UserName.ToLower().Contains(searchTerm.ToLower())
                 );
+
+            if (channelId.IsNotNullOrEmpty())
+            {
+                result = result.Where(u => u.Channels.Any(utc => utc.ChannelId == channelId));
+            }
+            
+            if (groupId.IsNotNullOrEmpty())
+            {
+                result = result.Where(u => u.Groups.Any(utc => utc.GroupId == groupId));
+            }
 
             if (excludedUserIds?.Count > 0)
             {

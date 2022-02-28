@@ -11,17 +11,21 @@ interface UserSearchProps {
     onSubmit: (users: User[]) => void;
     open: boolean;
     excludedUsers: User[];
+    channelId?: string | null;
+    groupId?: string | null;
 }
 
 /** Komponenta - vyhledávání mezi uživateli */
 const UserSearchPopup: FC<UserSearchProps> = (props) => {
-    const { onClose, onSubmit, open, excludedUsers } = props;
+    const { onClose, onSubmit, channelId, groupId, open, excludedUsers } = props;
 
     const [searchTerm, setSearchTerm] = useState<string>("");
 
     const getUsersQuery = useGetUsersQuery({
         variables: {
-            searchTerm: searchTerm, excludedUserIds: excludedUsers.map(u => u.id)
+            searchTerm: searchTerm, excludedUserIds: excludedUsers.map(u => u.id),
+            channelId: channelId,
+            groupId: groupId
         }
     });
 

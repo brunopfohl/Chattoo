@@ -1,9 +1,9 @@
 import { gql } from "@apollo/client";
 
 export const GET_USERS = gql`
-    query GetUsers($searchTerm: String!, $excludedUserIds: [String]) {
+    query GetUsers($searchTerm: String!, $excludedUserIds: [String], $channelId: String, $groupId: String) {
         users {
-            get(searchTerm: $searchTerm, excludedUserIds: $excludedUserIds) {
+            get(searchTerm: $searchTerm, excludedUserIds: $excludedUserIds, channelId: $channelId, groupId: $groupId) {
                 data {
                     id
                     userName

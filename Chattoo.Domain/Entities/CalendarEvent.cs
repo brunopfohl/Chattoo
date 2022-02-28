@@ -103,6 +103,11 @@ namespace Chattoo.Domain.Entities
             _participants.Remove(participant);
         }
 
+        public void ClearParticipants()
+        {
+            _participants.Clear();
+        }
+
         internal void SetMaximalParticipantsCount(int? count)
         {
             if (count.HasValue)

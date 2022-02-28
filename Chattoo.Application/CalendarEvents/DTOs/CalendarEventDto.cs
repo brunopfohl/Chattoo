@@ -66,11 +66,16 @@ namespace Chattoo.Application.CalendarEvents.DTOs
         public void Mapping(Profile profile)
         {
             profile.CreateMap<CalendarEvent, CalendarEventDto>()
-                .ForMember(d => 
-                    d.ParticipantsCount, 
-            opt => opt
-                            .MapFrom(e => e.Participants.Count())
-            );
+                .ForMember(d =>
+                        d.ParticipantsCount,
+                    opt => opt
+                        .MapFrom(e => e.Participants.Count())
+                )
+                .ForMember(
+                    d => d.Type,
+                    opt =>
+                        opt.MapFrom(e => e.CalendarEventType)
+                );
         }
     }
 }

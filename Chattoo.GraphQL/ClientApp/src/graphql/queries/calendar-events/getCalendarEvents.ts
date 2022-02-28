@@ -6,7 +6,7 @@ import { gql } from "@apollo/client";
 export const GET_CALENDAR_EVENTS = gql`
     query GetCalendarEvents($pageNumber: Int!, $pageSize: Int!) {
         calendarEvents {
-            getJoined(pageNumber: $pageNumber, pageSize: $pageSize) {
+            getVisible(pageNumber: $pageNumber, pageSize: $pageSize) {
                 data {
                     id,
                     startsAt,

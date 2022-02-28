@@ -60,7 +60,7 @@ namespace Chattoo.GraphQL.Mutation
                 arguments: 
                 new QueryArguments
                 (
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "id" }
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
                 ),
                 resolve: async (ctx, mediator) =>
                 {

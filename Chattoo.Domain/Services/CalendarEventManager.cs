@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Enums;
@@ -42,7 +43,7 @@ namespace Chattoo.Domain.Services
                 var userInSameGroup = 
                         calendarEvent.GroupId.IsNullOrEmpty() ||
                         _currentUserService.CanViewGroup(calendarEvent.GroupId);
-                
+
                 // Pokud uživatel není mezi účastníky, v komunikačním kanálu nebo skupině, nemá na tuto událost nárok.
                 if (!userInSameChannel && !userInSameGroup)
                 {
@@ -125,6 +126,8 @@ namespace Chattoo.Domain.Services
             {
                 throw new ForbiddenAccessException();
             }
+
+            calendarEvent.ClearParticipants();
             
             _calendarEventRepository.Remove(calendarEvent);
         }

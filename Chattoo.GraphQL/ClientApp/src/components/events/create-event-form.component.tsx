@@ -1,7 +1,9 @@
 import { AppStateContext } from '@components/app-state-provider.component';
 import CustomDialog from '@components/dialog/dialog.component';
 import InputValidation from '@components/input/input-validation.component';
-import { useDebounce } from '@hooks/useDebounceHook';
+import { useInputOnChange } from '@hooks/useInputOnChange';
+import { useSetter } from '@hooks/useSetter';
+import { useTextInputValue } from '@hooks/useTextInputValue';
 import { useValidation } from '@hooks/useValidation';
 import { DateTimePicker } from '@mui/lab';
 import { Autocomplete, Button, TextField } from '@mui/material';
@@ -41,50 +43,24 @@ const EventCreatePopup: FC<EventCreatePopupProps> = (props) => {
 
     const [useEndsAt, setUseEndsAt] = useState<boolean>(false);
 
-    const [name, setName] = useState<string>("");
+    const [name, setName, debouncedName, handleNameInputOnChange] = useTextInputValue("", 200);
 
     const [channelId, setChannelId] = useState<string>();
     const [groupId, setGroupId] = useState<string>();
     const [type, setType] = useState(types[0]);
     const [maximalParticipantsCount, setMaximalParticipantsCount] = useState<number>();
 
-    const [description, setDescription] = useState<string>("");
+    const [description, setDescription, debouncedDescription, handleDescriptionInputOnChange] = useTextInputValue("", 200);
 
     const [startsAt, setStartsAt] = useState<Date>();
     const [endsAt, setEndsAt] = useState<Date>();
 
-    const handleNameInputOnChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        setName(event.target.value);
-    }, [setName]);
+    const handleMaximalParticipantsCountOnChange = useInputOnChange(setMaximalParticipantsCount, "numeric");
 
-    const handleMaximalParticipantsCountOnChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        setMaximalParticipantsCount(!!event.target.value ? parseInt(event.target.value) : undefined);
-    }, [setMaximalParticipantsCount]);
-
-    const handleDescriptionInputOnChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        setDescription(event.target.value);
-    }, [setDescription]);
-
-    const handleStartsAtInputOnChange = useCallback(value => {
-        setStartsAt(value);
-    }, [setStartsAt]);
-
-    const handleEndsAtInputOnChange = useCallback(value => {
-        setEndsAt(value);
-    }, [setEndsAt]);
-
-    const handleAddEndsAtOnClick = useCallback(() => {
-        setUseEndsAt(true);
-    }, [setUseEndsAt]);
-
-    const handleDeleteEndsAtOnClick = useCallback(() => {
-        setUseEndsAt(false);
-    }, [setUseEndsAt]);
+    const handleAddEndsAtOnClick = useSetter(setUseEndsAt, true);
+    const handleDeleteEndsAtOnClick = useSetter(setUseEndsAt, false);
 
     const [createEventMutation] = useCreateChannelCalendarEventMutation();
-
-    const debouncedName = useDebounce(name, 200);
-    const debouncedDescription = useDebounce(description, 200);
 
     const object = useMemo(() => ({
         name: debouncedName,
@@ -190,7 +166,7 @@ const EventCreatePopup: FC<EventCreatePopupProps> = (props) => {
             <DateTimePicker
                 label="Počátek události"
                 value={startsAt}
-                onChange={handleStartsAtInputOnChange}
+                onChange={setStartsAt}
                 renderInput={(params) => <TextField {...params}
                     fullWidth
                     sx={{ mt: 1, mb: 1 }} />}
@@ -202,7 +178,7 @@ const EventCreatePopup: FC<EventCreatePopupProps> = (props) => {
                     <DateTimePicker
                         label="Konec události"
                         value={endsAt}
-                        onChange={handleEndsAtInputOnChange}
+                        onChange={setEndsAt}
                         renderInput={(params) => <TextField {...params}
                             fullWidth
                             sx={{ mt: 1, mb: 1 }} />}

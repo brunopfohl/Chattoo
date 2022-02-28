@@ -10,6 +10,8 @@ interface UsersManageProps {
     users: User[];
     onUserRemoved: (user: User) => void;
     onSubmit: (selectedUsers: User[]) => void;
+    channelId?: string | null;
+    groupId?: string | null;
 }
 
 interface UsersManagePopupProps extends UsersManageProps {
@@ -18,7 +20,7 @@ interface UsersManagePopupProps extends UsersManageProps {
 }
 
 const UsersManage: FC<UsersManageProps> = (props) => {
-    const { users, onUserRemoved, onSubmit } = props;
+    const { users, channelId, groupId, onUserRemoved, onSubmit } = props;
 
     const [showUserSearchPopup, setShowUserSearchPopup] = useState<boolean>(false);
 
@@ -29,7 +31,7 @@ const UsersManage: FC<UsersManageProps> = (props) => {
 
     return (
         <Stack>
-            <UserSearchPopup excludedUsers={users} onClose={() => setShowUserSearchPopup(false)} onSubmit={onSubmit} open={showUserSearchPopup} />
+            <UserSearchPopup excludedUsers={users} channelId={channelId} groupId={groupId} onClose={() => setShowUserSearchPopup(false)} onSubmit={onSubmit} open={showUserSearchPopup} />
             <Typography variant="subtitle2" sx={{ pl: 1 }}>Seznam účastníků</Typography>
             <List dense={true}>
                 {users && users.map(user => (

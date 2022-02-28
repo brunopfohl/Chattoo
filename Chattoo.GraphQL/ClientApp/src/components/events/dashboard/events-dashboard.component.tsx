@@ -1,56 +1,65 @@
-import { Event, QuestionMark, SportsBar, RecordVoiceOver, Celebration } from '@mui/icons-material';
-import { Box, Button, Container, Divider, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Stack, Typography } from "@mui/material";
-import { AutocompleteItem } from 'common/interfaces/autocomplete-item.interface';
-import { getKeysWithValues } from 'common/utils/enum.utils';
-import { CalendarEvent, CalendarEventTypeGraphType, useGetCalendarEventsQuery } from 'graphql/graphql-types';
-import { FC, useCallback, useMemo, useState } from "react";
-import EventCreatePopup from './create-event-form.component';
-import EventCard from "./event-card.component";
+import { useCalendarEventTypeIconRenderer } from "@hooks/useCalendarTypeIcon";
+import { useSetter } from "@hooks/useSetter";
+import { Event } from "@mui/icons-material";
+import { Box, Grid, Paper, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Button, Divider, Container, Stack } from "@mui/material";
+import { AutocompleteItem } from "common/interfaces/autocomplete-item.interface";
+import { getKeysWithValues } from "common/utils/enum.utils";
+import { CalendarEventTypeGraphType, CalendarEvent } from "graphql/graphql-types";
+import { useRouter } from "next/router";
+import { FC, useState, useMemo, useCallback } from "react";
+import EventCreatePopup from "../create-event-form.component";
+import EventCard from "../event-card.component";
 
-const EventsDashboard: FC = () => {
+export enum EventsDashboardMode {
+    All,
+    Joined,
+    Wishes
+}
+
+interface EventsDashboardProps {
+    events: CalendarEvent[]
+    refetchEvents: () => void;
+    mode: EventsDashboardMode;
+}
+
+const EventsDashboard: FC<EventsDashboardProps> = (props) => {
+    const { events, refetchEvents, mode } = props;
+
+    const router = useRouter();
+
     const [isEventCreatePopupOpenned, setEventCreatePopupOpenned] = useState<boolean>(false);
 
-    const onEventCreatePopupClosed = useCallback(() => {
-        setEventCreatePopupOpenned(false);
-    }, [setEventCreatePopupOpenned]);
+    const onEventCreatePopupClosed = useSetter(setEventCreatePopupOpenned, false);
+    const showEventCreatePopup = useSetter(setEventCreatePopupOpenned, true);
 
-    const showEventCreatePopup = useCallback(() => {
-        setEventCreatePopupOpenned(true);
-    }, [setEventCreatePopupOpenned]);
+    const [typeFilter, setTypeFilter] = useState<CalendarEventTypeGraphType | null>(null);
 
-    const { data: joinedEventsQuery, refetch: refetchJoinedEvents } = useGetCalendarEventsQuery({
-        variables: {
-            pageNumber: 1,
-            pageSize: 1000
-        }
-    });
+    const disableTypeFilter = useCallback(() => {
+        setTypeFilter(null);
+    }, [setTypeFilter]);
 
-    const joinedEvents = joinedEventsQuery?.calendarEvents?.getJoined?.data;
+    const showJoinedEvents = useCallback(() => {
+        router.push("/events/joined");
+    }, [router]);
 
-    const renderTypeIcon = (type: CalendarEventTypeGraphType) => {
-        switch (type) {
-            case CalendarEventTypeGraphType.Drink: {
-                return <SportsBar />
-            }
-            case CalendarEventTypeGraphType.Celebration: {
-                return <Celebration />
-            }
-            case CalendarEventTypeGraphType.Brainstorming: {
-                return <RecordVoiceOver />
-            }
-            default: {
-                <QuestionMark />
-            }
-        }
-    };
+    const showVisibleEvents = useCallback(() => {
+        router.push("/events");
+    }, [router]);
+
+    const showWishes = useCallback(() => {
+
+        router.push("/wishes");
+    }, [router]);
 
     const eventTypes: AutocompleteItem<CalendarEventTypeGraphType>[] = useMemo(() => {
         return getKeysWithValues(CalendarEventTypeGraphType);
     }, []);
 
+    const renderIcon = useCalendarEventTypeIconRenderer();
+
     return (
         <>
-            <EventCreatePopup onSubmit={refetchJoinedEvents} onClose={onEventCreatePopupClosed} open={isEventCreatePopupOpenned} types={eventTypes} />
+            <EventCreatePopup onSubmit={refetchEvents} onClose={onEventCreatePopupClosed} open={isEventCreatePopupOpenned} types={eventTypes} />
             <Box sx={{ height: "100%", width: "100%", pt: 1 }}>
                 <Grid container sx={{ width: "100%", height: "100%" }}>
                     <Grid item xs={2}>
@@ -59,7 +68,7 @@ const EventsDashboard: FC = () => {
                                 Události
                             </Typography>
                             <List>
-                                <ListItem disablePadding>
+                                <ListItem disablePadding selected={mode === EventsDashboardMode.All} onClick={showVisibleEvents}>
                                     <ListItemButton sx={{ pl: 0 }}>
                                         <ListItemIcon>
                                             <Event />
@@ -69,7 +78,7 @@ const EventsDashboard: FC = () => {
                                         </ListItemText>
                                     </ListItemButton>
                                 </ListItem>
-                                <ListItem disablePadding>
+                                <ListItem disablePadding selected={mode === EventsDashboardMode.Joined} onClick={showJoinedEvents}>
                                     <ListItemButton sx={{ pl: 0 }}>
                                         <ListItemIcon>
                                             <Event />
@@ -79,7 +88,7 @@ const EventsDashboard: FC = () => {
                                         </ListItemText>
                                     </ListItemButton>
                                 </ListItem>
-                                <ListItem disablePadding>
+                                <ListItem disablePadding selected={mode === EventsDashboardMode.Wishes} onClick={showWishes}>
                                     <ListItemButton sx={{ pl: 0 }}>
                                         <ListItemIcon>
                                             <Event />
@@ -100,11 +109,17 @@ const EventsDashboard: FC = () => {
                                 Kategorie
                             </Typography>
                             <List>
+                                <ListItem disablePadding selected={typeFilter === null} onClick={disableTypeFilter}>
+                                    <ListItemButton sx={{ pl: 0 }}>
+                                        <ListItemIcon></ListItemIcon>
+                                        <ListItemText>Vše</ListItemText>
+                                    </ListItemButton>
+                                </ListItem>
                                 {eventTypes.map(t => (
-                                    <ListItem disablePadding key={t.value}>
+                                    <ListItem disablePadding key={t.value} selected={t.value === typeFilter} onClick={() => setTypeFilter(t.value)}>
                                         <ListItemButton sx={{ pl: 0 }}>
                                             <ListItemIcon>
-                                                {renderTypeIcon(t.value)}
+                                                {renderIcon(t.value)}
                                             </ListItemIcon>
                                             <ListItemText>
                                                 {t.key}
@@ -122,7 +137,7 @@ const EventsDashboard: FC = () => {
                                     Vaše události
                                 </Typography>
                                 <Stack direction="row" sx={{ flexWrap: "wrap" }}>
-                                    {joinedEvents && joinedEvents.length > 0 && joinedEvents.map(e =>
+                                    {events && events.length > 0 && events.filter(e => typeFilter === null || e.type == typeFilter).map(e =>
                                         <EventCard calendarEvent={e as CalendarEvent} key={e.id} />
                                     )}
                                 </Stack>

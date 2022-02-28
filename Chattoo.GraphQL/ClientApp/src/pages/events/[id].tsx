@@ -1,8 +1,8 @@
 import { AppStateContext } from '@components/app-state-provider.component';
-import EventDetail from '@components/events/event-detail.component';
+import EventDetail from '@components/events/event-detail/event-detail.component';
 import Header from '@components/header/header.component';
 import { Typography } from '@mui/material';
-import { useGetCalendarEventQuery, useGetUsersForCalendarEventQuery, User } from 'graphql/graphql-types';
+import { useGetCalendarEventQuery, useGetChannelQuery, useGetUsersForCalendarEventQuery, User } from 'graphql/graphql-types';
 import { useRouter } from 'next/router';
 import { FC, useContext, useMemo } from 'react';
 
@@ -25,9 +25,20 @@ const EventPage: FC = () => {
         }
     });
 
+
     const event = useMemo(() => {
         return eventQueryData?.calendarEvents?.get;
     }, [eventQueryData]);
+
+    const { data: channelQueryData, error: channelQueryError } = useGetChannelQuery({
+        variables: {
+            id: event?.communicationChannelId
+        }
+    });
+
+    const channel = useMemo(() => {
+        return channelQueryData?.communicationChannels?.get;
+    }, [channelQueryData]);
 
     const users = useMemo(() => {
         return (usersQueryData?.users?.getForCalendarEvent?.data || []) as User[];
@@ -42,7 +53,7 @@ const EventPage: FC = () => {
             <Header />
 
             {event
-                ? <EventDetail calendarEvent={event} participants={users} canEdit={canEdit} refetchParticipants={refetchParticipants} />
+                ? <EventDetail calendarEvent={event} channel={channel} participants={users} canEdit={canEdit} refetchParticipants={refetchParticipants} />
                 : <Typography>Událost neexistuje</Typography>
             }
         </>

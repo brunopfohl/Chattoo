@@ -33,7 +33,8 @@ namespace Chattoo.Application.CalendarEvents.Queries
         {
             var calendarEvent = await _eventManager.GetEventOrThrow(request.Id);
 
-            return _mapper.Map<CalendarEventDto>(calendarEvent);
+            var result = _mapper.Map<CalendarEventDto>(calendarEvent);
+            return result;
         }
     }
 }

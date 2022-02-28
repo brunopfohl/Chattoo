@@ -67,7 +67,7 @@ export type CalendarEventMutationCreateArgs = {
 
 
 export type CalendarEventMutationDeleteArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 
@@ -93,6 +93,7 @@ export type CalendarEventQuery = {
   getForCommunicationChannel?: Maybe<PaginationListCalendarEventGraphType>;
   getForGroup?: Maybe<PaginationListCalendarEventGraphType>;
   getJoined?: Maybe<PaginationListCalendarEventGraphType>;
+  getVisible?: Maybe<PaginationListCalendarEventGraphType>;
 };
 
 
@@ -116,6 +117,12 @@ export type CalendarEventQueryGetForGroupArgs = {
 
 
 export type CalendarEventQueryGetJoinedArgs = {
+  pageNumber?: Scalars['Int'];
+  pageSize?: Scalars['Int'];
+};
+
+
+export type CalendarEventQueryGetVisibleArgs = {
   pageNumber?: Scalars['Int'];
   pageSize?: Scalars['Int'];
 };
@@ -682,7 +689,9 @@ export type UserQuery = {
 
 
 export type UserQueryGetArgs = {
+  channelId?: InputMaybe<Scalars['String']>;
   excludedUserIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  groupId?: InputMaybe<Scalars['String']>;
   pageNumber?: Scalars['Int'];
   pageSize?: Scalars['Int'];
   searchTerm: Scalars['String'];
@@ -731,12 +740,12 @@ export type CreateChannelCalendarEventMutationVariables = Exact<{
 
 export type CreateChannelCalendarEventMutation = { __typename?: 'Mutation', communicationChannelCalendarEvents?: { __typename?: 'CalendarEventMutation', create?: { __typename?: 'CalendarEvent', id: string, startsAt: any, endsAt?: any | null | undefined, name: string, description: string, authorId: string, createdAt?: any | null | undefined, modifiedAt?: any | null | undefined } | null | undefined } | null | undefined };
 
-export type DeleteChannelCalendarEventMutationVariables = Exact<{
-  id: Scalars['String'];
+export type DeleteCalendarEventMutationVariables = Exact<{
+  id: Scalars['ID'];
 }>;
 
 
-export type DeleteChannelCalendarEventMutation = { __typename?: 'Mutation', communicationChannelCalendarEvents?: { __typename?: 'CalendarEventMutation', delete?: boolean | null | undefined } | null | undefined };
+export type DeleteCalendarEventMutation = { __typename?: 'Mutation', communicationChannelCalendarEvents?: { __typename?: 'CalendarEventMutation', delete?: boolean | null | undefined } | null | undefined };
 
 export type RemoveUserFromCalendarEventMutationVariables = Exact<{
   userId: Scalars['String'];
@@ -791,7 +800,22 @@ export type GetCalendarEventsQueryVariables = Exact<{
 }>;
 
 
-export type GetCalendarEventsQuery = { __typename?: 'Query', calendarEvents?: { __typename?: 'CalendarEventQuery', getJoined?: { __typename?: 'PaginationListCalendarEventGraphType', hasNextPage: boolean, hasPreviousPage: boolean, pageIndex: number, totalCount: number, totalPages: number, data?: Array<{ __typename?: 'CalendarEvent', id: string, startsAt: any, endsAt?: any | null | undefined, name: string, description: string, maximalParticipantsCount?: number | null | undefined, participantsCount: number, authorId: string, communicationChannelId?: string | null | undefined, createdAt?: any | null | undefined, modifiedAt?: any | null | undefined, type?: CalendarEventTypeGraphType | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+export type GetCalendarEventsQuery = { __typename?: 'Query', calendarEvents?: { __typename?: 'CalendarEventQuery', getVisible?: { __typename?: 'PaginationListCalendarEventGraphType', hasNextPage: boolean, hasPreviousPage: boolean, pageIndex: number, totalCount: number, totalPages: number, data?: Array<{ __typename?: 'CalendarEvent', id: string, startsAt: any, endsAt?: any | null | undefined, name: string, description: string, maximalParticipantsCount?: number | null | undefined, participantsCount: number, authorId: string, communicationChannelId?: string | null | undefined, createdAt?: any | null | undefined, modifiedAt?: any | null | undefined, type?: CalendarEventTypeGraphType | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+
+export type GetJoinedCalendarEventsQueryVariables = Exact<{
+  pageNumber: Scalars['Int'];
+  pageSize: Scalars['Int'];
+}>;
+
+
+export type GetJoinedCalendarEventsQuery = { __typename?: 'Query', calendarEvents?: { __typename?: 'CalendarEventQuery', getJoined?: { __typename?: 'PaginationListCalendarEventGraphType', hasNextPage: boolean, hasPreviousPage: boolean, pageIndex: number, totalCount: number, totalPages: number, data?: Array<{ __typename?: 'CalendarEvent', id: string, startsAt: any, endsAt?: any | null | undefined, name: string, description: string, maximalParticipantsCount?: number | null | undefined, participantsCount: number, authorId: string, communicationChannelId?: string | null | undefined, createdAt?: any | null | undefined, modifiedAt?: any | null | undefined, type?: CalendarEventTypeGraphType | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+
+export type GetChannelQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetChannelQuery = { __typename?: 'Query', communicationChannels?: { __typename?: 'CommunicationChannelQuery', get?: { __typename?: 'CommunicationChannel', id: string, name: string, description: string, createdAt?: any | null | undefined, modifiedAt?: any | null | undefined, createdBy?: string | null | undefined, deletedBy?: string | null | undefined, modifiedBy?: string | null | undefined } | null | undefined } | null | undefined };
 
 export type GetChannelsForUserQueryVariables = Exact<{
   userId: Scalars['String'];
@@ -814,6 +838,8 @@ export type GetMessagesForChannelQuery = { __typename?: 'Query', communicationCh
 export type GetUsersQueryVariables = Exact<{
   searchTerm: Scalars['String'];
   excludedUserIds?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
+  channelId?: InputMaybe<Scalars['String']>;
+  groupId?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -940,39 +966,39 @@ export function useCreateChannelCalendarEventMutation(baseOptions?: Apollo.Mutat
 export type CreateChannelCalendarEventMutationHookResult = ReturnType<typeof useCreateChannelCalendarEventMutation>;
 export type CreateChannelCalendarEventMutationResult = Apollo.MutationResult<CreateChannelCalendarEventMutation>;
 export type CreateChannelCalendarEventMutationOptions = Apollo.BaseMutationOptions<CreateChannelCalendarEventMutation, CreateChannelCalendarEventMutationVariables>;
-export const DeleteChannelCalendarEventDocument = gql`
-    mutation DeleteChannelCalendarEvent($id: String!) {
+export const DeleteCalendarEventDocument = gql`
+    mutation DeleteCalendarEvent($id: ID!) {
   communicationChannelCalendarEvents {
     delete(id: $id)
   }
 }
     `;
-export type DeleteChannelCalendarEventMutationFn = Apollo.MutationFunction<DeleteChannelCalendarEventMutation, DeleteChannelCalendarEventMutationVariables>;
+export type DeleteCalendarEventMutationFn = Apollo.MutationFunction<DeleteCalendarEventMutation, DeleteCalendarEventMutationVariables>;
 
 /**
- * __useDeleteChannelCalendarEventMutation__
+ * __useDeleteCalendarEventMutation__
  *
- * To run a mutation, you first call `useDeleteChannelCalendarEventMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteChannelCalendarEventMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteCalendarEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCalendarEventMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteChannelCalendarEventMutation, { data, loading, error }] = useDeleteChannelCalendarEventMutation({
+ * const [deleteCalendarEventMutation, { data, loading, error }] = useDeleteCalendarEventMutation({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useDeleteChannelCalendarEventMutation(baseOptions?: Apollo.MutationHookOptions<DeleteChannelCalendarEventMutation, DeleteChannelCalendarEventMutationVariables>) {
+export function useDeleteCalendarEventMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCalendarEventMutation, DeleteCalendarEventMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteChannelCalendarEventMutation, DeleteChannelCalendarEventMutationVariables>(DeleteChannelCalendarEventDocument, options);
+        return Apollo.useMutation<DeleteCalendarEventMutation, DeleteCalendarEventMutationVariables>(DeleteCalendarEventDocument, options);
       }
-export type DeleteChannelCalendarEventMutationHookResult = ReturnType<typeof useDeleteChannelCalendarEventMutation>;
-export type DeleteChannelCalendarEventMutationResult = Apollo.MutationResult<DeleteChannelCalendarEventMutation>;
-export type DeleteChannelCalendarEventMutationOptions = Apollo.BaseMutationOptions<DeleteChannelCalendarEventMutation, DeleteChannelCalendarEventMutationVariables>;
+export type DeleteCalendarEventMutationHookResult = ReturnType<typeof useDeleteCalendarEventMutation>;
+export type DeleteCalendarEventMutationResult = Apollo.MutationResult<DeleteCalendarEventMutation>;
+export type DeleteCalendarEventMutationOptions = Apollo.BaseMutationOptions<DeleteCalendarEventMutation, DeleteCalendarEventMutationVariables>;
 export const RemoveUserFromCalendarEventDocument = gql`
     mutation RemoveUserFromCalendarEvent($userId: String!, $eventId: String!) {
   communicationChannelCalendarEvents {
@@ -1207,7 +1233,7 @@ export type GetCalendarEventQueryResult = Apollo.QueryResult<GetCalendarEventQue
 export const GetCalendarEventsDocument = gql`
     query GetCalendarEvents($pageNumber: Int!, $pageSize: Int!) {
   calendarEvents {
-    getJoined(pageNumber: $pageNumber, pageSize: $pageSize) {
+    getVisible(pageNumber: $pageNumber, pageSize: $pageSize) {
       data {
         id
         startsAt
@@ -1260,6 +1286,106 @@ export function useGetCalendarEventsLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetCalendarEventsQueryHookResult = ReturnType<typeof useGetCalendarEventsQuery>;
 export type GetCalendarEventsLazyQueryHookResult = ReturnType<typeof useGetCalendarEventsLazyQuery>;
 export type GetCalendarEventsQueryResult = Apollo.QueryResult<GetCalendarEventsQuery, GetCalendarEventsQueryVariables>;
+export const GetJoinedCalendarEventsDocument = gql`
+    query GetJoinedCalendarEvents($pageNumber: Int!, $pageSize: Int!) {
+  calendarEvents {
+    getJoined(pageNumber: $pageNumber, pageSize: $pageSize) {
+      data {
+        id
+        startsAt
+        endsAt
+        name
+        description
+        maximalParticipantsCount
+        participantsCount
+        authorId
+        communicationChannelId
+        createdAt
+        modifiedAt
+        type
+      }
+      hasNextPage
+      hasPreviousPage
+      pageIndex
+      totalCount
+      totalPages
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetJoinedCalendarEventsQuery__
+ *
+ * To run a query within a React component, call `useGetJoinedCalendarEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetJoinedCalendarEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetJoinedCalendarEventsQuery({
+ *   variables: {
+ *      pageNumber: // value for 'pageNumber'
+ *      pageSize: // value for 'pageSize'
+ *   },
+ * });
+ */
+export function useGetJoinedCalendarEventsQuery(baseOptions: Apollo.QueryHookOptions<GetJoinedCalendarEventsQuery, GetJoinedCalendarEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetJoinedCalendarEventsQuery, GetJoinedCalendarEventsQueryVariables>(GetJoinedCalendarEventsDocument, options);
+      }
+export function useGetJoinedCalendarEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetJoinedCalendarEventsQuery, GetJoinedCalendarEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetJoinedCalendarEventsQuery, GetJoinedCalendarEventsQueryVariables>(GetJoinedCalendarEventsDocument, options);
+        }
+export type GetJoinedCalendarEventsQueryHookResult = ReturnType<typeof useGetJoinedCalendarEventsQuery>;
+export type GetJoinedCalendarEventsLazyQueryHookResult = ReturnType<typeof useGetJoinedCalendarEventsLazyQuery>;
+export type GetJoinedCalendarEventsQueryResult = Apollo.QueryResult<GetJoinedCalendarEventsQuery, GetJoinedCalendarEventsQueryVariables>;
+export const GetChannelDocument = gql`
+    query GetChannel($id: ID!) {
+  communicationChannels {
+    get(id: $id) {
+      id
+      name
+      description
+      createdAt
+      modifiedAt
+      createdBy
+      deletedBy
+      modifiedBy
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetChannelQuery__
+ *
+ * To run a query within a React component, call `useGetChannelQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetChannelQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetChannelQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetChannelQuery(baseOptions: Apollo.QueryHookOptions<GetChannelQuery, GetChannelQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetChannelQuery, GetChannelQueryVariables>(GetChannelDocument, options);
+      }
+export function useGetChannelLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetChannelQuery, GetChannelQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetChannelQuery, GetChannelQueryVariables>(GetChannelDocument, options);
+        }
+export type GetChannelQueryHookResult = ReturnType<typeof useGetChannelQuery>;
+export type GetChannelLazyQueryHookResult = ReturnType<typeof useGetChannelLazyQuery>;
+export type GetChannelQueryResult = Apollo.QueryResult<GetChannelQuery, GetChannelQueryVariables>;
 export const GetChannelsForUserDocument = gql`
     query GetChannelsForUser($userId: String!, $pageNumber: Int!, $pageSize: Int!) {
   communicationChannels {
@@ -1368,9 +1494,14 @@ export type GetMessagesForChannelQueryHookResult = ReturnType<typeof useGetMessa
 export type GetMessagesForChannelLazyQueryHookResult = ReturnType<typeof useGetMessagesForChannelLazyQuery>;
 export type GetMessagesForChannelQueryResult = Apollo.QueryResult<GetMessagesForChannelQuery, GetMessagesForChannelQueryVariables>;
 export const GetUsersDocument = gql`
-    query GetUsers($searchTerm: String!, $excludedUserIds: [String]) {
+    query GetUsers($searchTerm: String!, $excludedUserIds: [String], $channelId: String, $groupId: String) {
   users {
-    get(searchTerm: $searchTerm, excludedUserIds: $excludedUserIds) {
+    get(
+      searchTerm: $searchTerm
+      excludedUserIds: $excludedUserIds
+      channelId: $channelId
+      groupId: $groupId
+    ) {
       data {
         id
         userName
@@ -1404,6 +1535,8 @@ export const GetUsersDocument = gql`
  *   variables: {
  *      searchTerm: // value for 'searchTerm'
  *      excludedUserIds: // value for 'excludedUserIds'
+ *      channelId: // value for 'channelId'
+ *      groupId: // value for 'groupId'
  *   },
  * });
  */

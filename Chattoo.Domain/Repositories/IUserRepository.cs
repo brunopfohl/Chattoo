@@ -30,6 +30,8 @@ namespace Chattoo.Domain.Repositories
         /// </summary>
         /// <param name="searchTerm">Výraz, dle kterého se mají dohledat uživatelé.</param>
         /// <param name="excludedUserIds">List Id uživatelů, kteří jsou mimo vyhledávání..</param>
-        public IQueryable<User> GetBySearchTerm(string searchTerm, List<string> excludedUserIds);
+        /// <param name="channelId">Id komunikačního kanálu.</param>
+        /// <param name="groupId">Id skupiny.</param>
+        public IQueryable<User> GetBySearchTerm(string searchTerm, List<string> excludedUserIds, string channelId, string groupId);
     }
 }

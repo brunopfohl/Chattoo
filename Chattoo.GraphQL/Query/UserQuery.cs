@@ -85,6 +85,8 @@ namespace Chattoo.GraphQL.Query
                 new QueryArgumentsWithPagination
                 (
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "searchTerm" },
+                    new QueryArgument<StringGraphType> { Name = "groupId" },
+                    new QueryArgument<StringGraphType> { Name = "channelId" },
                     new QueryArgument<ListGraphType<StringGraphType>> { Name = "excludedUserIds" }
                 ),
                 resolve: async (ctx, mediator) =>
@@ -92,6 +94,8 @@ namespace Chattoo.GraphQL.Query
                     var query = new GetUsersQuery()
                     {
                         SearchTerm = ctx.GetString("searchTerm"),
+                        GroupId = ctx.GetString("groupId"),
+                        ChannelId = ctx.GetString("channelId"),
                         ExcludedUserIds = ctx.GetArgument<List<string>>("excludedUserIds")
                     };
 

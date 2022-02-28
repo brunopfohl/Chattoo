@@ -1,5 +1,6 @@
 using Chattoo.Application.CalendarEvents.DTOs;
 using Chattoo.Application.CalendarEvents.Queries;
+using Chattoo.Application.CalendarEvents.Queries.Get;
 using Chattoo.Application.Common.Models;
 using Chattoo.Application.CommunicationChannels.Queries;
 using Chattoo.Application.Groups.Queries;
@@ -17,6 +18,23 @@ namespace Chattoo.GraphQL.Query
         {
             
             Name = "CalendarEventQuery";
+            
+            this.FieldAsyncWithScope<PageInfoGraphType<CalendarEventGraphType, CalendarEventDto>, PaginatedList<CalendarEventDto>>(
+                "getVisible",
+                arguments: 
+                new QueryArgumentsWithPagination(),
+                resolve: async (ctx, mediator) =>
+                {
+                    var query = new GetCalendarEventsQuery()
+                    {
+                        PageNumber = ctx.GetInt("pageNumber"),
+                        PageSize = ctx.GetInt("pageSize")
+                    };
+
+                    return await mediator.Send(query);
+                }
+            );
+            
             this.FieldAsyncWithScope<PageInfoGraphType<CalendarEventGraphType, CalendarEventDto>, PaginatedList<CalendarEventDto>>(
                 "getJoined",
                 arguments: 
