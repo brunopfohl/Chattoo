@@ -101,7 +101,6 @@ const EventsDashboard: FC<EventsDashboardProps> = (props) => {
                             </List>
 
                             <Button fullWidth variant="outlined" sx={{ mb: 1 }} onClick={showEventCreatePopup}>Vytvořit událost</Button>
-                            <Button fullWidth variant="outlined" color="secondary">Vytvořit přání</Button>
 
                             <Divider variant="middle" sx={{ mb: 2, mt: 2, ml: 0, width: "100%" }} />
 

@@ -16,6 +16,7 @@ namespace Chattoo.GraphQL.Mutation
             Field<CommunicationChannelRoleMutation>("communicationChannelRoles", resolve: context => new { });
             Field<CommunicationChannelMessageAttachmentMutation>("communicationChannelMessageAttachments", resolve: context => new { });
             Field<CalendarEventMutation>("communicationChannelCalendarEvents", resolve: context => new { });
+            Field<CalendarEventWishMutation>("wishes", resolve: context => new { });
         }
     }
 }

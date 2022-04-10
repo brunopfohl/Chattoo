@@ -7,12 +7,12 @@ using MediatR;
 
 namespace Chattoo.Application.CalendarEventWishes.Queries
 {
-    public class GetCalendarEventWishByIdQuery : IRequest<CalendarEventWishDto>
+    public class GetWishByIdQuery : IRequest<CalendarEventWishDto>
     {
         public string Id { get; set; }
     }
     
-    public class GetCalendarEventWishByIdQueryHandler : IRequestHandler<GetCalendarEventWishByIdQuery, CalendarEventWishDto>
+    public class GetCalendarEventWishByIdQueryHandler : IRequestHandler<GetWishByIdQuery, CalendarEventWishDto>
     {
         private readonly IMapper _mapper;
         private readonly CalendarEventWishManager _wishManager;
@@ -23,7 +23,7 @@ namespace Chattoo.Application.CalendarEventWishes.Queries
             _wishManager = wishManager;
         }
 
-        public async Task<CalendarEventWishDto> Handle(GetCalendarEventWishByIdQuery request, CancellationToken cancellationToken)
+        public async Task<CalendarEventWishDto> Handle(GetWishByIdQuery request, CancellationToken cancellationToken)
         {
             var wish = await _wishManager.GetWishOrThrow(request.Id);
 

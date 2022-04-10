@@ -8,15 +8,13 @@ using Chattoo.Domain.Repositories;
 using Chattoo.Domain.Services;
 using MediatR;
 
-namespace Chattoo.Application.CalendarEvents.Commands
+namespace Chattoo.Application.CalendarEventWishes.Commands
 {
     public class UpdateCalendarEventWishCommand : IRequest
     {
         public string Id { get; set; }
         
         public int? MinimalParticipantsCount { get; set; }
-        
-        public int? MaximalParticipantsCount { get; set; }
         
         public CalendarEventType Type { get; set; }
         
@@ -43,8 +41,7 @@ namespace Chattoo.Application.CalendarEvents.Commands
                 wish,
                 request.Type,
                 request.DateIntervals as ICollection<IDateInterval>,
-                request.MinimalParticipantsCount,
-                request.MaximalParticipantsCount
+                request.MinimalParticipantsCount
             );
            
             await _unitOfWork.SaveChangesAsync(cancellationToken);

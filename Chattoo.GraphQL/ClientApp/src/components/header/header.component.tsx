@@ -1,6 +1,5 @@
-import { Chat, MenuOutlined, AccountBox, Event } from '@mui/icons-material';
+import { Chat, MenuOutlined, AccountBox, Event, AutoAwesome } from '@mui/icons-material';
 import { AppBar, Button, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Stack, Toolbar, Typography, } from '@mui/material';
-import { Page } from 'common/enums/page.enum';
 import { useRouter } from 'next/router';
 import { FC, useCallback, useContext, useState } from 'react'
 import authService from '../api-authorization/AuthorizeService';
@@ -78,6 +77,15 @@ const Header: FC<HeaderProps> = (props) => {
                                         <Event />
                                     </ListItemIcon>
                                     <ListItemText primary="Události" />
+                                </ListItem>
+                            </NextLink>
+
+                            <NextLink href="/wishes">
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <AutoAwesome />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Přání" />
                                 </ListItem>
                             </NextLink>
 

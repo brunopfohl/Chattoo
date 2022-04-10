@@ -15,11 +15,6 @@ namespace Chattoo.Application.CalendarEventWishes.Commands
     public class CreateCalendarEventWishCommand : IRequest<CalendarEventWishDto>
     {
         /// <summary>
-        /// Vrací nebo nastavuje Id skupiny lidí, se kterými má uživatel zájem zorganizovat událost.
-        /// </summary>
-        public string GroupId { get; set; }
-        
-        /// <summary>
         /// Vrací nebo nastavuje Id komunikačího kanálu, jehož členové se do události mohou zapojit.
         /// </summary>
         public string CommunicationChannelId { get; set; }
@@ -28,11 +23,6 @@ namespace Chattoo.Application.CalendarEventWishes.Commands
         /// Vrací nebo nastavuje minimální počet účastníků.
         /// </summary>
         public int? MinimalParticipantsCount { get; set; }
-        
-        /// <summary>
-        /// Vrací nebo nastavuje maximální počet účastníků.
-        /// </summary>
-        public int? MaximalParticipantsCount { get; set; }
         
         /// <summary>
         /// Vrací nebo nastavuje typ události.
@@ -65,11 +55,9 @@ namespace Chattoo.Application.CalendarEventWishes.Commands
             var wish = await _wishManager.Create
             (
                 request.CommunicationChannelId,
-                request.GroupId,
                 request.DateIntervals as ICollection<IDateInterval>,
                 request.Type,
-                request.MinimalParticipantsCount,
-                request.MaximalParticipantsCount
+                request.MinimalParticipantsCount
             );
 
             await _wishRepository.AddOrUpdateAsync(wish, cancellationToken);

@@ -26,11 +26,6 @@ namespace Chattoo.Domain.Entities
         public int? MinimalParticipantsCount { get; private set; }
         
         /// <summary>
-        /// Vrací nebo nastavuje maximální počet účastníků.
-        /// </summary>
-        public int? MaximalParticipantsCount { get; private set; }
-        
-        /// <summary>
         /// Vrací nebo nastavuje Id autora.
         /// </summary>
         public string AuthorId { get; private set; }
@@ -62,33 +57,12 @@ namespace Chattoo.Domain.Entities
 
         public void SetMinimalParticipantsCount(int? count)
         {
-            if (count.HasValue)
+            if (count is < 2)
             {
-                if (count.Value < 2)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(MinimalParticipantsCount));
-                }
-
-                if (MaximalParticipantsCount.HasValue && count.Value > MaximalParticipantsCount.Value)
-                {
-                    throw new ArgumentOutOfRangeException(
-                        nameof(MinimalParticipantsCount), 
-                        $"{nameof(MaximalParticipantsCount)} has to be same or higher than {nameof(MinimalParticipantsCount)}."
-                    );
-                }
+                throw new ArgumentOutOfRangeException(nameof(MinimalParticipantsCount));
             }
 
             MinimalParticipantsCount = count;
-        }
-
-        public void SetMaximalParticipantsCount(int? count)
-        {
-            if (count.HasValue && count.Value < MinimalParticipantsCount)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-
-            MaximalParticipantsCount = count;
         }
 
         public void SetType(CalendarEventType type)
@@ -185,7 +159,7 @@ namespace Chattoo.Domain.Entities
         // }
 
         private static CalendarEventWish Create(User user, ICollection<DateInterval> dateIntervals,
-            CalendarEventType type, int? minimalParticipantsCount, int? maximalParticipantsCount)
+            CalendarEventType type, int? minimalParticipantsCount)
         {
             var entity = new CalendarEventWish()
             {
@@ -199,18 +173,15 @@ namespace Chattoo.Domain.Entities
             }
             
             entity.SetMinimalParticipantsCount(minimalParticipantsCount);
-            
-            entity.SetMaximalParticipantsCount(maximalParticipantsCount);
 
             return entity;
         }
         
         public static CalendarEventWish Create(User author, CommunicationChannel channel,
             ICollection<DateInterval> dateIntervals, CalendarEventType type,
-            int? minimalParticipantsCount, int? maximalParticipantsCount)
+            int? minimalParticipantsCount)
         {
-            var entity = Create(author, dateIntervals, type, minimalParticipantsCount,
-                maximalParticipantsCount);
+            var entity = Create(author, dateIntervals, type, minimalParticipantsCount);
 
             entity.CommunicationChannelId = channel.Id;
 
@@ -221,8 +192,7 @@ namespace Chattoo.Domain.Entities
             ICollection<DateInterval> dateIntervals, CalendarEventType type,
             int? minimalParticipantsCount, int? maximalParticipantsCount)
         {
-            var entity = Create(author, dateIntervals, type, minimalParticipantsCount,
-                maximalParticipantsCount);
+            var entity = Create(author, dateIntervals, type, minimalParticipantsCount);
 
             entity.GroupId = group.Id;
 

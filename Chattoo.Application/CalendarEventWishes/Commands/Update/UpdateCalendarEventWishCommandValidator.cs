@@ -3,7 +3,7 @@ using Chattoo.Application.Common.Services;
 using Chattoo.Domain.ValueObjects;
 using FluentValidation;
 
-namespace Chattoo.Application.CalendarEvents.Commands
+namespace Chattoo.Application.CalendarEventWishes.Commands
 {
     /// <summary>
     /// Validátor příkazu <see cref="UpdateCalendarEventWishCommand"/>.
@@ -28,11 +28,6 @@ namespace Chattoo.Application.CalendarEvents.Commands
             RuleFor(x => x.MinimalParticipantsCount)
                 .GreaterThan(1)
                 .WithMessage("Minimální počet účastníků musí být větší než 1.");
-
-            RuleFor(x => x.MaximalParticipantsCount)
-                .GreaterThan(x => x.MinimalParticipantsCount)
-                .When(x => x.MaximalParticipantsCount.HasValue && x.MinimalParticipantsCount.HasValue)
-                .WithMessage("Maximální počet účastníků musí být větší než minimální");
         }
     }
 }

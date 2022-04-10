@@ -40,8 +40,8 @@ namespace Chattoo.Domain.Services
             return wish;
         }
 
-        public async Task<CalendarEventWish> Create(string channelId, string groupId, ICollection<IDateInterval> dateIntervals,
-            CalendarEventType type, int? minimalParticipantsCount, int? maximalParticipantsCount)
+        public async Task<CalendarEventWish> Create(string channelId, ICollection<IDateInterval> dateIntervals,
+            CalendarEventType type, int? minimalParticipantsCount)
         {
             var dateIntervalEntities = dateIntervals
                 .Select(DateInterval.Create)
@@ -49,42 +49,20 @@ namespace Chattoo.Domain.Services
 
             CalendarEventWish wish;
             
-            if (channelId.IsNotNullOrEmpty())
-            {
-                var channel = await _channelManager.GetChannelOrThrow(channelId);
+            var channel = await _channelManager.GetChannelOrThrow(channelId);
 
-                if (!_currentUserService.CanViewChannel(channel))
-                {
-                    throw new ForbiddenAccessException();
-                }
-                
-                wish = CalendarEventWish.Create(
-                    _currentUserService.User,
-                    channel,
-                    dateIntervalEntities,
-                    type,
-                    minimalParticipantsCount,
-                    maximalParticipantsCount
-                );
-            }
-            else
+            if (!_currentUserService.CanViewChannel(channel))
             {
-                var group = await _groupManager.GetGroupOrThrow(groupId);
-                
-                if (!_currentUserService.CanViewGroup(group))
-                {
-                    throw new ForbiddenAccessException();
-                }
-                
-                wish = CalendarEventWish.Create(
-                    _currentUserService.User,
-                    group,
-                    dateIntervalEntities,
-                    type,
-                    minimalParticipantsCount,
-                    maximalParticipantsCount
-                );
+                throw new ForbiddenAccessException();
             }
+            
+            wish = CalendarEventWish.Create(
+                _currentUserService.User,
+                channel,
+                dateIntervalEntities,
+                type,
+                minimalParticipantsCount
+            );
 
             return wish;
         }
@@ -102,7 +80,7 @@ namespace Chattoo.Domain.Services
         }
         
         public async Task<CalendarEventWish> UpdateWish(CalendarEventWish wish, CalendarEventType type,
-            ICollection<IDateInterval> dateIntervals, int? minimalParticipantsCount, int? maximalParticipantsCount)
+            ICollection<IDateInterval> dateIntervals, int? minimalParticipantsCount)
         {
             if (!_currentUserService.CanEditWish(wish))
             {
@@ -110,7 +88,6 @@ namespace Chattoo.Domain.Services
             }
             
             wish.SetMinimalParticipantsCount(minimalParticipantsCount);
-            wish.SetMaximalParticipantsCount(maximalParticipantsCount);
             
             wish.SetType(type);
             wish.UpdateDateIntervals(dateIntervals.Select(DateInterval.Create).ToList());

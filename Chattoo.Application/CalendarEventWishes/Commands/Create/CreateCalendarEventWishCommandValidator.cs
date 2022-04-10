@@ -1,6 +1,5 @@
 using System.Linq;
 using Chattoo.Application.Common.Services;
-using Chattoo.Domain.Extensions;
 using Chattoo.Domain.ValueObjects;
 using FluentValidation;
 
@@ -20,10 +19,9 @@ namespace Chattoo.Application.CalendarEventWishes.Commands
                     return !isOverlapping;
                 }).WithMessage("Časové bloky se překrývají.");
 
-            RuleFor(x => x.GroupId)
+            RuleFor(x => x.CommunicationChannelId)
                 .NotEmpty()
-                .When(t => t.CommunicationChannelId.IsNullOrEmpty())
-                .WithMessage("Id komunikačního kanálu nebo Id skupiny musí být vyplněno");
+                .WithMessage("Id komunikačního kanálu musí být vyplněno");
         }
     }
 }

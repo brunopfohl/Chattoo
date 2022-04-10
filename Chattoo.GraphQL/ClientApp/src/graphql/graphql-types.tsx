@@ -137,6 +137,61 @@ export enum CalendarEventTypeGraphType {
   Walk = 'WALK'
 }
 
+export type CalendarEventWish = {
+  __typename?: 'CalendarEventWish';
+  authorId: Scalars['String'];
+  authorName: Scalars['String'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  createdBy?: Maybe<Scalars['String']>;
+  dateIntervals?: Maybe<Array<Maybe<DateInterval>>>;
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  deletedBy?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  maximalParticipantsCount?: Maybe<Scalars['Int']>;
+  minimalParticipantsCount?: Maybe<Scalars['Int']>;
+  modifiedAt?: Maybe<Scalars['DateTime']>;
+  modifiedBy?: Maybe<Scalars['String']>;
+};
+
+export type CalendarEventWishMutation = {
+  __typename?: 'CalendarEventWishMutation';
+  create?: Maybe<CalendarEventWish>;
+  delete?: Maybe<Scalars['Boolean']>;
+  update?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type CalendarEventWishMutationCreateArgs = {
+  channelId: Scalars['String'];
+  dateIntervals: Array<InputMaybe<DateIntervalInput>>;
+  minimalParticipantsCount: Scalars['Int'];
+  type: Scalars['String'];
+};
+
+
+export type CalendarEventWishMutationDeleteArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type CalendarEventWishMutationUpdateArgs = {
+  dateIntervals?: InputMaybe<Array<InputMaybe<DateIntervalInput>>>;
+  id: Scalars['String'];
+  minimalParticipantsCount?: InputMaybe<Scalars['Int']>;
+  type: Scalars['String'];
+};
+
+export type CalendarEventWishQuery = {
+  __typename?: 'CalendarEventWishQuery';
+  getActive?: Maybe<PaginationListCalendarEventWishGraphType>;
+};
+
+
+export type CalendarEventWishQueryGetActiveArgs = {
+  pageNumber?: Scalars['Int'];
+  pageSize?: Scalars['Int'];
+};
+
 export type CommunicationChannel = {
   __typename?: 'CommunicationChannel';
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -372,6 +427,18 @@ export type CommunicationChannelRoleQueryGetForUserInChannelArgs = {
   userId: Scalars['ID'];
 };
 
+export type DateInterval = {
+  __typename?: 'DateInterval';
+  endsAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  startsAt: Scalars['DateTime'];
+};
+
+export type DateIntervalInput = {
+  endsAt: Scalars['DateTime'];
+  startsAt: Scalars['DateTime'];
+};
+
 export type Group = {
   __typename?: 'Group';
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -509,11 +576,22 @@ export type Mutation = {
   groupRoles?: Maybe<GroupRoleMutation>;
   groups?: Maybe<GroupMutation>;
   userAliases?: Maybe<UserAliasMutation>;
+  wishes?: Maybe<CalendarEventWishMutation>;
 };
 
 export type PaginationListCalendarEventGraphType = {
   __typename?: 'PaginationListCalendarEventGraphType';
   data?: Maybe<Array<Maybe<CalendarEvent>>>;
+  hasNextPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean'];
+  pageIndex: Scalars['Int'];
+  totalCount: Scalars['Int'];
+  totalPages: Scalars['Int'];
+};
+
+export type PaginationListCalendarEventWishGraphType = {
+  __typename?: 'PaginationListCalendarEventWishGraphType';
+  data?: Maybe<Array<Maybe<CalendarEventWish>>>;
   hasNextPage: Scalars['Boolean'];
   hasPreviousPage: Scalars['Boolean'];
   pageIndex: Scalars['Int'];
@@ -601,6 +679,7 @@ export type Query = {
   groups?: Maybe<GroupQuery>;
   userAliases?: Maybe<UserAliasQuery>;
   users?: Maybe<UserQuery>;
+  wishes?: Maybe<CalendarEventWishQuery>;
 };
 
 export type Subscription = {
@@ -787,6 +866,23 @@ export type CreateMessageMutationVariables = Exact<{
 
 export type CreateMessageMutation = { __typename?: 'Mutation', communicationChannelMessages?: { __typename?: 'CommunicationChannelMessageMutation', create?: { __typename?: 'CommunicationChannelMessage', id: string, content: string, userName: string, type?: CommunicationChannelMessageType | null | undefined, channelId: string, createdAt?: any | null | undefined, modifiedAt?: any | null | undefined } | null | undefined } | null | undefined };
 
+export type CreateWishMutationVariables = Exact<{
+  channelId: Scalars['String'];
+  type: Scalars['String'];
+  minimalParticipantsCount: Scalars['Int'];
+  dateIntervals: Array<DateIntervalInput> | DateIntervalInput;
+}>;
+
+
+export type CreateWishMutation = { __typename?: 'Mutation', wishes?: { __typename?: 'CalendarEventWishMutation', create?: { __typename?: 'CalendarEventWish', id: string, authorId: string, authorName: string, createdAt?: any | null | undefined, modifiedAt?: any | null | undefined, dateIntervals?: Array<{ __typename?: 'DateInterval', startsAt: any, endsAt: any } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+
+export type DeleteWishMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteWishMutation = { __typename?: 'Mutation', wishes?: { __typename?: 'CalendarEventWishMutation', delete?: boolean | null | undefined } | null | undefined };
+
 export type GetCalendarEventQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -858,6 +954,14 @@ export type GetUsersForChannelQueryVariables = Exact<{
 
 
 export type GetUsersForChannelQuery = { __typename?: 'Query', users?: { __typename?: 'UserQuery', getForCommunicationChannel?: { __typename?: 'PaginationListUserGraphType', hasNextPage: boolean, hasPreviousPage: boolean, pageIndex: number, totalCount: number, totalPages: number, data?: Array<{ __typename?: 'User', id: string, userName: string, createdAt?: any | null | undefined, modifiedAt?: any | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+
+export type GetActiveWishesQueryVariables = Exact<{
+  pageNumber: Scalars['Int'];
+  pageSize: Scalars['Int'];
+}>;
+
+
+export type GetActiveWishesQuery = { __typename?: 'Query', wishes?: { __typename?: 'CalendarEventWishQuery', getActive?: { __typename?: 'PaginationListCalendarEventWishGraphType', hasNextPage: boolean, hasPreviousPage: boolean, pageIndex: number, totalCount: number, totalPages: number, data?: Array<{ __typename?: 'CalendarEventWish', id: string, authorId: string, authorName: string, maximalParticipantsCount?: number | null | undefined, minimalParticipantsCount?: number | null | undefined, dateIntervals?: Array<{ __typename?: 'DateInterval', startsAt: any, endsAt: any } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
 
 export type UserAddedToChannelSubscriptionVariables = Exact<{
   userId: Scalars['String'];
@@ -1179,6 +1283,90 @@ export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
 export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
 export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
+export const CreateWishDocument = gql`
+    mutation CreateWish($channelId: String!, $type: String!, $minimalParticipantsCount: Int!, $dateIntervals: [DateIntervalInput!]!) {
+  wishes {
+    create(
+      channelId: $channelId
+      type: $type
+      minimalParticipantsCount: $minimalParticipantsCount
+      dateIntervals: $dateIntervals
+    ) {
+      id
+      authorId
+      authorName
+      dateIntervals {
+        startsAt
+        endsAt
+      }
+      createdAt
+      modifiedAt
+    }
+  }
+}
+    `;
+export type CreateWishMutationFn = Apollo.MutationFunction<CreateWishMutation, CreateWishMutationVariables>;
+
+/**
+ * __useCreateWishMutation__
+ *
+ * To run a mutation, you first call `useCreateWishMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateWishMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createWishMutation, { data, loading, error }] = useCreateWishMutation({
+ *   variables: {
+ *      channelId: // value for 'channelId'
+ *      type: // value for 'type'
+ *      minimalParticipantsCount: // value for 'minimalParticipantsCount'
+ *      dateIntervals: // value for 'dateIntervals'
+ *   },
+ * });
+ */
+export function useCreateWishMutation(baseOptions?: Apollo.MutationHookOptions<CreateWishMutation, CreateWishMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateWishMutation, CreateWishMutationVariables>(CreateWishDocument, options);
+      }
+export type CreateWishMutationHookResult = ReturnType<typeof useCreateWishMutation>;
+export type CreateWishMutationResult = Apollo.MutationResult<CreateWishMutation>;
+export type CreateWishMutationOptions = Apollo.BaseMutationOptions<CreateWishMutation, CreateWishMutationVariables>;
+export const DeleteWishDocument = gql`
+    mutation DeleteWish($id: ID!) {
+  wishes {
+    delete(id: $id)
+  }
+}
+    `;
+export type DeleteWishMutationFn = Apollo.MutationFunction<DeleteWishMutation, DeleteWishMutationVariables>;
+
+/**
+ * __useDeleteWishMutation__
+ *
+ * To run a mutation, you first call `useDeleteWishMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteWishMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteWishMutation, { data, loading, error }] = useDeleteWishMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteWishMutation(baseOptions?: Apollo.MutationHookOptions<DeleteWishMutation, DeleteWishMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteWishMutation, DeleteWishMutationVariables>(DeleteWishDocument, options);
+      }
+export type DeleteWishMutationHookResult = ReturnType<typeof useDeleteWishMutation>;
+export type DeleteWishMutationResult = Apollo.MutationResult<DeleteWishMutation>;
+export type DeleteWishMutationOptions = Apollo.BaseMutationOptions<DeleteWishMutation, DeleteWishMutationVariables>;
 export const GetCalendarEventDocument = gql`
     query GetCalendarEvent($id: ID!) {
   calendarEvents {
@@ -1648,6 +1836,59 @@ export function useGetUsersForChannelLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetUsersForChannelQueryHookResult = ReturnType<typeof useGetUsersForChannelQuery>;
 export type GetUsersForChannelLazyQueryHookResult = ReturnType<typeof useGetUsersForChannelLazyQuery>;
 export type GetUsersForChannelQueryResult = Apollo.QueryResult<GetUsersForChannelQuery, GetUsersForChannelQueryVariables>;
+export const GetActiveWishesDocument = gql`
+    query GetActiveWishes($pageNumber: Int!, $pageSize: Int!) {
+  wishes {
+    getActive(pageNumber: $pageNumber, pageSize: $pageSize) {
+      data {
+        id
+        authorId
+        authorName
+        dateIntervals {
+          startsAt
+          endsAt
+        }
+        maximalParticipantsCount
+        minimalParticipantsCount
+      }
+      hasNextPage
+      hasPreviousPage
+      pageIndex
+      totalCount
+      totalPages
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetActiveWishesQuery__
+ *
+ * To run a query within a React component, call `useGetActiveWishesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetActiveWishesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetActiveWishesQuery({
+ *   variables: {
+ *      pageNumber: // value for 'pageNumber'
+ *      pageSize: // value for 'pageSize'
+ *   },
+ * });
+ */
+export function useGetActiveWishesQuery(baseOptions: Apollo.QueryHookOptions<GetActiveWishesQuery, GetActiveWishesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetActiveWishesQuery, GetActiveWishesQueryVariables>(GetActiveWishesDocument, options);
+      }
+export function useGetActiveWishesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetActiveWishesQuery, GetActiveWishesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetActiveWishesQuery, GetActiveWishesQueryVariables>(GetActiveWishesDocument, options);
+        }
+export type GetActiveWishesQueryHookResult = ReturnType<typeof useGetActiveWishesQuery>;
+export type GetActiveWishesLazyQueryHookResult = ReturnType<typeof useGetActiveWishesLazyQuery>;
+export type GetActiveWishesQueryResult = Apollo.QueryResult<GetActiveWishesQuery, GetActiveWishesQueryVariables>;
 export const UserAddedToChannelDocument = gql`
     subscription UserAddedToChannel($userId: String!) {
   communicationChannelAddedForUser(userId: $userId) {
