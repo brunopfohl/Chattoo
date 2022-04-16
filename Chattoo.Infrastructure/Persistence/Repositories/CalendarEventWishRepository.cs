@@ -20,7 +20,8 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
         {
             return GetActive().Where(w =>
                 w.Type == wish.Type &&
-                w.CommunicationChannelId == wish.CommunicationChannelId
+                w.CommunicationChannelId == wish.CommunicationChannelId &&
+                w.AuthorId != wish.AuthorId
             );
         }
         

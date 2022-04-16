@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Chattoo.Application.Common.DTOs;
@@ -14,7 +15,14 @@ namespace Chattoo.Application.CalendarEventWishes.Commands
     {
         public string Id { get; set; }
         
-        public int? MinimalParticipantsCount { get; set; }
+        public string Name { get; set; }
+        
+        public int MinimalParticipantsCount { get; set; }
+        
+        /// <summary>
+        /// Vrací nebo nastavuje minimální délku události.
+        /// </summary>
+        public TimeSpan MinimalLength { get; set; }
         
         public CalendarEventType Type { get; set; }
         
@@ -39,9 +47,11 @@ namespace Chattoo.Application.CalendarEventWishes.Commands
             await _wishManager.UpdateWish
             (
                 wish,
+                request.Name,
                 request.Type,
                 request.DateIntervals as ICollection<IDateInterval>,
-                request.MinimalParticipantsCount
+                request.MinimalParticipantsCount,
+                request.MinimalLength
             );
            
             await _unitOfWork.SaveChangesAsync(cancellationToken);

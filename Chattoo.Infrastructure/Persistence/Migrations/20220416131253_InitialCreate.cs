@@ -299,6 +299,44 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CalendarEvent",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StartsAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndsAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaximalParticipantsCount = table.Column<int>(type: "int", nullable: true),
+                    CommunicationChannelId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GroupId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AuthorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Address_Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_StreetNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CalendarEventTypeId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CalendarEventType = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CalendarEvent", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CalendarEvent_User_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CommunicationChannelMessage",
                 columns: table => new
                 {
@@ -449,6 +487,77 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CalendarEventWish",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    MinimalParticipantsCount = table.Column<int>(type: "int", nullable: false),
+                    MinimalLengthInMinutes = table.Column<long>(type: "bigint", nullable: false),
+                    AuthorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CommunicationChannelId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    GroupId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CalendarEventId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CalendarEventWish", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CalendarEventWish_CalendarEvent_CalendarEventId",
+                        column: x => x.CalendarEventId,
+                        principalTable: "CalendarEvent",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CalendarEventWish_CommunicationChannel_CommunicationChannelId",
+                        column: x => x.CommunicationChannelId,
+                        principalTable: "CommunicationChannel",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CalendarEventWish_Group_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Group",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CalendarEventWish_User_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserToCalendarEvent",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EventId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserToCalendarEvent", x => new { x.UserId, x.EventId });
+                    table.ForeignKey(
+                        name: "FK_UserToCalendarEvent_CalendarEvent_EventId",
+                        column: x => x.EventId,
+                        principalTable: "CalendarEvent",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_UserToCalendarEvent_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CommunicationChannelMessageAttachment",
                 columns: table => new
                 {
@@ -476,177 +585,23 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CalendarEventWish",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    MinimalParticipantsCount = table.Column<int>(type: "int", nullable: true),
-                    MaximalParticipantsCount = table.Column<int>(type: "int", nullable: true),
-                    AuthorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CommunicationChannelId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    GroupId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CalendarEventId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CalendarEventWish", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CalendarEventWish_CommunicationChannel_CommunicationChannelId",
-                        column: x => x.CommunicationChannelId,
-                        principalTable: "CommunicationChannel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CalendarEventWish_Group_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "Group",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CalendarEventWish_User_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CalendarEventType",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CalendarEventWishId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CalendarEventType", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CalendarEventType_CalendarEventWish_CalendarEventWishId",
-                        column: x => x.CalendarEventWishId,
-                        principalTable: "CalendarEventWish",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "DateInterval",
                 columns: table => new
                 {
-                    CalendarEventWishId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CalendarEventWishId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    StartsAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndsAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DateInterval", x => new { x.CalendarEventWishId, x.Id });
+                    table.PrimaryKey("PK_DateInterval", x => x.Id);
                     table.ForeignKey(
                         name: "FK_DateInterval_CalendarEventWish_CalendarEventWishId",
                         column: x => x.CalendarEventWishId,
                         principalTable: "CalendarEventWish",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CalendarEvent",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    StartsAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndsAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MaximalParticipantsCount = table.Column<int>(type: "int", nullable: true),
-                    CommunicationChannelId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    GroupId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AuthorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Address_Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address_Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address_City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address_Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address_StreetNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CalendarEventTypeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CalendarEvent", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CalendarEvent_CalendarEventType_CalendarEventTypeId",
-                        column: x => x.CalendarEventTypeId,
-                        principalTable: "CalendarEventType",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CalendarEvent_User_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CalendarEventWishToCalendarEventType",
-                columns: table => new
-                {
-                    WishId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TypeId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CalendarEventWishToCalendarEventType", x => new { x.TypeId, x.WishId });
-                    table.ForeignKey(
-                        name: "FK_CalendarEventWishToCalendarEventType_CalendarEventType_TypeId",
-                        column: x => x.TypeId,
-                        principalTable: "CalendarEventType",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CalendarEventWishToCalendarEventType_CalendarEventWish_WishId",
-                        column: x => x.WishId,
-                        principalTable: "CalendarEventWish",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserToCalendarEvent",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    EventId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserToCalendarEvent", x => new { x.UserId, x.EventId });
-                    table.ForeignKey(
-                        name: "FK_UserToCalendarEvent_CalendarEvent_EventId",
-                        column: x => x.EventId,
-                        principalTable: "CalendarEvent",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_UserToCalendarEvent_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -694,16 +649,6 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CalendarEvent_CalendarEventTypeId",
-                table: "CalendarEvent",
-                column: "CalendarEventTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CalendarEventType_CalendarEventWishId",
-                table: "CalendarEventType",
-                column: "CalendarEventWishId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CalendarEventWish_AuthorId",
                 table: "CalendarEventWish",
                 column: "AuthorId");
@@ -722,11 +667,6 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                 name: "IX_CalendarEventWish_GroupId",
                 table: "CalendarEventWish",
                 column: "GroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CalendarEventWishToCalendarEventType_WishId",
-                table: "CalendarEventWishToCalendarEventType",
-                column: "WishId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CommunicationChannelMessage_ChannelId",
@@ -752,6 +692,11 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                 name: "IX_CommunicationChannelRoleUser_UsersId",
                 table: "CommunicationChannelRoleUser",
                 column: "UsersId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DateInterval_CalendarEventWishId",
+                table: "DateInterval",
+                column: "CalendarEventWishId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
@@ -808,22 +753,10 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                 name: "IX_UserToGroup_GroupId",
                 table: "UserToGroup",
                 column: "GroupId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_CalendarEventWish_CalendarEvent_CalendarEventId",
-                table: "CalendarEventWish",
-                column: "CalendarEventId",
-                principalTable: "CalendarEvent",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_CalendarEvent_CalendarEventType_CalendarEventTypeId",
-                table: "CalendarEvent");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -838,9 +771,6 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "CalendarEventWishToCalendarEventType");
 
             migrationBuilder.DropTable(
                 name: "CommunicationChannelMessageAttachment");
@@ -885,13 +815,10 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                 name: "CommunicationChannelRole");
 
             migrationBuilder.DropTable(
-                name: "GroupRole");
-
-            migrationBuilder.DropTable(
-                name: "CalendarEventType");
-
-            migrationBuilder.DropTable(
                 name: "CalendarEventWish");
+
+            migrationBuilder.DropTable(
+                name: "GroupRole");
 
             migrationBuilder.DropTable(
                 name: "CalendarEvent");

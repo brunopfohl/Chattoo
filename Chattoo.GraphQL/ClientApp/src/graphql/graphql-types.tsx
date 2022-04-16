@@ -15,6 +15,7 @@ export type Scalars = {
   Float: number;
   /** The `DateTime` scalar type represents a date and time. `DateTime` expects timestamps to be formatted in accordance with the [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard. */
   DateTime: any;
+  Long: any;
 };
 
 export type CalendarEvent = {
@@ -139,18 +140,17 @@ export enum CalendarEventTypeGraphType {
 
 export type CalendarEventWish = {
   __typename?: 'CalendarEventWish';
-  authorId: Scalars['String'];
-  authorName: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
   createdBy?: Maybe<Scalars['String']>;
   dateIntervals?: Maybe<Array<Maybe<DateInterval>>>;
   deletedAt?: Maybe<Scalars['DateTime']>;
   deletedBy?: Maybe<Scalars['String']>;
   id: Scalars['String'];
-  maximalParticipantsCount?: Maybe<Scalars['Int']>;
+  minimalLengthInMinutes?: Maybe<Scalars['Long']>;
   minimalParticipantsCount?: Maybe<Scalars['Int']>;
   modifiedAt?: Maybe<Scalars['DateTime']>;
   modifiedBy?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
 };
 
 export type CalendarEventWishMutation = {
@@ -164,7 +164,9 @@ export type CalendarEventWishMutation = {
 export type CalendarEventWishMutationCreateArgs = {
   channelId: Scalars['String'];
   dateIntervals: Array<InputMaybe<DateIntervalInput>>;
+  minimalLengthInMinutes: Scalars['Long'];
   minimalParticipantsCount: Scalars['Int'];
+  name: Scalars['String'];
   type: Scalars['String'];
 };
 
@@ -177,7 +179,9 @@ export type CalendarEventWishMutationDeleteArgs = {
 export type CalendarEventWishMutationUpdateArgs = {
   dateIntervals?: InputMaybe<Array<InputMaybe<DateIntervalInput>>>;
   id: Scalars['String'];
-  minimalParticipantsCount?: InputMaybe<Scalars['Int']>;
+  minimalLengthInMinutes: Scalars['Long'];
+  minimalParticipantsCount: Scalars['Int'];
+  name: Scalars['String'];
   type: Scalars['String'];
 };
 
@@ -868,13 +872,15 @@ export type CreateMessageMutation = { __typename?: 'Mutation', communicationChan
 
 export type CreateWishMutationVariables = Exact<{
   channelId: Scalars['String'];
+  name: Scalars['String'];
   type: Scalars['String'];
   minimalParticipantsCount: Scalars['Int'];
+  minimalLengthInMinutes: Scalars['Long'];
   dateIntervals: Array<DateIntervalInput> | DateIntervalInput;
 }>;
 
 
-export type CreateWishMutation = { __typename?: 'Mutation', wishes?: { __typename?: 'CalendarEventWishMutation', create?: { __typename?: 'CalendarEventWish', id: string, authorId: string, authorName: string, createdAt?: any | null | undefined, modifiedAt?: any | null | undefined, dateIntervals?: Array<{ __typename?: 'DateInterval', startsAt: any, endsAt: any } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+export type CreateWishMutation = { __typename?: 'Mutation', wishes?: { __typename?: 'CalendarEventWishMutation', create?: { __typename?: 'CalendarEventWish', id: string, name: string, minimalParticipantsCount?: number | null | undefined, minimalLengthInMinutes?: any | null | undefined, createdAt?: any | null | undefined, modifiedAt?: any | null | undefined, dateIntervals?: Array<{ __typename?: 'DateInterval', startsAt: any, endsAt: any } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
 
 export type DeleteWishMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -961,7 +967,7 @@ export type GetActiveWishesQueryVariables = Exact<{
 }>;
 
 
-export type GetActiveWishesQuery = { __typename?: 'Query', wishes?: { __typename?: 'CalendarEventWishQuery', getActive?: { __typename?: 'PaginationListCalendarEventWishGraphType', hasNextPage: boolean, hasPreviousPage: boolean, pageIndex: number, totalCount: number, totalPages: number, data?: Array<{ __typename?: 'CalendarEventWish', id: string, authorId: string, authorName: string, maximalParticipantsCount?: number | null | undefined, minimalParticipantsCount?: number | null | undefined, dateIntervals?: Array<{ __typename?: 'DateInterval', startsAt: any, endsAt: any } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+export type GetActiveWishesQuery = { __typename?: 'Query', wishes?: { __typename?: 'CalendarEventWishQuery', getActive?: { __typename?: 'PaginationListCalendarEventWishGraphType', hasNextPage: boolean, hasPreviousPage: boolean, pageIndex: number, totalCount: number, totalPages: number, data?: Array<{ __typename?: 'CalendarEventWish', id: string, name: string, minimalParticipantsCount?: number | null | undefined, minimalLengthInMinutes?: any | null | undefined, dateIntervals?: Array<{ __typename?: 'DateInterval', startsAt: any, endsAt: any } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
 
 export type UserAddedToChannelSubscriptionVariables = Exact<{
   userId: Scalars['String'];
@@ -1284,17 +1290,20 @@ export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessage
 export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
 export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
 export const CreateWishDocument = gql`
-    mutation CreateWish($channelId: String!, $type: String!, $minimalParticipantsCount: Int!, $dateIntervals: [DateIntervalInput!]!) {
+    mutation CreateWish($channelId: String!, $name: String!, $type: String!, $minimalParticipantsCount: Int!, $minimalLengthInMinutes: Long!, $dateIntervals: [DateIntervalInput!]!) {
   wishes {
     create(
       channelId: $channelId
+      name: $name
       type: $type
       minimalParticipantsCount: $minimalParticipantsCount
+      minimalLengthInMinutes: $minimalLengthInMinutes
       dateIntervals: $dateIntervals
     ) {
       id
-      authorId
-      authorName
+      name
+      minimalParticipantsCount
+      minimalLengthInMinutes
       dateIntervals {
         startsAt
         endsAt
@@ -1321,8 +1330,10 @@ export type CreateWishMutationFn = Apollo.MutationFunction<CreateWishMutation, C
  * const [createWishMutation, { data, loading, error }] = useCreateWishMutation({
  *   variables: {
  *      channelId: // value for 'channelId'
+ *      name: // value for 'name'
  *      type: // value for 'type'
  *      minimalParticipantsCount: // value for 'minimalParticipantsCount'
+ *      minimalLengthInMinutes: // value for 'minimalLengthInMinutes'
  *      dateIntervals: // value for 'dateIntervals'
  *   },
  * });
@@ -1842,14 +1853,13 @@ export const GetActiveWishesDocument = gql`
     getActive(pageNumber: $pageNumber, pageSize: $pageSize) {
       data {
         id
-        authorId
-        authorName
+        name
         dateIntervals {
           startsAt
           endsAt
         }
-        maximalParticipantsCount
         minimalParticipantsCount
+        minimalLengthInMinutes
       }
       hasNextPage
       hasPreviousPage

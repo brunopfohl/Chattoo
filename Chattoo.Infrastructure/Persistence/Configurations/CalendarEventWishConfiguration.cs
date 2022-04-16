@@ -8,16 +8,11 @@ namespace Chattoo.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<CalendarEventWish> builder)
         {
-            // builder.OwnsMany(m => m.DateIntervals, a =>
-            // {
-            //     a.Property(p => p.StartsAt).IsRequired()
-            //         .HasColumnName("StartsAt");
-            //
-            //     a.Property(p => p.EndsAt).IsRequired()
-            //         .HasColumnName("EndsAt");
-            // }).HasNoKey();
-
-            builder.OwnsMany(e => e.DateIntervals);
+            builder
+                .HasMany(e => e.DateIntervals)
+                .WithOne()
+                .HasForeignKey(e => e.CalendarEventWishId)
+                .OnDelete(DeleteBehavior.Cascade);
             
             builder
                 .HasOne<User>()
@@ -33,6 +28,10 @@ namespace Chattoo.Infrastructure.Persistence.Configurations
                 .HasOne<CommunicationChannel>()
                 .WithMany()
                 .HasForeignKey(e => e.CommunicationChannelId);
+            
+            builder.Property(e => e.Name)
+                .HasMaxLength(100)
+                .IsRequired();
             
             builder
                 .HasOne<CalendarEvent>()

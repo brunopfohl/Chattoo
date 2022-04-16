@@ -7,11 +7,10 @@ namespace Chattoo.GraphQL.Types
     {
         public CalendarEventWishGraphType()
         {
-            Field(o => o.AuthorId);
-            Field(o => o.AuthorName);
+            Field(o => o.Name);
             Field(o => o.DateIntervals, type: typeof(ListGraphType<DateIntervalGraphType>));
-            Field(o => o.MaximalParticipantsCount, type: typeof(IntGraphType), nullable: true);
             Field(o => o.MinimalParticipantsCount, type: typeof(IntGraphType), nullable: true);
+            Field(o => o.MinimalLengthInMinutes, type: typeof(LongGraphType), nullable: true);
         }
     }
 }

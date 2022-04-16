@@ -1,12 +1,13 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_WISH = gql`
-    mutation CreateWish($channelId: String!, $type: String!, $minimalParticipantsCount: Int!, $dateIntervals: [DateIntervalInput!]!) {
+    mutation CreateWish($channelId: String!, $name: String!, $type: String!, $minimalParticipantsCount: Int!, $minimalLengthInMinutes: Long!, $dateIntervals: [DateIntervalInput!]!) {
         wishes {
-            create(channelId: $channelId, type: $type, minimalParticipantsCount: $minimalParticipantsCount, dateIntervals: $dateIntervals) {
+            create(channelId: $channelId, name: $name, type: $type, minimalParticipantsCount: $minimalParticipantsCount, minimalLengthInMinutes: $minimalLengthInMinutes, dateIntervals: $dateIntervals) {
                 id,
-                authorId,
-                authorName,
+                name,
+                minimalParticipantsCount,
+                minimalLengthInMinutes,
                 dateIntervals {
                     startsAt,
                     endsAt

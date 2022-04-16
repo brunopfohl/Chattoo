@@ -46,9 +46,15 @@ namespace Chattoo.Domain.ValueObjects
             return Create(interval.StartsAt, interval.EndsAt);
         }
 
-        public DateTime StartsAt { get; }
+        public string Id { get; protected set; }
         
-        public DateTime EndsAt { get; }
+        public string CalendarEventWishId { get; protected set; }
+        
+        public DateTime StartsAt { get; protected set; }
+        
+        public DateTime EndsAt { get; protected set; }
+
+        public TimeSpan Length => EndsAt - StartsAt;
         
         /// <summary>
         /// Vrací překrytí (časový interval) mezi 2 časovými intervaly.

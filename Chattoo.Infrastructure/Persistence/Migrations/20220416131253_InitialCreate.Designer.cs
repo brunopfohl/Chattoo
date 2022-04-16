@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chattoo.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220201233531_InitialCreate")]
+    [Migration("20220416131253_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,8 +31,11 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("CalendarEventType")
+                        .HasColumnType("int");
+
                     b.Property<string>("CalendarEventTypeId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CommunicationChannelId")
                         .HasColumnType("nvarchar(max)");
@@ -79,47 +82,7 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("CalendarEventTypeId");
-
                     b.ToTable("CalendarEvent");
-                });
-
-            modelBuilder.Entity("Chattoo.Domain.Entities.CalendarEventType", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CalendarEventWishId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CalendarEventWishId");
-
-                    b.ToTable("CalendarEventType");
                 });
 
             modelBuilder.Entity("Chattoo.Domain.Entities.CalendarEventWish", b =>
@@ -153,10 +116,10 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                     b.Property<string>("GroupId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("MaximalParticipantsCount")
-                        .HasColumnType("int");
+                    b.Property<long>("MinimalLengthInMinutes")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("MinimalParticipantsCount")
+                    b.Property<int>("MinimalParticipantsCount")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("ModifiedAt")
@@ -164,6 +127,14 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -176,21 +147,6 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                     b.HasIndex("GroupId");
 
                     b.ToTable("CalendarEventWish");
-                });
-
-            modelBuilder.Entity("Chattoo.Domain.Entities.CalendarEventWishToCalendarEventType", b =>
-                {
-                    b.Property<string>("TypeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("WishId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("TypeId", "WishId");
-
-                    b.HasIndex("WishId");
-
-                    b.ToTable("CalendarEventWishToCalendarEventType");
                 });
 
             modelBuilder.Entity("Chattoo.Domain.Entities.CommunicationChannel", b =>
@@ -565,6 +521,28 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                     b.ToTable("UserToGroup");
                 });
 
+            modelBuilder.Entity("Chattoo.Domain.ValueObjects.DateInterval", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CalendarEventWishId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("EndsAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartsAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CalendarEventWishId");
+
+                    b.ToTable("DateInterval");
+                });
+
             modelBuilder.Entity("Chattoo.Infrastructure.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -906,10 +884,6 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Chattoo.Domain.Entities.CalendarEventType", "CalendarEventType")
-                        .WithMany()
-                        .HasForeignKey("CalendarEventTypeId");
-
                     b.OwnsOne("Chattoo.Domain.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<string>("CalendarEventId")
@@ -939,15 +913,6 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                         });
 
                     b.Navigation("Address");
-
-                    b.Navigation("CalendarEventType");
-                });
-
-            modelBuilder.Entity("Chattoo.Domain.Entities.CalendarEventType", b =>
-                {
-                    b.HasOne("Chattoo.Domain.Entities.CalendarEventWish", null)
-                        .WithMany("Types")
-                        .HasForeignKey("CalendarEventWishId");
                 });
 
             modelBuilder.Entity("Chattoo.Domain.Entities.CalendarEventWish", b =>
@@ -969,41 +934,6 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                     b.HasOne("Chattoo.Domain.Entities.Group", null)
                         .WithMany()
                         .HasForeignKey("GroupId");
-
-                    b.OwnsMany("Chattoo.Domain.ValueObjects.DateInterval", "DateIntervals", b1 =>
-                        {
-                            b1.Property<string>("CalendarEventWishId")
-                                .HasColumnType("nvarchar(450)");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int")
-                                .UseIdentityColumn();
-
-                            b1.HasKey("CalendarEventWishId", "Id");
-
-                            b1.ToTable("DateInterval");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CalendarEventWishId");
-                        });
-
-                    b.Navigation("DateIntervals");
-                });
-
-            modelBuilder.Entity("Chattoo.Domain.Entities.CalendarEventWishToCalendarEventType", b =>
-                {
-                    b.HasOne("Chattoo.Domain.Entities.CalendarEventType", null)
-                        .WithMany()
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Chattoo.Domain.Entities.CalendarEventWish", null)
-                        .WithMany()
-                        .HasForeignKey("WishId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Chattoo.Domain.Entities.CommunicationChannelMessage", b =>
@@ -1100,6 +1030,14 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Chattoo.Domain.ValueObjects.DateInterval", b =>
+                {
+                    b.HasOne("Chattoo.Domain.Entities.CalendarEventWish", null)
+                        .WithMany("DateIntervals")
+                        .HasForeignKey("CalendarEventWishId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("CommunicationChannelRoleUser", b =>
                 {
                     b.HasOne("Chattoo.Domain.Entities.CommunicationChannelRole", null)
@@ -1188,7 +1126,7 @@ namespace Chattoo.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Chattoo.Domain.Entities.CalendarEventWish", b =>
                 {
-                    b.Navigation("Types");
+                    b.Navigation("DateIntervals");
                 });
 
             modelBuilder.Entity("Chattoo.Domain.Entities.CommunicationChannel", b =>

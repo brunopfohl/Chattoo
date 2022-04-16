@@ -6,7 +6,8 @@ interface CustomDialogAction {
     onClick: () => void;
     text: string;
     sx?: SxProps;
-    fullWidth?: boolean
+    fullWidth?: boolean;
+    disabled?: boolean;
 };
 
 interface CustomDialogProps {
@@ -46,7 +47,7 @@ const CustomDialog: FC<CustomDialogProps> = ({ title, open, onClose, closeButton
         }
         <DialogActions>
             {actions && actions.map((action, i) =>
-                <Button onClick={action.onClick} fullWidth={!!action.fullWidth} key={i}>{action.text}</Button>
+                <Button disabled={action.disabled} onClick={action.onClick} fullWidth={!!action.fullWidth} key={i}>{action.text}</Button>
             )}
             {closeButtonPosition === "bottom" &&
                 <Button onClick={onClose}>Zavřít</Button>

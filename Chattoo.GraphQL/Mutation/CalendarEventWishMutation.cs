@@ -25,7 +25,9 @@ namespace Chattoo.GraphQL.Mutation
                 (
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "channelId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "type" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" },
                     new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "minimalParticipantsCount" },
+                    new QueryArgument<NonNullGraphType<LongGraphType>> { Name = "minimalLengthInMinutes" },
                     new QueryArgument<NonNullGraphType<ListGraphType<DateIntervalInputGraphType>>> { Name = "dateIntervals" }
                 ),
                 resolve: async (ctx, mediator) =>
@@ -36,11 +38,16 @@ namespace Chattoo.GraphQL.Mutation
                         throw new ArgumentOutOfRangeException();
                     }
                     
+                    var minimalLengthInMinutes = ctx.GetLong("minimalLengthInMinutes");
+                    var minimalLength = TimeSpan.FromMinutes(minimalLengthInMinutes);
+                    
                     var command = new CreateCalendarEventWishCommand()
                     {
                         CommunicationChannelId = ctx.GetString("channelId"),
+                        Name = ctx.GetString("name"),
                         Type = type,
-                        MinimalParticipantsCount = ctx.GetNullableInt("minimalParticipantsCount"),
+                        MinimalLength = minimalLength,
+                        MinimalParticipantsCount = ctx.GetInt("minimalParticipantsCount"),
                         DateIntervals = ctx.GetArgument<List<DateIntervalDto>>("dateIntervals")
                     };
 
@@ -77,7 +84,9 @@ namespace Chattoo.GraphQL.Mutation
                 (
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "id" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "type" },
-                    new QueryArgument<IntGraphType> { Name = "minimalParticipantsCount" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" },
+                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "minimalParticipantsCount" },
+                    new QueryArgument<NonNullGraphType<LongGraphType>> { Name = "minimalLengthInMinutes" },
                     new QueryArgument<ListGraphType<DateIntervalInputGraphType>> { Name = "dateIntervals" }
                 ),
                 resolve: async (ctx, mediator) =>
@@ -88,11 +97,16 @@ namespace Chattoo.GraphQL.Mutation
                         throw new ArgumentOutOfRangeException();
                     }
 
+                    var minimalLengthInMinutes = ctx.GetLong("minimalLengthInMinutes");
+                    var minimalLength = TimeSpan.FromMinutes(minimalLengthInMinutes);
+                    
                     var command = new UpdateCalendarEventWishCommand()
                     {
                         Id = ctx.GetString("id"),
+                        Name = ctx.GetString("name"),
                         Type = type,
-                        MinimalParticipantsCount = ctx.GetNullableInt("minimalParticipantsCount"),
+                        MinimalLength = minimalLength,
+                        MinimalParticipantsCount = ctx.GetInt("minimalParticipantsCount"),
                         DateIntervals = ctx.GetArgument<List<DateIntervalDto>>("dateIntervals")
                     };
 

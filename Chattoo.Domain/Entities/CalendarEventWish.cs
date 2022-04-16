@@ -20,10 +20,17 @@ namespace Chattoo.Domain.Entities
             _dateIntervals = new List<DateInterval>();
         }
         
+        public string Name { get; private set; }
+        
         /// <summary>
         /// Vrací nebo nastavuje minimální počet účastníků.
         /// </summary>
-        public int? MinimalParticipantsCount { get; private set; }
+        public int MinimalParticipantsCount { get; private set; }
+        
+        /// <summary>
+        /// Vrací nebo nastavuje minimální délku události v minutách.
+        /// </summary>
+        public long MinimalLengthInMinutes { get; private set; }
         
         /// <summary>
         /// Vrací nebo nastavuje Id autora.
@@ -55,9 +62,14 @@ namespace Chattoo.Domain.Entities
         /// </summary>
         public virtual IReadOnlyCollection<DateInterval> DateIntervals => _dateIntervals.AsReadOnly();
 
-        public void SetMinimalParticipantsCount(int? count)
+        /// <summary>
+        /// Vrací minimální délku události.
+        /// </summary>
+        public TimeSpan MinimalLength => TimeSpan.FromMinutes(MinimalLengthInMinutes);
+
+        public void SetMinimalParticipantsCount(int count)
         {
-            if (count is < 2)
+            if (count < 2)
             {
                 throw new ArgumentOutOfRangeException(nameof(MinimalParticipantsCount));
             }
@@ -69,9 +81,26 @@ namespace Chattoo.Domain.Entities
         {
             Type = type;
         }
+
+        public void SetName(string name)
+        {
+            Name = name;
+        }
+        
+        public void SetMinimalLength(TimeSpan minimalLength)
+        {
+            foreach (var dateInterval in DateIntervals)
+            {
+                CheckDateIntervalWithMinimalLength(MinimalLength, dateInterval);
+            }
+            
+            MinimalLengthInMinutes = (long)minimalLength.TotalMinutes;
+        }
         
         public void AddInterval(DateInterval newInterval)
         {
+            CheckDateIntervalWithMinimalLength(MinimalLength, newInterval);
+                
             foreach (var interval in DateIntervals)
             {
                 if (newInterval.OverlapsWith(interval))
@@ -103,100 +132,44 @@ namespace Chattoo.Domain.Entities
             }
         }
 
-        // public void AddType(CalendarEventType eventType)
-        // {
-        //     if (Types.Contains(eventType))
-        //     {
-        //         throw new DuplicitCalendarEventTypeException(Id, eventType.Id);
-        //     }
-        //     
-        //     _types.Add(eventType);
-        // }
-        //
-        // public void RemoveType(CalendarEventType eventType)
-        // {
-        //     bool wasRemoved = _types.Remove(eventType);
-        //     
-        //     if (!wasRemoved)
-        //     {
-        //         throw new CalendarEventTypeNotFoundException(eventType.Id);
-        //     }
-        // }
-        //
-        // public void UpdateTypes(ICollection<CalendarEventType> eventTypes)
-        // {
-        //     var set = new HashSet<CalendarEventType>(new CalendarEventTypeComparer());
-        //
-        //     foreach (var type in eventTypes)
-        //     {
-        //         set.Add(type);
-        //     }
-        //
-        //     var removedTypes = new HashSet<CalendarEventType>();
-        //     var addedTypes = new HashSet<CalendarEventType>();
-        //     
-        //     foreach (var type in Types)
-        //     {
-        //         if (set.Add(type))
-        //         {
-        //             removedTypes.Add(type);
-        //         }
-        //         else
-        //         {
-        //             addedTypes.Add(type);
-        //         }
-        //     }
-        //
-        //     foreach (var toRemove in removedTypes)
-        //     {
-        //         _types.Remove(toRemove);
-        //     }
-        //     
-        //     foreach (var toAdd in addedTypes)
-        //     {
-        //         _types.Remove(toAdd);
-        //     }
-        // }
-
-        private static CalendarEventWish Create(User user, ICollection<DateInterval> dateIntervals,
-            CalendarEventType type, int? minimalParticipantsCount)
+        private static CalendarEventWish Create(User user, string name, ICollection<DateInterval> dateIntervals,
+            CalendarEventType type, int minimalParticipantsCount, TimeSpan minimalLength)
         {
             var entity = new CalendarEventWish()
             {
                 AuthorId = user.Id,
-                Type = type
+                Type = type,
+                Name = name
             };
 
+            entity.SetMinimalParticipantsCount(minimalParticipantsCount);
+            entity.SetMinimalLength(minimalLength);
+            
             foreach (var interval in dateIntervals)
             {
                 entity.AddInterval(interval);
             }
-            
-            entity.SetMinimalParticipantsCount(minimalParticipantsCount);
 
             return entity;
         }
         
-        public static CalendarEventWish Create(User author, CommunicationChannel channel,
+        public static CalendarEventWish Create(User author, string name, CommunicationChannel channel,
             ICollection<DateInterval> dateIntervals, CalendarEventType type,
-            int? minimalParticipantsCount)
+            int minimalParticipantsCount, TimeSpan minimalLength)
         {
-            var entity = Create(author, dateIntervals, type, minimalParticipantsCount);
+            var entity = Create(author, name, dateIntervals, type, minimalParticipantsCount, minimalLength);
 
             entity.CommunicationChannelId = channel.Id;
 
             return entity;
         }
-        
-        public static CalendarEventWish Create(User author, Group group,
-            ICollection<DateInterval> dateIntervals, CalendarEventType type,
-            int? minimalParticipantsCount, int? maximalParticipantsCount)
+
+        private void CheckDateIntervalWithMinimalLength(TimeSpan minimalLength, DateInterval dateInterval)
         {
-            var entity = Create(author, dateIntervals, type, minimalParticipantsCount);
-
-            entity.GroupId = group.Id;
-
-            return entity;
+            if (dateInterval.Length < minimalLength)
+            {
+                throw new DateIntervalTooShortException(dateInterval, Id);
+            }
         }
     }
 }

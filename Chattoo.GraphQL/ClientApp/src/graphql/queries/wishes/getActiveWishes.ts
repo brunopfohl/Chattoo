@@ -6,14 +6,13 @@ export const GET_ACTIVE_WISHES = gql`
             getActive(pageNumber: $pageNumber, pageSize: $pageSize) {
                 data {
                     id,
-                    authorId,
-                    authorName,
+                    name,
                     dateIntervals {
                         startsAt,
                         endsAt
                     },
-                    maximalParticipantsCount,
-                    minimalParticipantsCount
+                    minimalParticipantsCount,
+                    minimalLengthInMinutes
                 },
                 hasNextPage,
                 hasPreviousPage,

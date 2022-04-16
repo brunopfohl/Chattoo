@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -14,6 +16,8 @@ namespace Chattoo.Application.CalendarEventWishes.Commands
 {
     public class CreateCalendarEventWishCommand : IRequest<CalendarEventWishDto>
     {
+        public string Name { get; set; }
+        
         /// <summary>
         /// Vrací nebo nastavuje Id komunikačího kanálu, jehož členové se do události mohou zapojit.
         /// </summary>
@@ -22,7 +26,12 @@ namespace Chattoo.Application.CalendarEventWishes.Commands
         /// <summary>
         /// Vrací nebo nastavuje minimální počet účastníků.
         /// </summary>
-        public int? MinimalParticipantsCount { get; set; }
+        public int MinimalParticipantsCount { get; set; }
+        
+        /// <summary>
+        /// Vrací nebo nastavuje minimální délku události.
+        /// </summary>
+        public TimeSpan MinimalLength { get; set; }
         
         /// <summary>
         /// Vrací nebo nastavuje typ události.
@@ -55,9 +64,11 @@ namespace Chattoo.Application.CalendarEventWishes.Commands
             var wish = await _wishManager.Create
             (
                 request.CommunicationChannelId,
-                request.DateIntervals as ICollection<IDateInterval>,
+                request.Name,
+                request.DateIntervals.Cast<IDateInterval>().ToList(),
                 request.Type,
-                request.MinimalParticipantsCount
+                request.MinimalParticipantsCount,
+                request.MinimalLength
             );
 
             await _wishRepository.AddOrUpdateAsync(wish, cancellationToken);

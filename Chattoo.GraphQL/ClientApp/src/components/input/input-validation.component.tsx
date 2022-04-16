@@ -20,7 +20,7 @@ const InputValidation: FC<InputValidationProps> = ({ errors, fieldKey }) => {
     }
 
     return errorsToShow.map((e, i) => (
-        <Typography color="#e94b4b" variant="caption" key={i}>{e}</Typography>
+        <Typography color="#cc5511" variant="caption" key={i}>{e}</Typography>
     ));
 };
 

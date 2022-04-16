@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Chattoo.Domain.Entities;
 using Chattoo.Domain.Enums;
 using Chattoo.Domain.Exceptions;
-using Chattoo.Domain.Extensions;
 using Chattoo.Domain.Interfaces;
 using Chattoo.Domain.Repositories;
 using Chattoo.Domain.ValueObjects;
@@ -16,15 +16,13 @@ namespace Chattoo.Domain.Services
         private readonly ICurrentUserService _currentUserService;
         private readonly ICalendarEventWishRepository _wishRepository;
         private readonly ChannelManager _channelManager;
-        private readonly GroupManager _groupManager;
 
         public CalendarEventWishManager(ICurrentUserService currentUserService,
-            ICalendarEventWishRepository wishRepository, ChannelManager channelManager, GroupManager groupManager)
+            ICalendarEventWishRepository wishRepository, ChannelManager channelManager)
         {
             _currentUserService = currentUserService;
             _wishRepository = wishRepository;
             _channelManager = channelManager;
-            _groupManager = groupManager;
         }
 
         public async Task<CalendarEventWish> GetWishOrThrow(string wishId)
@@ -40,8 +38,8 @@ namespace Chattoo.Domain.Services
             return wish;
         }
 
-        public async Task<CalendarEventWish> Create(string channelId, ICollection<IDateInterval> dateIntervals,
-            CalendarEventType type, int? minimalParticipantsCount)
+        public async Task<CalendarEventWish> Create(string channelId, string name, ICollection<IDateInterval> dateIntervals,
+            CalendarEventType type, int minimalParticipantsCount, TimeSpan minimalLength)
         {
             var dateIntervalEntities = dateIntervals
                 .Select(DateInterval.Create)
@@ -58,10 +56,12 @@ namespace Chattoo.Domain.Services
             
             wish = CalendarEventWish.Create(
                 _currentUserService.User,
+                name,
                 channel,
                 dateIntervalEntities,
                 type,
-                minimalParticipantsCount
+                minimalParticipantsCount,
+                minimalLength
             );
 
             return wish;
@@ -79,8 +79,8 @@ namespace Chattoo.Domain.Services
             _wishRepository.Remove(wish);
         }
         
-        public async Task<CalendarEventWish> UpdateWish(CalendarEventWish wish, CalendarEventType type,
-            ICollection<IDateInterval> dateIntervals, int? minimalParticipantsCount)
+        public async Task<CalendarEventWish> UpdateWish(CalendarEventWish wish, string name, CalendarEventType type,
+            ICollection<IDateInterval> dateIntervals, int minimalParticipantsCount, TimeSpan minimalLength)
         {
             if (!_currentUserService.CanEditWish(wish))
             {
@@ -89,7 +89,9 @@ namespace Chattoo.Domain.Services
             
             wish.SetMinimalParticipantsCount(minimalParticipantsCount);
             
+            wish.SetName(name);
             wish.SetType(type);
+            wish.SetMinimalLength(minimalLength);
             wish.UpdateDateIntervals(dateIntervals.Select(DateInterval.Create).ToList());
 
             return wish;

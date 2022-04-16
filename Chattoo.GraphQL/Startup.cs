@@ -161,6 +161,17 @@ namespace Chattoo.GraphQL
                                 new ExecutionError("V komunikačním kanálu již existuje role se stejným názvem.")
                             );
                         }
+                        else if (ctx.Exception is DateIntervalTooShortException dateIntervalTooShortException)
+                        {
+                            var intervalLength =
+                                dateIntervalTooShortException.DateInterval.EndsAt -
+                                dateIntervalTooShortException.DateInterval.StartsAt;
+                            
+                            ctx.Context.Errors.Add
+                            (
+                                new ExecutionError($"Interval s délkou {intervalLength} je moc krátký.")
+                            );
+                        }
                         
                         logger.LogError("{Error} occurred", ctx.OriginalException.Message);
                     };

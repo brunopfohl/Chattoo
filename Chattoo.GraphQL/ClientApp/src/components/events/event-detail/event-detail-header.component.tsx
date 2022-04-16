@@ -22,10 +22,10 @@ const EventDetailHeader: FC<EventDetailHeaderProps> = (props) => {
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
 
     const dateText = useMemo(() => {
-        let result = moment(calendarEvent.startsAt).format("d. MM. YYYY - hh:mm");
+        let result = moment(calendarEvent.startsAt).format("D. MM. YYYY - hh:mm");
 
         if (calendarEvent.endsAt) {
-            const endsAt = moment(calendarEvent.endsAt).format("d. MM. YYYY - hh:mm");
+            const endsAt = moment(calendarEvent.endsAt).format("D. MM. YYYY - hh:mm");
             result = `Od ${result} do ${endsAt}`;
         }
 

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chattoo.Domain.ValueObjects;
 
 namespace Chattoo.Application.Common.Services
@@ -21,7 +23,7 @@ namespace Chattoo.Application.Common.Services
         {
             for (int i = 0; i < intervals.Count; i++)
             {
-                for (int j = i; j < intervals.Count; j++)
+                for (int j = i + 1; j < intervals.Count; j++)
                 {
                     if (intervals[i].GetOverlap(intervals[j]) != null)
                     {
@@ -31,6 +33,32 @@ namespace Chattoo.Application.Common.Services
             }
 
             return false;
+        }
+        
+        public List<DateInterval> GetOverlaps(List<DateInterval> a, List<DateInterval> b, TimeSpan minimalLength)
+        {
+            var result = new List<DateInterval>();
+
+            var aSorted = a.OrderBy(aI => aI.StartsAt);
+            var bSorted = a.OrderBy(bI => bI.StartsAt);
+
+            foreach (var aI in a)
+            {
+                foreach (var bI in b)
+                {
+                    if (bI.StartsAt > aI.EndsAt)
+                        break;
+
+                    var overlap = bI.GetOverlap(aI);
+
+                    if (overlap is not null && overlap.Length >= minimalLength)
+                    {
+                        result.Add(overlap);
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }
