@@ -5,6 +5,7 @@ using Chattoo.Application.CalendarEventWishes.DTOs;
 using Chattoo.Application.Common.DTOs;
 using Chattoo.Domain.Enums;
 using Chattoo.GraphQL.Extensions;
+using Chattoo.GraphQL.Subscription.CalendarEvent;
 using Chattoo.GraphQL.Types;
 using GraphQL;
 using GraphQL.Types;
@@ -13,9 +14,12 @@ namespace Chattoo.GraphQL.Mutation
 {
     public class CalendarEventWishMutation : ObjectGraphType
     {
+        private readonly ICalendarEventSubscriptionProvider _calendarEventSubscriptionProvider;
+        
         // TODO: Dodělat. Zatím mě drží zpátky, že potřebuji mít možnost zaslat kolekci časových intervalů.
-        public CalendarEventWishMutation()
+        public CalendarEventWishMutation(ICalendarEventSubscriptionProvider calendarEventSubscriptionProvider)
         {
+            _calendarEventSubscriptionProvider = calendarEventSubscriptionProvider;
             Name = "CalendarEventWishMutation";
             
             this.FieldAsyncWithScope<CalendarEventWishGraphType, CalendarEventWishDto>(
@@ -51,9 +55,14 @@ namespace Chattoo.GraphQL.Mutation
                         DateIntervals = ctx.GetArgument<List<DateIntervalDto>>("dateIntervals")
                     };
 
-                    var calendarEvent = await mediator.Send(command);
+                    var response = await mediator.Send(command);
 
-                    return calendarEvent;
+                    if (response.JoinedEvent is not null)
+                    {
+                        
+                    }
+
+                    return response.CreatedWish;
                 }
             );
             

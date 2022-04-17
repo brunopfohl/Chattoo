@@ -1,7 +1,7 @@
 import ConfirmDialog from '@components/confirm-dialog.component';
 import { useSetter } from '@hooks/useSetter';
-import { AddCircle, Clear, Delete, Event, Remove } from '@mui/icons-material';
-import { Container, Paper, Typography, Stack, Divider, IconButton, List, ListItem, ListItemText, ListItemIcon } from "@mui/material";
+import { AccessTime, AddCircle, Clear, Delete, Event, Person, Remove } from '@mui/icons-material';
+import { Container, Paper, Typography, Stack, Divider, IconButton, List, ListItem, ListItemText, ListItemIcon, Chip } from "@mui/material";
 import { AutocompleteItem } from 'common/interfaces/autocomplete-item.interface';
 import { getKeysWithValues } from 'common/utils/enum.utils';
 import { CalendarEventTypeGraphType, useDeleteWishMutation, useGetActiveWishesQuery } from 'graphql/graphql-types';
@@ -91,8 +91,11 @@ const WishesDashboard: FC<WishesDashboardProps> = (props) => {
                                     <Stack direction="row" sx={{ justifyContent: "space-between", width: "100%" }}>
                                         <ListItem key={wish.id}>
                                             <Stack>
-                                                <ListItemText>{wish.name}</ListItemText>
-
+                                                <ListItemText>
+                                                    {wish.name}
+                                                    <Chip size="small" sx={{ ml: 1 }} label={`${wish?.minimalLengthInMinutes}m`} icon={<AccessTime />} />
+                                                    <Chip size="small" sx={{ ml: 1 }} label={wish?.minimalParticipantsCount} icon={<Person />} />
+                                                </ListItemText>
                                                 <List>
                                                     {wish?.dateIntervals?.map((dateInterval, i) => (
                                                         <ListItem key={`wish_interval_${wish.id}_${i}`}>

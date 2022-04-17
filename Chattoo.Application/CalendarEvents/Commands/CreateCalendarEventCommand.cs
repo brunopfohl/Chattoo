@@ -25,8 +25,6 @@ namespace Chattoo.Application.CalendarEvents.Commands
         
         public string CommunicationChannelId { get; set; }
         
-        public string GroupId { get; set; }
-        
         public CalendarEventType Type { get; set; } 
         
         public int? MaximalParticipantsCount { get; set; }
@@ -53,7 +51,6 @@ namespace Chattoo.Application.CalendarEvents.Commands
             var calendarEvent = await _eventManager.CreateEvent
             (
                 request.CommunicationChannelId,
-                request.GroupId,
                 request.Type,
                 request.Name,
                 request.Description,

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Chattoo.Domain.Entities;
@@ -54,23 +55,12 @@ namespace Chattoo.Domain.Services
             return calendarEvent;
         }
 
-        public async Task<CalendarEvent> CreateEvent(string channelId, string groupId, CalendarEventType type, string name, string description,
+        public async Task<CalendarEvent> CreateEvent(string channelId, CalendarEventType type, string name, string description,
             int? maximalParticipants, DateTime startsAt, DateTime? endsAt)
         {
-            CalendarEvent calendarEvent;
-
-            if (channelId.IsNotNullOrEmpty())
-            {
-                var channel = await _channelManager.GetChannelOrThrow(channelId);
-
-                calendarEvent = CalendarEvent.Create(_currentUserService.User, channel, type, name, description);
-            }
-            else
-            {
-                var group = await _groupManager.GetGroupOrThrow(groupId);
-
-                calendarEvent = CalendarEvent.Create(_currentUserService.User, group, type, name, description);
-            }
+            var channel = await _channelManager.GetChannelOrThrow(channelId);
+            
+            var calendarEvent = CalendarEvent.Create(_currentUserService.User, channel, type, name, description);
             
             calendarEvent.SetEndsAt(endsAt);
             calendarEvent.SetStartsAt(startsAt);

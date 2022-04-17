@@ -25,7 +25,6 @@ namespace Chattoo.GraphQL.Mutation
                     new QueryArgument<NonNullGraphType<DateTimeGraphType>> { Name = "startsAt" },
                     new QueryArgument<DateTimeGraphType> { Name = "endsAt" },
                     new QueryArgument<StringGraphType> { Name = "channelId" },
-                    new QueryArgument<StringGraphType> { Name = "groupId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "type" },
                     new QueryArgument<IntGraphType> { Name = "maximalParticipantsCount" }
                 ),
@@ -44,7 +43,6 @@ namespace Chattoo.GraphQL.Mutation
                         StartsAt = ctx.GetDateTime("startsAt"),
                         EndsAt = ctx.GetNullableDateTime("endsAt"),
                         CommunicationChannelId = ctx.GetString("channelId"),
-                        GroupId = ctx.GetString("groupId"),
                         Type = type,
                         MaximalParticipantsCount = ctx.GetNullableInt("maximalParticipantsCount")
                     };

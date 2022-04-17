@@ -66,6 +66,20 @@ namespace Chattoo.Domain.Services
 
             return wish;
         }
+
+        public void AssignWishToCalendarEvent(CalendarEventWish wish, CalendarEvent calendarEvent)
+        {
+            if 
+            (
+                wish.Type != calendarEvent.CalendarEventType ||
+                wish.CommunicationChannelId != calendarEvent.CommunicationChannelId
+            )
+            {
+                throw new ArgumentException();
+            }
+
+            wish.AssignToCalendarEvent(calendarEvent.Id);
+        }
         
         public async Task DeleteWish(string eventId)
         {

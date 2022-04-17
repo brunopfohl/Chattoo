@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Chattoo.Application.Common.DTOs;
@@ -63,6 +65,11 @@ namespace Chattoo.Application.CalendarEvents.DTOs
         /// </summary>
         public int ParticipantsCount { get; set; }
         
+        /// <summary>
+        /// Vrací nebo nastavuje Id všech účastníků.
+        /// </summary>
+        public List<string> Participants { get; set; }
+        
         public void Mapping(Profile profile)
         {
             profile.CreateMap<CalendarEvent, CalendarEventDto>()
@@ -70,6 +77,11 @@ namespace Chattoo.Application.CalendarEvents.DTOs
                         d.ParticipantsCount,
                     opt => opt
                         .MapFrom(e => e.Participants.Count())
+                )
+                .ForMember(d =>
+                        d.Participants,
+                    opt => opt
+                        .MapFrom(e => e.Participants.Select(p => p.UserId).ToList())
                 )
                 .ForMember(
                     d => d.Type,

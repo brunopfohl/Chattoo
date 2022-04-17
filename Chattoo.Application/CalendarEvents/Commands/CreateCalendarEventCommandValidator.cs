@@ -12,8 +12,7 @@ namespace Chattoo.Application.CalendarEvents.Commands
         {
             RuleFor(v => v.CommunicationChannelId)
                 .NotEmpty()
-                .When(cmd => cmd.GroupId.IsNotNullOrEmpty())
-                    .WithMessage("Id komunikačního kanálu nebo Id skupiny musí být zadáno.");
+                .WithMessage("Id komunikačního kanálu musí být zadáno.");
             
             RuleFor(v => v.Name)
                 .MaximumLength(100).WithMessage("Název události v komunikačním kanálu nesmí být delší než 100 znaků.")

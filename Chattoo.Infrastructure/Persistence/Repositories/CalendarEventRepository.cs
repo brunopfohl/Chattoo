@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using AutoMapper;
 using Chattoo.Domain.Entities;
@@ -16,17 +17,43 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
 
         public IQueryable<CalendarEvent> GetByCommunicationChannelId(string communicationChannelId)
         {
-            var result = GetAll()
+            var result = GetNonDeleted()
                 .Where(ce => ce.CommunicationChannelId == communicationChannelId);
 
             return result;
         }
 
-        public IQueryable<CalendarEvent> GetByGroupId(string groupId)
+        public IQueryable<CalendarEvent> GetAddeptsForWish(CalendarEventWish wish)
         {
-            var result = GetAll()
-                .Where(ce => ce.GroupId == groupId);
+            // Nadcházející události
+            var result = GetUpcoming().Where(e =>
+                e.CalendarEventType == wish.Type && // se stejným typem
+                e.CommunicationChannelId == wish.CommunicationChannelId && // ve stejném komunikačním kanálu
+                (
+                    !e.MaximalParticipantsCount.HasValue ||
+                    (
+                        e.MaximalParticipantsCount.Value >= wish.MinimalParticipantsCount && // může obsahovat dostatečný počet účastníků
+                        e.Participants.Count() < e.MaximalParticipantsCount.Value // s volnou kapacitou
+                    )
+                ) &&
+                e.Participants.Count() >= wish.MinimalParticipantsCount - 1 && // pokrývá minimální počet účastníků
+                e.Participants.All(p => p.UserId != wish.AuthorId) // neúčastní se
+            );
 
+            return result;
+        }
+
+        public IQueryable<CalendarEvent> GetUpcoming()
+        {
+            var result = GetNonDeleted()
+                .Where(e => e.StartsAt >= DateTime.Now);
+
+            return result;
+        }
+
+        public IQueryable<CalendarEvent> GetNonDeleted()
+        {
+            var result = GetAll().Where(e => !e.DeletedAt.HasValue);
             return result;
         }
     }

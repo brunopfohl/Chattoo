@@ -86,6 +86,11 @@ namespace Chattoo.Domain.Entities
         {
             Name = name;
         }
+
+        internal void AssignToCalendarEvent(string eventId)
+        {
+            CalendarEventId = eventId;
+        }
         
         public void SetMinimalLength(TimeSpan minimalLength)
         {

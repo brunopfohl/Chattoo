@@ -70,6 +70,8 @@ namespace Chattoo.Domain.Entities
         /// Vrací nebo nastavuje Id typu události.
         /// </summary>
         public string CalendarEventTypeId { get; private set; }
+
+        public TimeSpan? Length => EndsAt - StartsAt;
         
         /// <summary>
         /// Vrací nebo nastavuje autora (null reprezentuje "jakýkoliv typ").
@@ -83,12 +85,10 @@ namespace Chattoo.Domain.Entities
             return Participants.Any(u => u.UserId == userId);
         }
 
-        internal void AddParticipant(string userId)
+        public void AddParticipant(string userId)
         {
             if (HasParticipant(userId))
-            {
                 throw new DuplicateUserInCalendarEventException(Id, userId);
-            }
 
             var participant = UserToCalendarEvent.Create(userId, Id);
             

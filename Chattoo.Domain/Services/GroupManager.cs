@@ -50,11 +50,6 @@ namespace Chattoo.Domain.Services
                    ?? throw new GroupRoleNotFoundException(group.Id, roleId);
         }
 
-        public async Task<IQueryable<CalendarEvent>> GetEvents(Group group)
-        {
-            return _calendarEventRepository.GetByGroupId(group.Id);
-        }
-
         public async Task AddParticipantToGroup(Group group, string userId)
         {
             var user = await _userRepository.GetByIdAsync(userId)

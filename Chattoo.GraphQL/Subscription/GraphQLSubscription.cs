@@ -1,9 +1,12 @@
 ﻿using System;
-using System.Linq;
 using System.Reactive.Linq;
+using Chattoo.Application.CalendarEvents.DTOs;
 using Chattoo.Application.Common.DTOs;
 using Chattoo.Application.CommunicationChannels.DTOs;
+using Chattoo.Domain.Interfaces;
 using Chattoo.GraphQL.Extensions;
+using Chattoo.GraphQL.Subscription.CalendarEvent;
+using Chattoo.GraphQL.Subscription.CommunicationChannel;
 using Chattoo.GraphQL.Subscription.CommunicationChannelMessage;
 using Chattoo.GraphQL.Types;
 using GraphQL;
@@ -17,13 +20,17 @@ namespace Chattoo.GraphQL.Subscription
     {
         private readonly ICommunicationChannelMessageSubscriptionProvider _communicationChannelMessageSubscriptionProvider;
         private readonly ICommunicationChannelSubscriptionProvider _communicationChannelSubscriptionProvider;
+        private readonly ICalendarEventSubscriptionProvider _calendarEventSubscriptionProvider;
+        private readonly ICurrentUserIdService _currentUserId;
         
         public GraphQLSubscription(ICommunicationChannelMessageSubscriptionProvider communicationChannelMessageSubscriptionProvider,
-            ICommunicationChannelSubscriptionProvider communicationChannelSubscriptionProvider)
+            ICommunicationChannelSubscriptionProvider communicationChannelSubscriptionProvider, ICalendarEventSubscriptionProvider calendarEventSubscriptionProvider, ICurrentUserIdService currentUserId)
         {
             _communicationChannelMessageSubscriptionProvider = communicationChannelMessageSubscriptionProvider;
             _communicationChannelSubscriptionProvider = communicationChannelSubscriptionProvider;
-            
+            _calendarEventSubscriptionProvider = calendarEventSubscriptionProvider;
+            _currentUserId = currentUserId;
+
             Name = "Subscription";
 
             AddField(new EventStreamFieldType
@@ -47,6 +54,15 @@ namespace Chattoo.GraphQL.Subscription
                 Resolver = new FuncFieldResolver<CommunicationChannelDto>(ResolveCommunicationChannel),
                 Subscriber = new EventStreamResolver<CommunicationChannelDto>(SubscribeToCommunicationChannelByUserId)
             });
+            
+            AddField(new EventStreamFieldType
+            {
+                Name = "userAddedToEvent",
+                Arguments = new QueryArguments(),
+                Type = typeof(CalendarEventGraphType),
+                Resolver = new FuncFieldResolver<CalendarEventDto>(ResolveCalendarEvent),
+                Subscriber = new EventStreamResolver<CalendarEventDto>(SubscribeToCalendarEvents)
+            });
         }
 
         #region CommunicationChannelMessage 
@@ -66,6 +82,8 @@ namespace Chattoo.GraphQL.Subscription
             return communicationChannelMessages.Where(m => m.ChannelId == channelId);
         }
         #endregion
+
+        #region CommunicationChanel
         
         private CommunicationChannelDto ResolveCommunicationChannel(IResolveFieldContext context)
         {
@@ -81,5 +99,29 @@ namespace Chattoo.GraphQL.Subscription
             var communicationChannels = _communicationChannelSubscriptionProvider.CommunicationChannels();
             return communicationChannels.Where(m => m.ParticipantIds.Contains(userId));
         }
+
+        #endregion
+
+        #region CalendarEvent
+
+        private CalendarEventDto ResolveCalendarEvent(IResolveFieldContext context)
+        {
+            var calendarEvent = context.Source as CalendarEventDto;
+
+            return calendarEvent;
+        }
+
+        private IObservable<CalendarEventDto> SubscribeToCalendarEvents(
+            IResolveEventStreamContext context)
+        {
+            var result = _calendarEventSubscriptionProvider
+                .CalendarEvents()
+                .Where(e => e.UserId == _currentUserId.UserId)
+                .Select(e => e.CalendarEvent);
+
+            return result;
+        }
+
+        #endregion
     }
 }

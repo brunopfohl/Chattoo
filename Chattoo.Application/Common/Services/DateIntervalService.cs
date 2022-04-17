@@ -35,7 +35,7 @@ namespace Chattoo.Application.Common.Services
             return false;
         }
         
-        public List<DateInterval> GetOverlaps(List<DateInterval> a, List<DateInterval> b, TimeSpan minimalLength)
+        public List<DateInterval> GetOverlaps(IEnumerable<DateInterval> a, IEnumerable<DateInterval> b, TimeSpan minimalLength)
         {
             var result = new List<DateInterval>();
 

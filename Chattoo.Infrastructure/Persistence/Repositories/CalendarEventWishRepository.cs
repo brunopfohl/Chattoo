@@ -1,6 +1,7 @@
 using System.Linq;
 using AutoMapper;
 using Chattoo.Domain.Entities;
+using Chattoo.Domain.Extensions;
 using Chattoo.Domain.Repositories;
 
 namespace Chattoo.Infrastructure.Persistence.Repositories
@@ -21,6 +22,7 @@ namespace Chattoo.Infrastructure.Persistence.Repositories
             return GetActive().Where(w =>
                 w.Type == wish.Type &&
                 w.CommunicationChannelId == wish.CommunicationChannelId &&
+                w.CalendarEventId.IsNullOrEmpty() &&
                 w.AuthorId != wish.AuthorId
             );
         }

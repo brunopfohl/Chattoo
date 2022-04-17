@@ -59,7 +59,6 @@ export type CalendarEventMutationCreateArgs = {
   channelId?: InputMaybe<Scalars['String']>;
   desc: Scalars['String'];
   endsAt?: InputMaybe<Scalars['DateTime']>;
-  groupId?: InputMaybe<Scalars['String']>;
   maximalParticipantsCount?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
   startsAt: Scalars['DateTime'];
@@ -92,7 +91,6 @@ export type CalendarEventQuery = {
   get?: Maybe<CalendarEvent>;
   getAvailable?: Maybe<CalendarEvent>;
   getForCommunicationChannel?: Maybe<PaginationListCalendarEventGraphType>;
-  getForGroup?: Maybe<PaginationListCalendarEventGraphType>;
   getJoined?: Maybe<PaginationListCalendarEventGraphType>;
   getVisible?: Maybe<PaginationListCalendarEventGraphType>;
 };
@@ -105,13 +103,6 @@ export type CalendarEventQueryGetArgs = {
 
 export type CalendarEventQueryGetForCommunicationChannelArgs = {
   channelId: Scalars['String'];
-  pageNumber?: Scalars['Int'];
-  pageSize?: Scalars['Int'];
-};
-
-
-export type CalendarEventQueryGetForGroupArgs = {
-  groupId: Scalars['String'];
   pageNumber?: Scalars['Int'];
   pageSize?: Scalars['Int'];
 };
@@ -690,6 +681,7 @@ export type Subscription = {
   __typename?: 'Subscription';
   communicationChannelAddedForUser?: Maybe<CommunicationChannel>;
   communicationChannelMessageAddedToChannel?: Maybe<CommunicationChannelMessage>;
+  userAddedToEvent?: Maybe<CalendarEvent>;
 };
 
 
@@ -815,7 +807,6 @@ export type CreateChannelCalendarEventMutationVariables = Exact<{
   startsAt: Scalars['DateTime'];
   endsAt?: InputMaybe<Scalars['DateTime']>;
   channelId?: InputMaybe<Scalars['String']>;
-  groupId?: InputMaybe<Scalars['String']>;
   type: Scalars['String'];
   maximalParticipantsCount?: InputMaybe<Scalars['Int']>;
 }>;
@@ -1019,7 +1010,7 @@ export type AddUserToCalendarEventMutationHookResult = ReturnType<typeof useAddU
 export type AddUserToCalendarEventMutationResult = Apollo.MutationResult<AddUserToCalendarEventMutation>;
 export type AddUserToCalendarEventMutationOptions = Apollo.BaseMutationOptions<AddUserToCalendarEventMutation, AddUserToCalendarEventMutationVariables>;
 export const CreateChannelCalendarEventDocument = gql`
-    mutation CreateChannelCalendarEvent($name: String!, $desc: String!, $startsAt: DateTime!, $endsAt: DateTime, $channelId: String, $groupId: String, $type: String!, $maximalParticipantsCount: Int) {
+    mutation CreateChannelCalendarEvent($name: String!, $desc: String!, $startsAt: DateTime!, $endsAt: DateTime, $channelId: String, $type: String!, $maximalParticipantsCount: Int) {
   communicationChannelCalendarEvents {
     create(
       name: $name
@@ -1027,7 +1018,6 @@ export const CreateChannelCalendarEventDocument = gql`
       startsAt: $startsAt
       endsAt: $endsAt
       channelId: $channelId
-      groupId: $groupId
       type: $type
       maximalParticipantsCount: $maximalParticipantsCount
     ) {
@@ -1063,7 +1053,6 @@ export type CreateChannelCalendarEventMutationFn = Apollo.MutationFunction<Creat
  *      startsAt: // value for 'startsAt'
  *      endsAt: // value for 'endsAt'
  *      channelId: // value for 'channelId'
- *      groupId: // value for 'groupId'
  *      type: // value for 'type'
  *      maximalParticipantsCount: // value for 'maximalParticipantsCount'
  *   },

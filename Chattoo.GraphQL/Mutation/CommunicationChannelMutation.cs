@@ -2,6 +2,7 @@
 using Chattoo.Application.CommunicationChannels.Commands.AddUser;
 using Chattoo.Application.CommunicationChannels.DTOs;
 using Chattoo.GraphQL.Extensions;
+using Chattoo.GraphQL.Subscription.CommunicationChannel;
 using Chattoo.GraphQL.Subscription.CommunicationChannelMessage;
 using Chattoo.GraphQL.Types;
 using GraphQL.Types;

@@ -5,6 +5,8 @@ using Chattoo.Domain.Exceptions;
 using Chattoo.Domain.Interfaces;
 using Chattoo.GraphQL.Extensions;
 using Chattoo.GraphQL.Services;
+using Chattoo.GraphQL.Subscription.CalendarEvent;
+using Chattoo.GraphQL.Subscription.CommunicationChannel;
 using Chattoo.GraphQL.Subscription.CommunicationChannelMessage;
 using Chattoo.Infrastructure;
 using Chattoo.Infrastructure.Persistence;
@@ -69,6 +71,7 @@ namespace Chattoo.GraphQL
             services
                 .AddSingleton<ICommunicationChannelSubscriptionProvider, CommunicationChannelSubscriptionProvider>()
                 .AddSingleton<ICommunicationChannelMessageSubscriptionProvider, CommunicationChannelMessageSubscriptionProvider>()
+                .AddSingleton<ICalendarEventSubscriptionProvider, CalendarEventSubscriptionProvider>()
                 .AddSingleton<GraphQLSchema>()
                 .AddGraphQL((options, provider) =>
                 {
