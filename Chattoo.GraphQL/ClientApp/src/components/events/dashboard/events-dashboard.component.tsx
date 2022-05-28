@@ -1,7 +1,7 @@
 import { useCalendarEventTypeIconRenderer } from "@hooks/useCalendarTypeIcon";
 import { useSetter } from "@hooks/useSetter";
-import { Event } from "@mui/icons-material";
-import { Box, Grid, Paper, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Button, Divider, Container, Stack } from "@mui/material";
+import { Add, AddCircle, AllInclusive, Circle, Create, Event, EventAvailable } from "@mui/icons-material";
+import { Box, Grid, Paper, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Button, Divider, Container, Stack, IconButton, Icon } from "@mui/material";
 import { AutocompleteItem } from "common/interfaces/autocomplete-item.interface";
 import { getKeysWithValues } from "common/utils/enum.utils";
 import { CalendarEventTypeGraphType, CalendarEvent } from "graphql/graphql-types";
@@ -64,7 +64,7 @@ const EventsDashboard: FC<EventsDashboardProps> = (props) => {
                 <Grid container sx={{ width: "100%", height: "100%" }}>
                     <Grid item xs={2}>
                         <Paper elevation={0} sx={{ borderRadius: 0, height: "100%", p: 2, boxShadow: "5px 0 5px -2px #cccccc" }}>
-                            <Typography variant="h4">
+                            <Typography variant="h4" sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
                                 Události
                             </Typography>
                             <List>
@@ -73,7 +73,11 @@ const EventsDashboard: FC<EventsDashboardProps> = (props) => {
                                         <ListItemIcon>
                                             <Event />
                                         </ListItemIcon>
-                                        <ListItemText>
+                                        <ListItemText sx={{
+                                            display: {
+                                                xs: "none", sm: "none", md: "block"
+                                            }
+                                        }}>
                                             Dostupné události
                                         </ListItemText>
                                     </ListItemButton>
@@ -81,37 +85,38 @@ const EventsDashboard: FC<EventsDashboardProps> = (props) => {
                                 <ListItem disablePadding selected={mode === EventsDashboardMode.Joined} onClick={showJoinedEvents}>
                                     <ListItemButton sx={{ pl: 0 }}>
                                         <ListItemIcon>
-                                            <Event />
+                                            <EventAvailable />
                                         </ListItemIcon>
-                                        <ListItemText>
+                                        <ListItemText sx={{
+                                            display: {
+                                                xs: "none", sm: "none", md: "block"
+                                            }
+                                        }}>
                                             Vaše události
-                                        </ListItemText>
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem disablePadding selected={mode === EventsDashboardMode.Wishes} onClick={showWishes}>
-                                    <ListItemButton sx={{ pl: 0 }}>
-                                        <ListItemIcon>
-                                            <Event />
-                                        </ListItemIcon>
-                                        <ListItemText>
-                                            Vaše přání
                                         </ListItemText>
                                     </ListItemButton>
                                 </ListItem>
                             </List>
 
-                            <Button fullWidth variant="outlined" sx={{ mb: 1 }} onClick={showEventCreatePopup}>Vytvořit událost</Button>
+                            <Button fullWidth variant="outlined" sx={{ mb: 1, display: { xs: "none", sm: "none", md: "block" } }} onClick={showEventCreatePopup}>Vytvořit událost</Button>
+                            <IconButton sx={{ p: 0 }} onClick={showEventCreatePopup}>
+                                <Icon>
+                                    <AddCircle color="primary" sx={{ display: { xs: "block", sm: "block", md: "none" } }} />
+                                </Icon>
+                            </IconButton>
 
                             <Divider variant="middle" sx={{ mb: 2, mt: 2, ml: 0, width: "100%" }} />
 
-                            <Typography variant="h6">
+                            <Typography variant="h6" sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
                                 Kategorie
                             </Typography>
                             <List>
                                 <ListItem disablePadding selected={typeFilter === null} onClick={disableTypeFilter}>
                                     <ListItemButton sx={{ pl: 0 }}>
-                                        <ListItemIcon></ListItemIcon>
-                                        <ListItemText>Vše</ListItemText>
+                                        <ListItemIcon>
+                                            <AllInclusive />
+                                        </ListItemIcon>
+                                        <ListItemText sx={{ display: { xs: "none", sm: "none", md: "block" } }}>Vše</ListItemText>
                                     </ListItemButton>
                                 </ListItem>
                                 {eventTypes.map(t => (
@@ -120,7 +125,7 @@ const EventsDashboard: FC<EventsDashboardProps> = (props) => {
                                             <ListItemIcon>
                                                 {renderIcon(t.value)}
                                             </ListItemIcon>
-                                            <ListItemText>
+                                            <ListItemText sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
                                                 {t.key}
                                             </ListItemText>
                                         </ListItemButton>
@@ -144,7 +149,7 @@ const EventsDashboard: FC<EventsDashboardProps> = (props) => {
                         </Container>
                     </Grid>
                 </Grid>
-            </Box>
+            </Box >
         </>
     );
 };

@@ -88,15 +88,6 @@ const Header: FC<HeaderProps> = (props) => {
                                     <ListItemText primary="Přání" />
                                 </ListItem>
                             </NextLink>
-
-                            <NextLink href="/profile">
-                                <ListItem button>
-                                    <ListItemIcon>
-                                        <AccountBox />
-                                    </ListItemIcon>
-                                    <ListItemText primary="Profil" />
-                                </ListItem>
-                            </NextLink>
                         </List>
                     </Drawer>
                 </Toolbar>

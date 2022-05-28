@@ -26,7 +26,7 @@ const EventCard: FC<EventCardProps> = (props) => {
     const renderTypeIcon = useCalendarEventTypeIconRenderer();
 
     return (
-        <Card sx={{ maxWidth: 345, m: 1 }}>
+        <Card sx={{ maxWidth: 345, m: 1, flexGrow: 1 }}>
             <CardActionArea onClick={redirectToDetail}>
                 <Box sx={{ position: "relative" }}>
                     <Box sx={{ bottom: "5px", left: "5px", borderRadius: "5px", p: 0.5, backgroundColor: "white", position: "absolute" }}>

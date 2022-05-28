@@ -174,6 +174,7 @@ const WishCreatePopup: FC<WishCreatePopupProps> = (props) => {
 
                 {/* číselné pole - minimální délka události v minutách */}
                 <TextField
+                    sx={{ mt: 1 }}
                     type="number"
                     value={minimalLengthInMinutes?.toString() || ""}
                     onChange={handleMinimalLengthInMinutesOnChange}

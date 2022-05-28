@@ -12,11 +12,11 @@ const Chat: FC = () => (
     <ChatStateProvider>
         <Grid spacing={1} container sx={{ height: "100%", p: 1, pt: 2 }}>
             {/* Levá strana */}
-            <Grid item md={3}>
+            <Grid item md={3} sx={{ flexGrow: 1, height: { xs: "30%", sm: "auto" } }}>
                 <ChatLeftPanel />
             </Grid>
             {/* Pravá strana */}
-            <Grid item md={9}>
+            <Grid item md={9} sx={{ flexGrow: 1, height: { xs: "70%", sm: "auto" } }}>
                 <ChatRightPanel />
             </Grid>
         </Grid>

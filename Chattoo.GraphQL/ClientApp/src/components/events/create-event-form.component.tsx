@@ -121,6 +121,7 @@ const EventCreatePopup: FC<EventCreatePopupProps> = (props) => {
 
             {/* Textové pole - popis */}
             <TextField
+                sx={{ mt: 1 }}
                 value={description}
                 onChange={handleDescriptionInputOnChange}
                 label="Popis"
@@ -130,6 +131,7 @@ const EventCreatePopup: FC<EventCreatePopupProps> = (props) => {
 
             {/* číselné pole - minimální počet uživatelů */}
             <TextField
+                sx={{ mt: 1 }}
                 type="number"
                 value={maximalParticipantsCount?.toString() || ""}
                 onChange={handleMaximalParticipantsCountOnChange}

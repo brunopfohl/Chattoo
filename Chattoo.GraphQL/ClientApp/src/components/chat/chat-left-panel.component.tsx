@@ -33,7 +33,7 @@ const ChatLeftPanel: FC = () => {
             {/* Dialog pro vytvoření kanálu */}
             <CommunicationChannelCreatePopup onClose={handleCreateCommunicationChannelDialogClose} open={showCreateCommunicationChannelPopup} />
             <Stack sx={{ flexGrow: 1 }}>
-                <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
+                <Stack direction="row" justifyContent="space-between" sx={{ mb: 1, display: { xs: "none", sm: "flex" } }}>
                     {/* Nadpis */}
                     <Typography variant="h5">Chaty</Typography>
 
@@ -43,7 +43,13 @@ const ChatLeftPanel: FC = () => {
                     </IconButton>
                 </Stack>
 
-                <CustomInput placeholder="Zadejte hledaný výraz" icon={<Search />} value={searchTerm} onChange={onSearchTermChanged} />
+                <Stack direction="row" sx={{ width: "100%", justifyContent: "space-between" }}>
+                    <CustomInput placeholder="Zadejte hledaný výraz" icon={<Search />} value={searchTerm} onChange={onSearchTermChanged} full={true} />
+                    {/* Ikona pro otevření dialogu na vytvoření kanálu */}
+                    <IconButton sx={{ display: { sx: "block", sm: "none" } }} color="primary" onClick={handleCreateCommunicationChannelDialogOpen}>
+                        <AddCircleIcon />
+                    </IconButton>
+                </Stack>
 
                 {/* Seznam kanálů */}
                 <CommunicationChannelList filterText={searchTerm} />

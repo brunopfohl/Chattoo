@@ -40,11 +40,11 @@ namespace Chattoo.Application.Common.Services
             var result = new List<DateInterval>();
 
             var aSorted = a.OrderBy(aI => aI.StartsAt);
-            var bSorted = a.OrderBy(bI => bI.StartsAt);
+            var bSorted = b.OrderBy(bI => bI.StartsAt).ToList();
 
-            foreach (var aI in a)
+            foreach (var aI in aSorted)
             {
-                foreach (var bI in b)
+                foreach (var bI in bSorted)
                 {
                     if (bI.StartsAt > aI.EndsAt)
                         break;

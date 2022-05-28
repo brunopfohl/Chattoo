@@ -2844,10 +2844,7 @@
         },
         "runtime": {
           "bin/placeholder/Chattoo.Application.dll": {}
-        },
-        "frameworkReferences": [
-          "Microsoft.AspNetCore.App"
-        ]
+        }
       },
       "Chattoo.Domain/1.0.0": {
         "type": "project",
@@ -2876,10 +2873,7 @@
         },
         "runtime": {
           "bin/placeholder/Chattoo.Infrastructure.dll": {}
-        },
-        "frameworkReferences": [
-          "Microsoft.AspNetCore.App"
-        ]
+        }
       }
     }
   },

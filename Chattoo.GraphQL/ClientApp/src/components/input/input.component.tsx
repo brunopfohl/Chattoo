@@ -6,12 +6,12 @@ let stackSx: SxProps = {
     display: "flex",
     borderRadius: "5px",
     p: 0.5,
-    alignItems: "center",
+    alignItems: "center"
 };
 
 const inputSx: SxProps = {
     borderRadius: "5px",
-    flexGrow: 1
+    flexGrow: 1,
 };
 
 interface CustomInputProps extends InputProps {
